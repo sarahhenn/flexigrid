@@ -1,0 +1,948 @@
+
+Gurobi 8.0.1 (win64, Python) logging started 07/26/19 18:40:29
+
+Academic license - for non-commercial use only
+
+Gurobi 8.0.1 (win64, Python) logging started 07/26/19 19:26:57
+
+Academic license - for non-commercial use only
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+
+Gurobi 8.0.1 (win64, Python) logging started 07/27/19 16:26:24
+
+Academic license - for non-commercial use only
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
