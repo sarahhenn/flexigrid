@@ -10,7 +10,8 @@ import numpy as np
 import gurobipy as gp
 import pickle
 import time
-import matplotlib
+import matplotlib.pyplot as plt
+import xlrd
 import pandas as pd
 import pandapower as pp
 import pandapower.networks as nw
@@ -34,7 +35,9 @@ emission_year = "2017"      # 2017, 2030, 2050
 
 # set options
 options =   {# define if dhw is provided electrically
-            "dhw_electric": True }
+            "dhw_electric": True,
+            "P_pv": 15.0,
+            "eta_inverter": 0.97}
 
 
 #%% data import
@@ -89,7 +92,7 @@ clustered["co2"]         = inputs[5]
 clustered["weights"]     = nc
 clustered["z"]           = z
 
-
+        
 #%% set and calculate building energy system data, as well as load and injection profiles
 
 #build dictionary with batData
@@ -109,8 +112,27 @@ if options ["dhw_electric"]:
     powerLoad = clustered["electricity"] + clustered["dhw"]
 else:
     powerLoad = clustered["electricity"]
-# TODO: calculate PV generation
-powerGen = np.zeros_like(powerLoad)
+# calculate PV injection
+    pv_data = pd.read_excel (sourceFolder+"\\pv_info.xlsx")
+
+i_NOCT = pv_data["i_NOCT"][0] # [kW/m²]
+T_NOCT = pv_data["T_NOCT"][0] # [°C] 
+P_NOCT = pv_data["P_NOCT"][0] # [kW]     
+gamma = pv_data["gamma"][0]   # [%/kW]
+area_nom = pv_data["area"][0] # [m²]
+P_nom = pv_data["P_nom"][0] # [kW]
+eta_inverter = pv_data["eta_inverter"][0] # [-]
+
+# Interpolate cell temperature.
+# Without solar irradiation, the cell temperature has to be equal to the ambient temperature. 
+# At NOCT irradiation, the cell's temperature has to be equal to t_NOCT
+T_cell = (clustered["temperature"] + clustered["solar_irrad"] / i_NOCT * (T_NOCT - clustered["temperature"]))
+eta_NOCT = P_NOCT / (area_nom * i_NOCT)
+# Compute electrical efficiency of the cell
+eta_el   = eta_NOCT * (1 +  gamma / 100 * (T_cell - T_NOCT))
+
+# compute generated power
+powerGen = options["P_pv"] *(area_nom/P_nom) * eta_el * eta_inverter * clustered["solar_irrad"]
 
 #build dictionary with misc data
 days = [i for i in range(number_clusters)]
@@ -329,8 +351,8 @@ res_powerDis = {}
 res_soc = {}
 for n in gridnodes:
     res_powerCh[n] = np.array([[powerCh[n,d,t].X for t in timesteps] for d in days])
-    res_powerDis = np.array([[powerDis[n,d,t].X for t in timesteps] for d in days])
-    res_soc = np.array([[SOC[n,d,t].X for t in timesteps] for d in days])
+    res_powerDis[n] = np.array([[powerDis[n,d,t].X for t in timesteps] for d in days])
+    res_soc[n] = np.array([[SOC[n,d,t].X for t in timesteps] for d in days])
 
 res_powerTrafo = {}
 res_powerTrafo = np.array([[powerTrafo[d,t].X for t in timesteps]for d in days])
