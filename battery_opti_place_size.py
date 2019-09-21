@@ -11,7 +11,6 @@ import gurobipy as gp
 import pickle
 import time
 import matplotlib.pyplot as plt
-import xlrd
 import pandas as pd
 import pandapower as pp
 import pandapower.networks as nw
@@ -36,7 +35,7 @@ emission_year = "2017"      # 2017, 2030, 2050
 # set options
 options =   {# define if dhw is provided electrically
             "dhw_electric": True,
-            "P_pv": 15.0,
+            "P_pv": 10.0,
             "eta_inverter": 0.97}
 
 
@@ -96,15 +95,12 @@ clustered["z"]           = z
 #%% set and calculate building energy system data, as well as load and injection profiles
 
 #build dictionary with batData
-batData =   {"Pmin":0.0,
-             "Pmax":10.0,
-             "SOCmin":0.1,
-             "SOCmax":0.9,
-             "energyContent":10.0,
-             "etaCh":0.95,
-             "etaDis":0.95,
-             "selfDis":0.0, 
-             "init":0.5}
+batData =   {"Cap_min":0.0,
+             "Cap_max":50.0,
+             "etaCh": 0.95,
+             "etaDis": 0.95,
+             "selfDis":0.0,
+             "pc_ratio": 1.0}
 
 
 # calculate parameters for load and generation
@@ -113,7 +109,7 @@ if options ["dhw_electric"]:
 else:
     powerLoad = clustered["electricity"]
 # calculate PV injection
-    pv_data = pd.read_excel (sourceFolder+"\\pv_info.xlsx")
+pv_data = pd.read_excel (sourceFolder+"\\pv_info.xlsx")
 
 i_NOCT = pv_data["i_NOCT"][0] # [kW/m²]
 T_NOCT = pv_data["T_NOCT"][0] # [°C] 
@@ -184,24 +180,13 @@ for [n,m] in nodeLines:
     powerLine_max[n,m] = (net.line['max_i_ka'][nodeLines.index((n,m))])*400
     
 # extract battery nodes and define technical data for them
-powerBat_max = {}
-powerBat_min = {}
-SOC_max = {}
-SOC_min = {}
-SOC_init = {}
+capBat_max = {}
+capBat_min = {}
+
 for n in gridnodes:
     if n in nodes["bat"]:
-        powerBat_max[n] = batData["Pmax"]
-        powerBat_min[n] = batData["Pmin"]
-        SOC_max[n] = batData["SOCmax"]
-        SOC_min[n] = batData["SOCmin"]
-        SOC_init[n] = batData["init"]
-    else:
-        powerBat_max[n] = 0.0
-        powerBat_min[n] = 0.0
-        SOC_max[n] = 0.0
-        SOC_min[n] = 0.0
-        SOC_init[n] = 0.0
+        capBat_max[n] = batData["Cap_max"]
+        capBat_min[n] = batData["Cap_min"]
 
 # attach plug-in loads and PV generatrion to building nodes
 # TODO: do the same with EV loads!?
@@ -230,7 +215,9 @@ powerLine = {}
 # initiate bat variables
 #x = {} # Battery existance
 #y = {} # Battery activity -> is maybe needed later do avoid simultaneous charging and discharging
+capacity = {} # battery capacity
 SOC = {} # Battery state of charge
+SOC_init = {} # initial battery state per typeday
 powerCh = {} # Power load battery
 powerDis = {} #Power feed-in battery
 
@@ -247,7 +234,9 @@ powerLine = model.addVars(nodeLines,days,timesteps, vtype="C", lb=-10000, name="
 # add bat variables to model
 # x = model.addVars(dridnodes, vtype="B", name="bat_existance_"+str(n))      
 # y = model.addVars(gridnodes, days, timesteps, vtype="B", name= "activation_charge_"+str(n)+str(t))
-SOC = model.addVars(gridnodes, days, timesteps, vtype="C", name="SOC_"+str(n)+str(t))
+capacity = model.addVars(gridnodes, vtype="C", name="Cap_"+str(n))
+SOC = model.addVars(gridnodes, days, timesteps, vtype="C", name="SOC_"+str(n)+str(d)+str(t))
+SOC_init = model.addVars(gridnodes, days, vtype="C", name="SOC_init_"+str(n)+str(d))
 powerCh = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerLoad_"+str(n)+str(t))
 powerDis = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerFeed_"+str(n)+str(t))
     
@@ -255,7 +244,6 @@ model.update()
 
 #%% grid optimization
 
-#TODO: stopped here
 # set energy balance for all nodes
 for n in gridnodes:
     for d in days:
@@ -268,8 +256,6 @@ for n in gridnodes:
             else:
                 model.addConstr(powerLine.sum(n,'*',d,t) - powerLine.sum('*',n,d,t) == 
                                 powerPV[n,d,t] - powerPlug[n,d,t] - powerCh[n,d,t] + powerDis[n,d,t], name="node balance_"+str(n))
-
-
 
 # set line limits
 # TODO: check if it's better to set line limits like this or to set lb/ub of variable to min/max values      
@@ -285,36 +271,49 @@ for [n,m] in nodeLines:
 
 # binary variables x/y needed? don't think so right  now -> build LP
 
+# maximum power is defined by power/capacity ratio       
 for n in gridnodes:
     for d in days:                   
         for t in timesteps:
             if n in nodes["bat"]:
                 
-                model.addConstr(powerCh[n,d,t]  >= powerBat_min[n], name="min power_"+str(n)+str(t))
-                model.addConstr(powerCh[n,d,t]  <= powerBat_max[n], name="max power_"+str(n)+str(t))
-                model.addConstr(powerDis[n,d,t] >= powerBat_min[n], name="min power_"+str(n)+str(t))
-                model.addConstr(powerDis[n,d,t] <= powerBat_max[n], name="max power_"+str(n)+str(t))
+                model.addConstr(powerCh[n,d,t]  >= 0, name="min power_"+str(n)+str(t))
+                model.addConstr(powerCh[n,d,t]  <= capacity[n]*batData["pc_ratio"], name="max power_"+str(n)+str(t))
+                model.addConstr(powerDis[n,d,t] >= 0, name="min power_"+str(n)+str(t))
+                model.addConstr(powerDis[n,d,t] <= capacity[n]*batData["pc_ratio"], name="max power_"+str(n)+str(t))
 
+# set limitations for battery capacity
 for n in gridnodes:
-    for d in days:
-        for t in timesteps:
-            model.addConstr(SOC[n,d,t] <= SOC_max[n], name="max sto cap_"+str(n)+str(t))
-            model.addConstr(SOC[n,d,t] >= SOC_min[n], name="min sto cap_"+str(n)+str(t))
+    if n in nodes["bat"]:
+
+        model.addConstr(capacity[n] <= capBat_max[n], name="Battery_capacity_max")
+        model.addConstr(capacity[n] >= capBat_min[n], name="Battery_capacity_min")
+        
+        model.addConstrs((capacity[n] >= SOC_init[n,d] for d in days), name="Battery_capacity_SOC_init")
+        model.addConstrs((capacity[n] >= SOC[n,d,t] for d in days for t in timesteps), name="Battery_capacity_SOC")
+        
+    else:
+        
+        model.addConstr(capacity[n] == 0, name="Battery_capacity_max")
+                
+# SOC repetitions: SOC at the end of typeday == SOC at the beginning of typeday
+for n in gridnodes:   
+    for d in days:   
+        
+        model.addConstr(SOC_init[n,d] == SOC[n,d,len(timesteps)-1],
+                                                       name="repetitions_" +str(d))
 
 for n in gridnodes:   
     for d in days:         
         for t in timesteps:
             if t == 0:
-                SOC_previous = SOC_init[n]
+                SOC_previous = SOC_init[n,d]
             else:
                 SOC_previous = SOC[n,d,t-1]
         
-            model.addConstr(SOC[n,d,t] == (SOC_previous 
-                        + (dt * (powerCh[n,d,t] * batData["etaCh"] - powerDis[n,d,t]/batData["etaDis"])) / batData["energyContent"]) 
+            model.addConstr(SOC[n,d,t] == SOC_previous 
+                        + (dt * (powerCh[n,d,t] * batData["etaCh"] - powerDis[n,d,t]/batData["etaDis"])) 
                         - batData["selfDis"]*dt*SOC_previous, name="storage balance_"+str(n)+str(t))
-                
-            if t == (len(timesteps)-1):
-                model.addConstr(SOC[n,d,t] == SOC_init[n])
 
 ## set objective function
 
@@ -349,23 +348,25 @@ for [n,m] in nodeLines:
 res_powerCh = {}
 res_powerDis = {}
 res_soc = {}
+res_soc_init = {}
 for n in gridnodes:
     res_powerCh[n] = np.array([[powerCh[n,d,t].X for t in timesteps] for d in days])
     res_powerDis[n] = np.array([[powerDis[n,d,t].X for t in timesteps] for d in days])
     res_soc[n] = np.array([[SOC[n,d,t].X for t in timesteps] for d in days])
+    res_soc_init[n] = np.array([SOC_init[n,d].X for d in days])
 
 res_powerTrafo = {}
 res_powerTrafo = np.array([[powerTrafo[d,t].X for t in timesteps]for d in days])
 
 
 #%% plot grid with batteries highlighted
-res_Ch = {}
+res_Cap = {}
 for n in gridnodes:
-    res_Ch[n] = sum(sum(res_powerCh[n][d,t] for t in timesteps) for d in days)
+    res_Cap = np.array([capacity[n].X for n in gridnodes])
 
 bat_ex = np.zeros(len(gridnodes))
 for n in gridnodes:
-    if res_Ch[n] >0:
+    if res_Cap[n] >0:
         bat_ex[n] = 1
 
 netx=net
