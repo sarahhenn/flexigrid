@@ -9,7 +9,6 @@ Created on Wed Jun 26 15:34:57 2019
 import numpy as np
 import gurobipy as gp
 import pickle
-import time
 import matplotlib.pyplot as plt
 import pandas as pd
 import pandapower as pp
@@ -17,6 +16,7 @@ import pandapower.networks as nw
 import pandapower.plotting as plot
 from pandapower.plotting.simple_plot_bat import simple_plot_bat
 from pandapower.plotting.plotly import simple_plotly
+
 # import own function
 import python.clustering_medoid as clustering
 
@@ -25,6 +25,7 @@ import python.clustering_medoid as clustering
 building_type = "EFH"       # EFH, ZFH, MFH_6WE, MFH_10WE, MFH_15WE
 building_age  = "2005"      # 1960, 1980, 2005 
 emission_year = "2017"      # 2017, 2030, 2050 
+
 # TODO: implement mixed shares of buildings
 # TODO: adjust emission factors regarding to national weather conditions
  
@@ -33,10 +34,15 @@ emission_year = "2017"      # 2017, 2030, 2050
 #useable_roofarea  = 0.30    #Default value: 0.25
 
 # set options
-options =   {"dhw_electric": True, # define if dhw is provided electrically
-            "P_pv": 10.0, # installed peak PV power
-            "eta_inverter": 0.97, # PV inverter efficiency
-            "show_grid_plots": False, # show gridplots before and after optimization
+options =   {"static_emissions": True,  # True: calculation with static emissions, 
+                                        # False: calculation with timevariant emissions
+            "rev_emissions": True,      # True: emissions revenues for feed-in
+                                        # False: no emissions revenues for feed-in
+            "dhw_electric": True,       # define if dhw is provided electrically
+            "P_pv": 10.0,               # installed peak PV power
+            "eta_inverter": 0.97,       # PV inverter efficiency
+            "show_grid_plots": False,   # show gridplots before and after optimization
+            
             "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl"
             }
@@ -70,7 +76,7 @@ eco["q"]            = 1 + eco["rate"]
 # compute capital recovery factor (crf) and price-dynamic cash value factor (b)
 eco["crf"]          = ((eco["q"] ** eco["t_calc"] * eco["rate"]) / (eco["q"] ** eco["t_calc"] - 1)) 
 eco["b"]            = {}                       
-eco["b"]["elec"]    = ((1 - (eco["elec_prChange"] / eco["q"]) ** eco["t_calc"]) / (eco["q"] - eco["elec_prChange"]))
+eco["b"]["el"]    = ((1 - (eco["elec_prChange"] / eco["q"]) ** eco["t_calc"]) / (eco["q"] - eco["elec_prChange"]))
 eco["b"]["infl"]    = ((1 - (eco["infl"] / eco["q"]) ** eco["t_calc"]) / (eco["q"] - eco["infl"]))
 
 # determine residual value for battery     
@@ -102,6 +108,7 @@ for t in range (0, 8760):
     i=t*4
     raw_inputs["co2"][t]= np.mean(emi_input[i:(i+4)])
 
+emission_factor_static = np.mean(raw_inputs["co2"])
 
 #%% data clustering 
     
@@ -243,33 +250,42 @@ for n in gridnodes:
 
 print("start modelling")
 model = gp.Model("Optimal Battery Placement and Sizing")
+
 #%% economic variables
 
 # initiate cost variables: there are cost-variables for investment, operation & maintenance, 
-# demand costs (electricity, fuel costs) and fix costs resulting from base prices 
+# demand costs (electricity, fuel costs) and fix costs resulting from base prices
+# moreover there are revenues from feed in
+
+# for every node
 c_inv  = model.addVars(gridnodes, vtype="C", name="c_inv")      
 c_om   = model.addVars(gridnodes, vtype="C", name="c_om")            
 c_dem  = model.addVars(gridnodes, vtype="C", name="c_dem")         
-c_fix  = model.addVars(gridnodes, vtype="C", name="c_fix")  
+c_fix  = model.addVars(gridnodes, vtype="C", name="c_fix")                 
+revenues = model.addVars(gridnodes, vtype="C", name="revenue")
 
-# revenues and subsidies                
-revenue = model.addVars(gridnodes, vtype="C", name="revenue_")
+# for the whole grid
+c_dem_grid  = model.addVars(gridnodes, vtype="C", name="c_dem_grid")                          
+revenues_grid = model.addVars(gridnodes, vtype="C", name="revenue_grid")
 
 # variables for total node costs, total costs and total emissions
-c_node = model.addVars(gridnodes, vtype="C", name="c_total", lb= -gp.GRB.INFINITY)
-c_total = model.addVar(vtype="C", name="c_total", lb= -gp.GRB.INFINITY)
-emission_node = model.addVars(gridnodes, vtype="C", name= "CO2_emission", lb= -gp.GRB.INFINITY) 
-emission = model.addVar(vtype="C", name= "CO2_emission", lb= -gp.GRB.INFINITY)  
+c_total_nodes = model.addVar(vtype="C", name="c_total", lb= -gp.GRB.INFINITY)
+c_total_grid = model.addVar(vtype="C", name="c_total", lb= -gp.GRB.INFINITY)
+emission_nodes = model.addVars(gridnodes, vtype="C", name= "CO2_emission", lb= -gp.GRB.INFINITY) 
+emission_grid = model.addVar(vtype="C", name= "CO2_emission", lb= -gp.GRB.INFINITY)  
 
 #%% technical variables
 
 # add grid variables to model
 
 # set trafo bounds due to technichal limits
-trafo_min = float(net.trafo.sn_mva*(-1000.))
 trafo_max = float(net.trafo.sn_mva*1000.)
-powerTrafo = model.addVars(days,timesteps, vtype="C", lb=trafo_min, ub=trafo_max, name="powerTrafo_"+str(t))
-        
+powerTrafoLoad = model.addVars(days,timesteps, vtype="C", lb=0, ub=trafo_max, name="powerTrafo_"+str(t))
+powerTrafoInj = model.addVars(days,timesteps, vtype="C", lb=0, ub=trafo_max, name="powerTrafo_"+str(t))
+
+# activation variable for trafo load
+yTrafo = model.addVars(days,timesteps, vtype="B", name="yTrafo_"+str(t))
+
 # set line bounds due to technical limits                             
 powerLine = model.addVars(nodeLines,days,timesteps, vtype="C", lb=-10000, name="powerLine_")
 
@@ -294,45 +310,128 @@ model.update()
 
 #%% define constraints
 
-## economical constraints
+#%% economical constraints
 
-model.addConstr(c_total ==  (c_inv.sum('*') 
-                            + c_om.sum('*') 
-                            + c_dem.sum('*') 
-                            + c_fix.sum('*')
-                            - revenue.sum('*')))
+model.addConstr(c_total_nodes == c_inv.sum('*') + c_om.sum('*') + c_fix.sum('*')
+                                 + c_dem.sum('*') - revenues.sum('*'), name="total_costs")
+                                 
+
+model.addConstr(c_total_grid == c_inv.sum('*') + c_om.sum('*') + c_fix.sum('*')
+                                 + c_dem_grid - revenues_grid, name="total_costs_grid")
+                                 
      
-# compute annual investment costs
+# compute annual investment costs per load node
 model.addConstrs((c_inv[n] == eco["crf"] * rval * batData["c_inv"] * capacity[n]
                     for n in gridnodes), name="investment_costs"+str(n))
 
-# compute annual operation and maintenance costs
+# compute annual operation and maintenance costs per load node
 model.addConstrs((c_om[n] == eco["b"]["infl"] * batData["c_om_rel"] * c_inv[n]
                     for n in gridnodes), name="maintenance_costs"+str(n))
 
-# compute annual demand related costs
-el_total_node = {}
+# compute annual fix costs for electricity per load node
+model.addConstrs((c_fix[n] == prices["elec_base"] for n in nodes["load"]), name="fix_costs"+str(n))
+
+# compute annual demand related costs load node
+Load_total_node = {}
 for n in gridnodes:
-    el_total_node[n] = (dt * sum(clustered["weights"][d] * sum(powerLoad[n,d,t] 
+    el_total_node[n] = (sum(clustered["weights"][d] * sum(powerLoad[n,d,t] 
                         for t in timesteps) for d in days) * dt)
     
-model.addConstrs((c_dem[n] == eco["crf"] * eco["b"]["infl"] * el_total_node[n] * prices["elec_energy"]
+model.addConstrs((c_dem[n] == eco["crf"] * eco["b"]["el"] * Load_total_node[n] * prices["elec_energy"]
                     for n in gridnodes), name="demand_costs"+str(n))
 
-# compute annual fix costs for electricity
-model.addConstrs((c_fix[n] == prices["elec_base"] for n in gridnodes), name="fix_costs"+str(n))
-
-# compute annual revenues for electricity feed-in
-model.addConstrs((revenue[n] == prices["sell"] for n in gridnodes), name="revenues"+str(n))
-
-# annual electricity demand per node
-el_total_node = {}
-for n in gridnodes:
-    el_total_node[n] = (dt * sum(clustered["weights"][d] * sum(powerLoad[n,d,t] 
+# compute annual demand related costs per grid
+Load_total_grid = (sum(clustered["weights"][d] * sum(powerTrafoLoad[d,t] 
                         for t in timesteps) for d in days) * dt)
-            
+    
+model.addConstr(c_dem_grid == 
+                 eco["crf"] * eco["b"]["el"] * Load_total_grid[n] * prices["elec_energy"], 
+                 name="demand_costs_grid"+str(n))
+
+# compute annual revenues for electricity feed-in per node
+# here: it's assumed that revenues are generated only for PV power
+InjPV_total_node = {}
+for n in gridnodes:
+    InjPV_total_node[n] = (sum(clustered["weights"][d] * sum(powerInjPV[n,d,t] 
+                        for t in timesteps) for d in days) * dt)
+
+Inj_total_node = {}
+for n in gridnodes:
+    Inj_total_node[n] = (sum(clustered["weights"][d] * sum(powerInjPV[n,d,t] + powerInjBat[n,d,t]
+                        for t in timesteps) for d in days) * dt)
+
+model.addConstrs((revenues[n] == eco["crf"] * eco["b"]["infl"] * InjPV_total_node[n] * prices["sell"] 
+                    for n in gridnodes), name="revenues"+str(n))
+
+# compute annual revenues for electricity feed-in per node
+# here: it's assumed that revenues are generated for all injections to the higher level grid
+Inj_total_grid = (sum(clustered["weights"][d] * sum(powerTrafoInj[d,t] 
+                        for t in timesteps) for d in days) * dt)
+
+model.addConstr(revenues_grid == 
+                 eco["crf"] * eco["b"]["infl"] * Inj_total_grid * prices["sell"], 
+                 name="revenues"+str(n))            
+
+#%% ecological constraints
+
+if options["static_emissions"]:
+    
+    # calculate emissions with static CO2-factor and revenues
+    if options["rev_emissions"]:
+        model.addConstrs(emission_nodes[n] == 
+                        (Load_total_node[n] - Inj_total_node[n])* emission_factor_static,
+                        name= "emissions_static_rev")
+        model.addConstr(emission_grid == 
+                        (Load_total_grid[n] - Inj_total_grid[n])* emission_factor_static,
+                        name= "emissions_static_rev")
+    
+    # calculate emissions with static CO2-factor without revenues
+    else:
+        model.addConstrs(emission_nodes == Load_total_node[n]* emission_factor_static,
+                        name= "emissions_static")
+        model.addConstr(emission_grid == Load_total_grid[n]* emission_factor_static,
+                        name= "emissions_static")        
+
+else:
+    # compute annual emissions and emission revenues
+    # for single nodes
+    emissions_Load_nodes = {}
+    emissions_Inj_nodes = {}
+    for n in gridnodes:
+        emissions_Load_nodes[n] = (sum(clustered["weights"][d] * sum((powerLoad[d,t] *clustered["co2"][d,t]) 
+                                    for t in timesteps) for d in days) * dt)
+        emissions_Inj_nodes[n] = (sum(clustered["weights"][d] * sum((powerInj[d,t] *clustered["co2"][d,t]) 
+                                    for t in timesteps) for d in days) * dt)
+        
+    # for total grid
+    emissions_Load_grid = (sum(clustered["weights"][d] * sum((powerTrafoLoad[d,t] *clustered["co2"][d,t]) 
+                                for t in timesteps) for d in days) * dt)
+    emissions_Inj_grid = (sum(clustered["weights"][d] * sum((powerTrafoInj[d,t] *clustered["co2"][d,t]) 
+                                for t in timesteps) for d in days) * dt)
+    
+    # calculate emissions with timevariant CO2-factor and revenues
+    if options["rev_emissions"]:
+        model.addConstrs(emission_nodes[n] == Load_total_node[n] - emissions_Inj_nodes[n],
+                        name= "emissions_dyn_rev") 
+        model.addConstr(emission_grid == emissions_Load_grid - emissions_Inj_grid,
+                        name= "emissions_dyn_rev")
+        
+    # calculate emissions with timevariant CO2-factor without revenues
+    else:
+        model.addConstrs(emission_nodes[n] == Load_total_node[n],
+                        name= "emissions_dyn_rev")     
+        model.addConstr(emission_grid == emissions_Load_grid,
+                        name= "emissions_dyn_rev")
+
  
 #%% grid constraints
+
+# prevent trafo from simulataneous load and injection
+model.addConstrs((powerTrafoLoad[d,t] <= yTrafo[d,t] * trafo_max for d in days for t in timesteps), 
+                 name="trafoLoad_activation")
+model.addConstrs((powerTrafoInj[d,t] <= (1 - yTrafo[d,t]) * trafo_max for d in days for t in timesteps),
+                 name="trafoInj_activation")
+
 # set energy balance for all nodes
 for n in gridnodes:
     for d in days:
@@ -340,7 +439,7 @@ for n in gridnodes:
             if n in nodes["trafo"]:
             
                 model.addConstr(powerLine.sum(n,'*',d,t) - powerLine.sum('*',n,d,t) == 
-                                powerTrafo[d,t], name="node balance_"+str(n)+str(t))
+                                powerTrafoLoad[d,t] - powerTrafoInj[d,t], name="node balance_"+str(n))
 
             else:
                 model.addConstr(powerLine.sum(n,'*',d,t) - powerLine.sum('*',n,d,t) == 
@@ -427,7 +526,8 @@ model.addConstrs((powerPlug[n,d,t] + powerCh[n,d,t] ==
 
 # set objective function
 
-model.setObjective(sum(sum(powerTrafo[d,t]*clustered["co2"][d,t] for t in timesteps) for d in days), gp.GRB.MINIMIZE)                
+model.setObjective(sum(sum((powerTrafoLoad[d,t]-powerTrafoInj[d,t])*clustered["co2"][d,t] 
+                            for t in timesteps) for d in days), gp.GRB.MINIMIZE)                
 
 # adgust gurobi settings
 model.Params.TimeLimit = 25
@@ -453,8 +553,8 @@ if model.status==gp.GRB.Status.INFEASIBLE:
 #%% retrieve results
 
 # grid results    
-res_powerTrafo = {}
-res_powerTrafo = np.array([[powerTrafo[d,t].X for t in timesteps]for d in days])
+res_powerTrafoLoad = np.array([[powerTrafoLoad[d,t].X for t in timesteps]for d in days])
+res_powerTrafoInj = np.array([[powerTrafoInj[d,t].X for t in timesteps]for d in days])
     
 res_powerLine = {}
 for [n,m] in nodeLines:
@@ -473,14 +573,16 @@ for n in gridnodes:
     res_SOC[n] = np.array([[SOC[n,d,t].X for t in timesteps] for d in days])
     res_SOC_init[n] = np.array([SOC_init[n,d].X for d in days])
 
-# node energy management results
-    
+# node energy management results    
 res_powerLoad = {}
 res_powerInj = {}
 res_powerInjPV = {}
 res_powerInjBat = {}
 res_powerUsePV = {}
 res_powerUseBat = {}
+
+res_powerPV = {}
+res_powerPlug = {} 
 
 for n in gridnodes:
     res_powerLoad[n] = np.array([[powerLoad[n,d,t].X for t in timesteps] for d in days])
@@ -490,12 +592,34 @@ for n in gridnodes:
     res_powerUsePV[n] = np.array([[powerUsePV[n,d,t].X for t in timesteps] for d in days])
     res_powerUseBat[n] = np.array([[powerUseBat[n,d,t].X for t in timesteps] for d in days])
 
+    res_powerPV[n] = np.array([[powerPV[n,d,t] for t in timesteps] for d in days])
+    res_powerPlug[n] = np.array([[powerPlug[n,d,t] for t in timesteps] for d in days])
+
+# economical and ecological results
+res_c_inv = np.array([c_inv[n].X for n in gridnodes])
+res_c_om = np.array([c_om[n].X for n in gridnodes])
+res_c_dem = np.array([c_dem[n].X for n in gridnodes])
+res_c_fix = np.array([c_fix[n].X for n in gridnodes])
+res_rev = np.array([revenues[n].X for n in gridnodes])
+
+res_c_dem_grid = c_dem_grid.X
+res_rev_grid = revenues_grid.X
+
+# comupte annual costs per node
+res_c_node = res_c_inv + res_c_om + res_c_dem + res_c_fix - res_rev
+    
+res_c_total_nodes = c_total_nodes.X
+res_c_total_grid = c_total_grid.X
+res_emission_nodes = emission_nodes.X
+res_emission_grid = emission_grid.X
+
 # save results 
 with open(options["filename_results"], "wb") as fout:
     pickle.dump(model.ObjVal, fout, pickle.HIGHEST_PROTOCOL)
     pickle.dump(model.Runtime, fout, pickle.HIGHEST_PROTOCOL)  
     pickle.dump(model.MIPGap, fout, pickle.HIGHEST_PROTOCOL)
-    pickle.dump(res_powerTrafo, fout, pickle.HIGHEST_PROTOCOL)
+    pickle.dump(res_powerTrafoLoad, fout, pickle.HIGHEST_PROTOCOL)
+    pickle.dump(res_powerTrafoInj, fout, pickle.HIGHEST_PROTOCOL)
     pickle.dump(res_powerLine, fout, pickle.HIGHEST_PROTOCOL)
     pickle.dump(res_capacity, fout, pickle.HIGHEST_PROTOCOL)
     pickle.dump(res_powerCh, fout, pickle.HIGHEST_PROTOCOL)
@@ -508,14 +632,22 @@ with open(options["filename_results"], "wb") as fout:
     pickle.dump(res_powerInjBat, fout, pickle.HIGHEST_PROTOCOL)
     pickle.dump(res_powerUsePV, fout, pickle.HIGHEST_PROTOCOL)
     pickle.dump(res_powerUseBat, fout, pickle.HIGHEST_PROTOCOL)
+    pickle.dump(res_powerPV, fout, pickle.HIGHEST_PROTOCOL)
+    pickle.dump(res_powerPlug, fout, pickle.HIGHEST_PROTOCOL)
+    pickle.dump(res_c_inv, fout, pickle.HIGHEST_PROTOCOL)
     pickle.dump(res_c_om, fout, pickle.HIGHEST_PROTOCOL)
     pickle.dump(res_c_dem, fout, pickle.HIGHEST_PROTOCOL)
     pickle.dump(res_c_fix, fout, pickle.HIGHEST_PROTOCOL)
-    pickle.dump(res_c_total, fout, pickle.HIGHEST_PROTOCOL)
     pickle.dump(res_rev, fout, pickle.HIGHEST_PROTOCOL)
-    pickle.dump(res_emission, fout, pickle.HIGHEST_PROTOCOL)  
+    pickle.dump(res_c_node, fout, pickle.HIGHEST_PROTOCOL)
+    pickle.dump(res_c_total_nodes, fout, pickle.HIGHEST_PROTOCOL)
+    pickle.dump(res_c_total_grid, fout, pickle.HIGHEST_PROTOCOL)
+    pickle.dump(res_emission_nodes, fout, pickle.HIGHEST_PROTOCOL)
+    pickle.dump(res_emission_grid, fout, pickle.HIGHEST_PROTOCOL)
+
 
 #%% plot grid with batteries highlighted
+
 if options["show_grid_plots"]:
     
     bat_ex = np.zeros(len(gridnodes))
