@@ -16,7 +16,7 @@ import pandas as pd
 import pandapower as pp
 import pandapower.networks as nw
 import pandapower.plotting as plot
-from pandapower.plotting.simple_plot_bat import simple_plot_bat
+#from pandapower.plotting.simple_plot_bat import simple_plot_bat 
 from pandapower.plotting.plotly import simple_plotly
 # import own function
 import python.clustering_medoid as clustering
@@ -43,7 +43,8 @@ options =   {# define if dhw is provided electrically
 #%% data import
 
 #determine the optimization folder in which all input data and results are placed
-operationFolder="D:\\git\\flexigrid"
+#operationFolder="D:\\git\\flexigrid"  #§§ Importquelle geändert
+operationFolder="C:\Users\Chrissi\Git\Flexigrid" 
 #the input data is always in this source folder
 sourceFolder=operationFolder+"\\input"
 
@@ -107,7 +108,7 @@ batData =   {"Pmin":0.0,
              "init":0.5}
 
 
-# calculate parameters for load and generation
+# calculate parameters for load and generation     #§§ hier Gebäudeanlagenoptionen einfügen 
 if options ["dhw_electric"]:
     powerLoad = clustered["electricity"] + clustered["dhw"]
 else:
