@@ -13,7 +13,7 @@ import pickle
 
 #%% Start:
 
-def compute(net, eco, devs, clustered, params, options, batData, prices):
+def compute(net, eco, devs, clustered, params, options, batData):
     """
     Compute the optimal building energy system consisting of pre-defined 
     devices (devs) for a given building. Furthermore the program can choose
@@ -35,9 +35,9 @@ def compute(net, eco, devs, clustered, params, options, batData, prices):
         - pel : pellet prices
         - prChange : price changes
         - price_sell_el : price for sold electricity (chp / pv)
+        - price_sell_eeg : feed in tariff according to EEG
         - rate : interest rate        
         - q : interest rate + 1
-        - sub_CHP : subsidies for electricity from CHP units
         - t_calc : calculation time
         - tax : value added tax
         
@@ -54,33 +54,25 @@ def compute(net, eco, devs, clustered, params, options, batData, prices):
         - tes : Thermal energy storage systems
         
     clustered : dict
+        - heat: Heat load profile
         - dhw : Domestic hot water load profile
         - electricity : Electricity load profile
-        - int_gains : internal gains profile 
-        - solar e/n/s/w : solar irradiation for windows
         - solar_roof : solar irradiation on rooftop
-        - temp_ambient : Ambient temperature
-        - temp_delta : difference between indoor and ambient temperature
-        - temp_design : Design temperature for heating system
-        - temp_indoor : indoor temperature        
+        - temperature : Ambient temperature
+        - co2_dyn : time variant co2 factor
+        - co2_stat: static co2 factor
         - weights : Weight factors from the clustering algorithm
         
     params : dict
         - c_w : heat capacity of water
         - days : quantity of clustered days
         - dt : time step length (h)
-        - mip_gap : Solver setting (-)
         - rho_w : density of water
-        - time_limit : Solver setting (s)
         - time_steps : time steps per day
         
     options : dict
         -      
         
-    building : dict
-        - U-values : Heat transition coefficients for different scenarios
-        - dimensions : Building dimensions
-        - usable_roof : Share of usable rooftop area from total area
     """
     
     # extract parameters
@@ -138,8 +130,8 @@ def compute(net, eco, devs, clustered, params, options, batData, prices):
     
     for n in gridnodes:
         if n in nodes["bat"]:
-            capBat_max[n] = batData["Cap_max"]
-            capBat_min[n] = batData["Cap_min"]
+            capBat_max[n] = devs["bat"]["cap_max"]
+            capBat_min[n] = devs["bat"]["cap_min"]
     
     # attach plug-in loads and PV generatrion to building nodes
     # TODO: do the same with EV loads!?
@@ -238,7 +230,7 @@ def compute(net, eco, devs, clustered, params, options, batData, prices):
                         for n in gridnodes), name="maintenance_costs"+str(n))
     
     # compute annual fix costs for electricity per load node
-    model.addConstrs((c_fix[n] == prices["elec_base"] for n in nodes["load"]), name="fix_costs"+str(n))
+    model.addConstrs((c_fix[n] == eco["el"]["el_sta"]["fix"][0] for n in nodes["load"]), name="fix_costs"+str(n))
     
     # compute annual demand related costs load node
     Load_total_node = {}
@@ -246,7 +238,7 @@ def compute(net, eco, devs, clustered, params, options, batData, prices):
         Load_total_node[n] = (sum(clustered["weights"][d] * sum(powerLoad[n,d,t] 
                             for t in timesteps) for d in days) * dt)
         
-    model.addConstrs((c_dem[n] == eco["crf"] * eco["b"]["el"] * Load_total_node[n] * prices["elec_energy"]
+    model.addConstrs((c_dem[n] == eco["crf"] * eco["b"]["el"] * Load_total_node[n] * eco["el"]["el_sta"]["var"][0]
                         for n in gridnodes), name="demand_costs"+str(n))
     
     # compute annual demand related costs per grid
@@ -254,7 +246,7 @@ def compute(net, eco, devs, clustered, params, options, batData, prices):
                             for t in timesteps) for d in days) * dt)
         
     model.addConstr(c_dem_grid == 
-                     eco["crf"] * eco["b"]["el"] * Load_total_grid * prices["elec_energy"], 
+                     eco["crf"] * eco["b"]["el"] * Load_total_grid * eco["el"]["el_sta"]["var"][0], 
                      name="demand_costs_grid")
     
     # compute annual revenues for electricity feed-in per node
@@ -269,7 +261,7 @@ def compute(net, eco, devs, clustered, params, options, batData, prices):
         Inj_total_node[n] = (sum(clustered["weights"][d] * sum(powerInjPV[n,d,t] + powerInjBat[n,d,t]
                             for t in timesteps) for d in days) * dt)
     
-    model.addConstrs((revenues[n] == eco["crf"] * eco["b"]["infl"] * InjPV_total_node[n] * prices["sell"] 
+    model.addConstrs((revenues[n] == eco["crf"] * eco["b"]["infl"] * InjPV_total_node[n] * eco["price_sell_eeg"] 
                         for n in gridnodes), name="revenues"+str(n))
     
     # compute annual revenues for electricity feed-in per node
@@ -278,7 +270,7 @@ def compute(net, eco, devs, clustered, params, options, batData, prices):
                             for t in timesteps) for d in days) * dt)
     
     model.addConstr(revenues_grid == 
-                     eco["crf"] * eco["b"]["infl"] * Inj_total_grid * prices["sell"], 
+                     eco["crf"] * eco["b"]["infl"] * Inj_total_grid * eco["price_sell_eeg"], 
                      name="revenues"+str(n))            
     
     #%% ecological constraints
@@ -422,8 +414,8 @@ def compute(net, eco, devs, clustered, params, options, batData, prices):
                     SOC_previous = SOC[n,d,t-1]
             
                 model.addConstr(SOC[n,d,t] == SOC_previous 
-                            + (dt * (powerCh[n,d,t] * batData["etaCh"] - powerDis[n,d,t]/batData["etaDis"])) 
-                            - batData["selfDis"]*dt*SOC_previous, name="storage balance_"+str(n)+str(t))
+                            + (dt * (powerCh[n,d,t] * devs["bat"]["eta"] - powerDis[n,d,t]/devs["bat"]["eta"])) 
+                            - devs["bat"]["k_loss"]*dt*SOC_previous, name="storage balance_"+str(n)+str(t))
                 
     #%% energy balances for every node
     

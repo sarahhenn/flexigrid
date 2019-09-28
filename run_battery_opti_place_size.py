@@ -30,7 +30,7 @@ emission_year = "2017"      # 2017, 2030, 2050
 # TODO: adjust emission factors regarding to national weather conditions
  
 # TODO: load data for useable roofarea per building type
-# TODO: calculate PV injection within the model, if possible set PV area as MILP-variable     
+# TODO: PV area as MILP-variable??     
 #useable_roofarea  = 0.30    #Default value: 0.25
 
 # set options
@@ -38,32 +38,21 @@ options =   {"static_emissions": True,  # True: calculation with static emission
                                         # False: calculation with timevariant emissions
             "rev_emissions": True,      # True: emissions revenues for feed-in
                                         # False: no emissions revenues for feed-in
-            "dhw_electric": True,       # define if dhw is provided electrically
+            "dhw_electric": True,       # define if dhw is provided decentrally by electricity
             "P_pv": 10.0,               # installed peak PV power
-            "eta_inverter": 0.97,       # PV inverter efficiency
             "show_grid_plots": False,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl"
             }
 
+# TODO: load this data from list of devices 
+# -> only possible if there's a binary variable for Bat -> TODO!
 # build dictionary with technical data
-batData =   {"Cap_min":0.0,
-             "Cap_max":150.0,
-             "etaCh": 0.95,
-             "etaDis": 0.95,
-             "selfDis":0.0,
-             "pc_ratio": 1.0,
+batData =   {"pc_ratio": 1.0,
              "c_inv": 800.0, # price for battery [€/kW]
-             "c_om_rel": 0.05, # percentual share for operation and maintenance costs
-             "lifetime": 15 
+             "c_om_rel": 0.05 # percentual share for operation and maintenance costs
              }
-
-# build dictionary with prices
-prices =   {"elec_energy": 0.278, # electricity base price [€/a]
-            "elec_base": 150.0, # electricity price [€/kWh]
-            "sell": 0.1018, # feed-in-tariff: EEG (10/2020) for PV plants up to 10 kW
-            }
                      
 #%% data import
 
@@ -158,7 +147,7 @@ with open(filename, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
          
-(costs, emission) = opti.compute(net, eco, devs, clustered, params, options, batData, prices)
+(costs, emission) = opti.compute(net, eco, devs, clustered, params, options, batData)
 
 outputs = reader.read_results(building_type + "_" + building_age)
 
