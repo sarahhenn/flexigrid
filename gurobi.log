@@ -1546,3 +1546,80 @@ Changed value of parameter MIPGapAbs to 2.0
    Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
 Changed value of parameter Threads to 1
    Prev: 0  Min: 0  Max: 1024  Default: 0
+
+Gurobi 8.1.1 (win64, Python) logging started 09/27/19 10:10:42
+
+Academic license - for non-commercial use only
+Changed value of parameter TimeLimit to 300.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.0
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Optimize a model with 133957 rows, 133590 columns and 401135 nonzeros
+Variable types: 0 continuous, 133590 integer (133590 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [2e-01, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+01]
+Presolve removed 731 rows and 365 columns
+Presolve time: 2.62s
+Presolved: 133226 rows, 133225 columns, 399310 nonzeros
+Variable types: 0 continuous, 133225 integer (133225 binary)
+Found heuristic solution: objective 226.7802960
+
+Root simplex log...
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+    4190    1.9187470e+02   1.120000e+03   0.000000e+00      5s
+    9665    1.9511677e+02   0.000000e+00   0.000000e+00      8s
+
+Root relaxation: objective 1.951168e+02, 9665 iterations, 4.47 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  195.11677    0  639  226.78030  195.11677  14.0%     -   10s
+H    0     0                     200.7415306  195.11677  2.80%     -   10s
+H    0     0                     197.3110375  195.11677  1.11%     -   10s
+H    0     0                     195.3543062  195.11677  0.12%     -   16s
+     0     0  195.14768    0  817  195.35431  195.14768  0.11%     -   17s
+     0     0  195.14768    0  631  195.35431  195.14768  0.11%     -   19s
+     0     0  195.15336    0  781  195.35431  195.15336  0.10%     -   19s
+     0     0  195.16503    0  830  195.35431  195.16503  0.10%     -   19s
+     0     0  195.35149    0  802  195.35431  195.35149  0.00%     -   19s
+     0     0  195.35149    0  778  195.35431  195.35149  0.00%     -   19s
+     0     0  195.35149    0  890  195.35431  195.35149  0.00%     -   19s
+     0     0  195.35149    0  890  195.35431  195.35149  0.00%     -   20s
+     0     0  195.35149    0  585  195.35431  195.35149  0.00%     -   20s
+     0     0  195.35149    0  633  195.35431  195.35149  0.00%     -   20s
+     0     0  195.35149    0  635  195.35431  195.35149  0.00%     -   20s
+     0     0  195.35149    0  836  195.35431  195.35149  0.00%     -   20s
+     0     0  195.35149    0  816  195.35431  195.35149  0.00%     -   20s
+     0     0  195.35149    0  878  195.35431  195.35149  0.00%     -   20s
+     0     0  195.35149    0  878  195.35431  195.35149  0.00%     -   21s
+     0     0  195.35149    0  555  195.35431  195.35149  0.00%     -   21s
+     0     0  195.35149    0  778  195.35431  195.35149  0.00%     -   21s
+     0     0  195.35190    0  808  195.35431  195.35190  0.00%     -   21s
+     0     0  195.35190    0  830  195.35431  195.35190  0.00%     -   21s
+     0     0  195.35190    0  830  195.35431  195.35190  0.00%     -   21s
+     0     2  195.35190    0  830  195.35431  195.35190  0.00%     -   21s
+
+Cutting planes:
+  Gomory: 7
+  Zero half: 30
+
+Explored 5 nodes (17721 simplex iterations) in 21.94 seconds
+Thread count was 8 (of 8 available processors)
+
+Solution count 4: 195.354 197.311 200.742 226.78 
+
+Optimal solution found (tolerance 0.00e+00)
+Best objective 1.953543062232e+02, best bound 1.953543062232e+02, gap 0.0000%
+Changed value of parameter TimeLimit to 60.0
+   Prev: 1e+100  Min: 0.0  Max: 1e+100  Default: 1e+100
+Changed value of parameter MIPGap to 0.01
+   Prev: 0.0001  Min: 0.0  Max: 1e+100  Default: 0.0001
+Changed value of parameter MIPGapAbs to 2.0
+   Prev: 1e-10  Min: 0.0  Max: 1e+100  Default: 1e-10
+Changed value of parameter Threads to 1
+   Prev: 0  Min: 0  Max: 1024  Default: 0
