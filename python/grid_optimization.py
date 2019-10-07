@@ -147,6 +147,9 @@ def compute(net, eco, devs, clustered, params, options, batData):
                     powerPlug[n,d,t] = np.zeros_like(powerElec[d,t])
                     powerPV[n,d,t] = np.zeros_like(powerGen[d,t])
 
+#hier powPVRet auslesen?
+
+
 #%% optimization model
 
     print("start modelling")
@@ -434,8 +437,26 @@ def compute(net, eco, devs, clustered, params, options, batData):
     # node energy balance
     model.addConstrs((powerPlug[n,d,t] + powerCh[n,d,t] == 
                       powerLoad[n,d,t] + powerUsePV[n,d,t] + powerUseBat[n,d,t] 
-                      for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))         
-                
+                      for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))
+
+    # read out values of powerPV and powerPlug, to return to timeloop
+    print("ab hier wird ausgelesen")
+    powPVRet = {}
+    powPlugRet = {}
+    powChRet = {}
+    powDisRet = {}
+
+    powPVRet[n, d, t] = powerPV[n, d, t]
+    powPlugRet[n, d, t] = powerPlug[n, d, t]
+    powChRet [n,d,t] = np.array([[[powerCh[n,d,t].X for t in timesteps]for d in days]for n in gridnodes])
+    #powChRet[n, d, t] = powerCh[n, d, t].X
+    powDisRet [n,d,t] = np.array([[[powerDis[n,d,t].X for t in timesteps]for d in days]for n in gridnodes])
+    #powDisRet[n, d, t] = powerDis[n, d, t].X
+
+    print(powDisRet)
+    print(powPVRet)
+    print("bis hier wird ausgelesen")
+
     #%% start optimization
     
     # set objective function
@@ -526,11 +547,12 @@ def compute(net, eco, devs, clustered, params, options, batData):
     res_c_total_grid = c_total_grid.X
     res_emission_nodes = np.array([emission_nodes[n].X for n in gridnodes])
     res_emission_grid = emission_grid.X
-    
-    # save results 
+
+
+# save results
     with open(options["filename_results"], "wb") as fout:
         pickle.dump(model.ObjVal, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(model.Runtime, fout, pickle.HIGHEST_PROTOCOL)  
+        pickle.dump(model.Runtime, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(model.MIPGap, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerTrafoLoad, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerTrafoInj, fout, pickle.HIGHEST_PROTOCOL)
@@ -561,6 +583,10 @@ def compute(net, eco, devs, clustered, params, options, batData):
         pickle.dump(res_emission_nodes, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_emission_grid, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(nodes, fout, pickle.HIGHEST_PROTOCOL)
-    
-    
-        return (res_c_total_grid, res_emission_grid)
+
+
+
+    return (res_c_total_grid, res_emission_grid, timesteps, days, powerCh, powerDis, powerPV, powerPlug, gridnodes)
+
+
+

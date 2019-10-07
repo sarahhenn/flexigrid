@@ -22,7 +22,7 @@ from pandapower.control.controller.const_control import ConstControl
 
 def timeseries_example(output_dir):
     net = simple_test_net()
-    #noch aus unserer Methode das abholen
+    #abholen über funktion
 
     # 2. create data source
     n_timesteps = 24

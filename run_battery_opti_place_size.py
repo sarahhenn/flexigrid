@@ -9,17 +9,22 @@ Created on Wed Jun 26 15:34:57 2019
 import numpy as np
 import pickle
 import pandas as pd
+import os
+import tempfile
 import pandapower as pp
 import pandapower.networks as nw
 import pandapower.plotting as plot
 from pandapower.plotting.simple_plot_bat import simple_plot_bat
+
+import timeloop_flexigrid as loop
+
 
 # import own function
 import python.clustering_medoid as clustering
 import python.parse_inputs as pik
 import python.grid_optimization as opti
 import python.read_basic as reader
-
+#import timeloop_flexigrid as timeloop
 
 # set parameters 
 building_type = "EFH"       # EFH, ZFH, MFH_6WE, MFH_10WE, MFH_15WE
@@ -57,7 +62,7 @@ batData =   {"pc_ratio": 1.0,
 #%% data import
 
 #determine the optimization folder in which all input data and results are placed
-operationFolder="D:\\git\\flexigrid"
+operationFolder="C:\\users\\flori\\pycharmprojects\\flexigrid"
 #the input data is always in this source folder
 sourceFolder=operationFolder+"\\input"
 
@@ -147,7 +152,8 @@ with open(filename, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
          
-(costs, emission) = opti.compute(net, eco, devs, clustered, params, options, batData)
+(costs, emission, timesteps, days, powerCh, powerDis, powerPV, powerPlug, gridnodes) = opti.compute(net, eco, devs, clustered, params, options, batData)
+
 
 outputs = reader.read_results(building_type + "_" + building_age)
 
@@ -163,3 +169,19 @@ if options["show_grid_plots"]:
     netx=net
     netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
     simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
+
+#run timeloop_flexigrid_now
+
+loop.run_timeloop(net, timesteps, days, powerCh, powerDis, powerPV, powerPlug, gridnodes)
+
+"""#run time series für jeden Clustertag
+
+timesteps = len_day
+days = number_clusters
+
+for d in days:
+    output_dir = os.path.join(tempfile.gettempdir(), "time_series_flexigrid" + str(d))
+    print("Results can be found in your local temp folder: {}".format(output_dir))
+    if not os.path.exists(output_dir):
+        os.mkdir(output_dir)
+    timeloop.timeseries_each_day(output_dir, net, timesteps)"""
