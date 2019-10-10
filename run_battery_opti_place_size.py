@@ -152,7 +152,7 @@ with open(filename, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
          
-(costs, emission, timesteps, days, powerCh, powerDis, powerPV, powerPlug, gridnodes) = opti.compute(net, eco, devs, clustered, params, options, batData)
+(costs, emission, timesteps, days, powChRet, powDisRet, powPVRet, powPlugRet, gridnodes) = opti.compute(net, eco, devs, clustered, params, options, batData)
 
 
 outputs = reader.read_results(building_type + "_" + building_age)
@@ -172,7 +172,7 @@ if options["show_grid_plots"]:
 
 #run timeloop_flexigrid_now
 
-loop.run_timeloop(net, timesteps, days, powerCh, powerDis, powerPV, powerPlug, gridnodes)
+loop.run_timeloop(net, timesteps, days, powChRet, powDisRet, powPVRet, powPlugRet, gridnodes)
 
 """#run time series für jeden Clustertag
 

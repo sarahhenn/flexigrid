@@ -92,9 +92,6 @@ def create_data_source(n_timesteps=24):
     - first sgen in dataframe (element_index=[0]) to the profile_name "sgen1_p" 
 """
 
-
-# Ist noch nicht ganz geklärt, ob ich den noch selbst schreiben muss, oder ob es den schon gibt.
-
 def create_controllers(net, ds):
     ConstControl(net, element='load', variable='p_mw', element_index=[0],
                  data_source=ds, profile_name=["load1_p"])

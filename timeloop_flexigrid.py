@@ -11,27 +11,27 @@ from pandapower.timeseries.run_time_series import run_timeseries
 from pandapower.control.controller.const_control import ConstControl
 
 #kann ich jeden Tag über diese Funktion einzeln laufen lassen, indem ich in der rundatei davon vielleicht das mache für alle Tage?
-def timeseries_each_day(output_dir, net, timesteps, d, powerCh, powerDis, powerPV, powerPlug, gridnodes):
+def timeseries_each_day(output_dir, net, timesteps, d, powChRet, powDisRet, powPVRet, powPlugRet, gridnodes):
 
     #retrieve data source
-    profiles, ds = retrieve_data_source(timesteps, d, powerCh, powerDis, powerPV, powerPlug, gridnodes)
+    profilesLoad, profilesGen, dsLoad, dsGen = retrieve_data_source(timesteps, d, powChRet, powDisRet, powPVRet, powPlugRet, gridnodes)
 
-    #create controllers (to control P values of the load and the gen)
-    create_controllers(net, ds)
+    #create controllers (to control P values of the load and the gen, which are now combined as positive and negative values in one dataframe)
+    create_controllers(net, dsLoad, dsGen)
 
     #the output writer with the desired results to be stored to files
-    ow = create_output_writer(net, time_steps, output_dir=output_dir)
+    #ow = create_output_writer(net, time_steps, output_dir=output_dir)
 
     #the main time series function
-    run_timeseries(net, time_steps, output_writer=ow)
+    #run_timeseries(net, time_steps, output_writer=ow)
 
-def retrieve_data_source(timesteps, d, powerPV, powerPlug, powerDis, powerCh, gridnodes):
+def retrieve_data_source(timesteps, d, powChRet, powDisRet, powPVRet, powPlugRet, gridnodes):
 
-    profiles = pd.DataFrame()
-
-    # create new two-dimensional lists for the cumulated gen and load
-    # positive value means gen, negative value equals load
-    genDayOne = {}
+    #create new two-dimensional lists for the cumulated gen and load
+    #positive value means gen, negative value equals load
+    powDay = {}
+    #try with just using one genDay, because whole timloop depends on d value
+    """genDayOne = {}
     genDayTwo = {}
     genDayThree = {}
     genDayFour = {}
@@ -42,68 +42,57 @@ def retrieve_data_source(timesteps, d, powerPV, powerPlug, powerDis, powerCh, gr
     genDayNine = {}
     genDayTen = {}
     genDayEleven = {}
-    genDayTwelve = {}
-    for t in timesteps:
-        for n in gridnodes:
-            genDayOne[n, t] = powerPV[n, 0, t] - powerPlug[n, 0, t] + powerDis[n, 0, t] - powerCh[n, 0, t]
+    genDayTwelve = {}"""
 
-    print(genDayOne)
     for t in timesteps:
         for n in gridnodes:
-            genDayTwo[n, t] = powerPV[n, 1, t] - powerPlug[n, 1, t] + powerDis[n, 1, t].X - powerCh[n, 1, t].X
-    for t in timesteps:
-        for n in gridnodes:
-            genDayThree[n, t] = powerPV[n, 2, t] - powerPlug[n, 2, t] + powerDis[n, 2, t].X - powerCh[n, 2, t].X
-    for t in timesteps:
-        for n in gridnodes:
-            genDayFour[n, t] = powerPV[n, 3, t] - powerPlug[n, 3, t] + powerDis[n, 3, t].X - powerCh[n, 3, t].X
-    for t in timesteps:
-        for n in gridnodes:
-            genDayFive[n, t] = powerPV[n, 4, t] - powerPlug[n, 4, t] + powerDis[n, 4, t].X - powerCh[n, 4, t].X
-    for t in timesteps:
-        for n in gridnodes:
-            genDaySix[n, t] = powerPV[n, 5, t] - powerPlug[n, 5, t] + powerDis[n, 5, t].X - powerCh[n, 5, t].X
-    for t in timesteps:
-        for n in gridnodes:
-            genDaySeven[n, t] = powerPV[n, 6, t] - powerPlug[n, 6, t] + powerDis[n, 6, t].X - powerCh[n, 6, t].X
-    for t in timesteps:
-        for n in gridnodes:
-            genDayEight[n, t] = powerPV[n, 7, t] - powerPlug[n, 7, t] + powerDis[n, 7, t].X - powerCh[n, 7, t].X
-    for t in timesteps:
-        for n in gridnodes:
-            genDayNine[n, t] = powerPV[n, 8, t] - powerPlug[n, 8, t] + powerDis[n, 8, t].X - powerCh[n, 8, t].X
-    for t in timesteps:
-        for n in gridnodes:
-            genDayTen[n, t] = powerPV[n, 9, t] - powerPlug[n, 9, t] + powerDis[n, 9, t].X - powerCh[n, 9, t].X
-    for t in timesteps:
-        for n in gridnodes:
-            genDayEleven[n, t] = powerPV[n, 10, t] - powerPlug[n, 10, t] + powerDis[n, 10, t].X - powerCh[n, 10, t].X
-    for t in timesteps:
-        for n in gridnodes:
-            genDayTwelve[n, t] = powerPV[n, 11, t] - powerPlug[n, 11, t] + powerDis[n, 11, t].X - powerCh[n, 11, t].X
+            powDay[n,t] = powPVRet[n,d,t] - powPlugRet[n,d,t] + powDisRet[(9,11,23)][n,d,t] - powChRet[(9,11,23)][n,d,t]
 
-    print(genDayTwelve)
-    print("hihi")
-    #profiles['load1_p'] =
-    #profiles['sgen1_p'] =
+    #split power in load and gen for Const_Controller
+    genDay = {}
+    loadDay = {}
+    
+    for t in timesteps:
+        for n in gridnodes:
+            if powDay[n,t] < 0:
+                loadDay[n,t] = powDay[n,t] * -1
+                genDay[n,t] = 0
+            elif powDay[n,t] >= 0:
+                loadDay[n,t] = 0
+                genDay[n,t] = powDay[n,t]
 
-    ds = DFData(profiles)
+    #transforming dict into an array to write into a dataframe
+    genDayArray = np.array([[genDay[n,t] for t in timesteps] for n in gridnodes])
+    loadDayArray = np.array([[loadDay[n,t] for t in timesteps] for n in gridnodes])
 
-    return profiles, ds
 
-def create_controllers(net, ds):
-    ConstControl(net, element='load', variable='p_mw', element_index=[0],
-                 data_source=ds, profile_name=["load1_p"])
-    ConstControl(net, element='sgen', variable='p_mw', element_index=[0],
-                 data_source=ds, profile_name=["sgen1_p"])
+    profilesPreLoad = pd.DataFrame(loadDayArray)
+    profilesPreGen = pd.DataFrame(genDayArray)
+    #transpose DataFrame to fit the standard layout of given DataFrame. Afterwards columns are nodes, rows are timesteps
+    profilesLoad = profilesPreLoad.transpose()
+    profilesGen = profilesPreGen.transpose()
 
-"""create the output writer. Instead of saving the whole net (which would take a lot of time), we extract only pre defined outputs.
-    In this case we: 
-        
-        save the results ro "../timeseries/tests/outputs"
-        write the results to ".xls" excel files. (Possible are: .json , .p, . csv" 
-        log the variables "p_mw" from "res_load", "vm_pu" from "res_bus" and two res_line values. 
-"""
+    #split up profiles in gen and load profiles, to properly insert them in 2 const_controllers
+
+
+
+    dsLoad = DFData(profilesLoad)
+    dsGen = DFData(profilesGen)
+
+    return profilesLoad, profilesGen, dsLoad, dsGen
+
+def create_controllers(net, dsLoad, dsGen):
+
+    ConstControl(net, element='load',variable='p_mw',element_index=[np.where(0)],data_source=dsLoad, profile_name=["load1_p"])
+    ConstControl(net, element='sgen', variable='p_mw', element_index=[np.where(0)],data_source=dsGen, profile_name=["sgen1_p"])
+    print("stop")
+
+    #create the output writer. Instead of saving the whole net (which would take a lot of time), we extract only pre defined outputs.
+    #In this case we:
+
+     #   save the results ro "../timeseries/tests/outputs"
+      #  write the results to ".xls" excel files. (Possible are: .json , .p, . csv"
+       # log the variables "p_mw" from "res_load", "vm_pu" from "res_bus" and two res_line values.
 
 def create_output_writer(net, time_steps, output_dir):
     ow = OutputWriter(net, time_steps, output_path=output_dir, output_file_type=".xls")
@@ -114,12 +103,13 @@ def create_output_writer(net, time_steps, output_dir):
     ow.log_variable('res_line', 'i_ka')
     return ow
 
-#execution follows:
 
-def run_timeloop(net, timesteps, days, powerCh, powerDis, powerPV, powerPlug, gridnodes):
+    #execution follows:
+
+def run_timeloop(net, timesteps, days, powChRet, powDisRet, powPVRet, powPlugRet, gridnodes):
     for d in days:
         output_dir = os.path.join(tempfile.gettempdir(), "time_series_example" + str(d))
         print("Results can be found in your local temp folder: {}".format(output_dir))
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
-        timeseries_each_day(output_dir, net, timesteps, d, powerCh, powerDis, powerPV, powerPlug, gridnodes)
+        timeseries_each_day(output_dir, net, timesteps, d, powChRet, powDisRet, powPVRet, powPlugRet, gridnodes)

@@ -439,24 +439,6 @@ def compute(net, eco, devs, clustered, params, options, batData):
                       powerLoad[n,d,t] + powerUsePV[n,d,t] + powerUseBat[n,d,t] 
                       for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))
 
-    # read out values of powerPV and powerPlug, to return to timeloop
-    print("ab hier wird ausgelesen")
-    powPVRet = {}
-    powPlugRet = {}
-    powChRet = {}
-    powDisRet = {}
-
-    powPVRet[n, d, t] = powerPV[n, d, t]
-    powPlugRet[n, d, t] = powerPlug[n, d, t]
-    powChRet [n,d,t] = np.array([[[powerCh[n,d,t].X for t in timesteps]for d in days]for n in gridnodes])
-    #powChRet[n, d, t] = powerCh[n, d, t].X
-    powDisRet [n,d,t] = np.array([[[powerDis[n,d,t].X for t in timesteps]for d in days]for n in gridnodes])
-    #powDisRet[n, d, t] = powerDis[n, d, t].X
-
-    print(powDisRet)
-    print(powPVRet)
-    print("bis hier wird ausgelesen")
-
     #%% start optimization
     
     # set objective function
@@ -584,9 +566,21 @@ def compute(net, eco, devs, clustered, params, options, batData):
         pickle.dump(res_emission_grid, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(nodes, fout, pickle.HIGHEST_PROTOCOL)
 
+    # read out values of powerPV, powerPlug, powerCh and powerDis to return to run file and ultimately to timeloop
+    powPVRet = {}
+    powPlugRet = {}
+    powChRet = {}
+    powDisRet = {}
+
+    powPVRet = powerPV
+    powPlugRet= powerPlug
+    powChRet[n,d,t] = np.array([[[powerCh[n,d,t].X for t in timesteps]for d in days]for n in gridnodes])
+    #powChRet[n, d, t] = powerCh[n, d, t].X
+    powDisRet[n,d,t] = np.array([[[powerDis[n,d,t].X for t in timesteps]for d in days]for n in gridnodes])
+    #powDisRet[n, d, t] = powerDis[n, d, t].X
 
 
-    return (res_c_total_grid, res_emission_grid, timesteps, days, powerCh, powerDis, powerPV, powerPlug, gridnodes)
+    return (res_c_total_grid, res_emission_grid, timesteps, days, powChRet, powDisRet, powPVRet, powPlugRet, gridnodes)
 
 
 
