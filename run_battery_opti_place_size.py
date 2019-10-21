@@ -16,15 +16,13 @@ import pandapower.networks as nw
 import pandapower.plotting as plot
 from pandapower.plotting.simple_plot_bat import simple_plot_bat
 
-import timeloop_flexigrid as loop
-
 
 # import own function
 import python.clustering_medoid as clustering
 import python.parse_inputs as pik
 import python.grid_optimization as opti
 import python.read_basic as reader
-#import timeloop_flexigrid as timeloop
+import timeloop_flexigrid as loop
 
 # set parameters 
 building_type = "EFH"       # EFH, ZFH, MFH_6WE, MFH_10WE, MFH_15WE
@@ -44,7 +42,7 @@ options =   {"static_emissions": True,  # True: calculation with static emission
             "rev_emissions": True,      # True: emissions revenues for feed-in
                                         # False: no emissions revenues for feed-in
             "dhw_electric": True,       # define if dhw is provided decentrally by electricity
-            "P_pv": 10.0,               # installed peak PV power
+            "P_pv": 10.00,              # installed peak PV power
             "show_grid_plots": False,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
@@ -138,7 +136,7 @@ extreme kerber grids:   landnetz_freileitung(), landnetz_kabel(), landnetz_freil
             
 '''
 #net = nw.create_kerber_landnetz_freileitung_2()
-net = nw.create_kerber_landnetz_freileitung_2()
+net = nw.create_kerber_vorstadtnetz_kabel_2()
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
@@ -152,8 +150,7 @@ with open(filename, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
          
-(costs, emission, timesteps, days, powChRet, powDisRet, powPVRet, powPlugRet, gridnodes) = opti.compute(net, eco, devs, clustered, params, options, batData)
-
+(costs, emission, timesteps, days, powInjRet, powSubtrRet, gridnodes) = opti.compute(net, eco, devs, clustered, params, options, batData)
 
 outputs = reader.read_results(building_type + "_" + building_age)
 
@@ -172,16 +169,4 @@ if options["show_grid_plots"]:
 
 #run timeloop_flexigrid_now
 
-loop.run_timeloop(net, timesteps, days, powChRet, powDisRet, powPVRet, powPlugRet, gridnodes)
-
-"""#run time series für jeden Clustertag
-
-timesteps = len_day
-days = number_clusters
-
-for d in days:
-    output_dir = os.path.join(tempfile.gettempdir(), "time_series_flexigrid" + str(d))
-    print("Results can be found in your local temp folder: {}".format(output_dir))
-    if not os.path.exists(output_dir):
-        os.mkdir(output_dir)
-    timeloop.timeseries_each_day(output_dir, net, timesteps)"""
+loop.run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes)
