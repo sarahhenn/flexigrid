@@ -69,7 +69,7 @@ def create_controllers(net, dsInj, dsSubtr, n):
 
 def create_output_writer(net, timesteps, output_dir):
     time_steps = timesteps
-    ow = OutputWriter(net, time_steps, output_path=output_dir, output_file_type=".xls")
+    ow = OutputWriter(net, time_steps, output_path=output_dir, output_file_type=".json")
     #these variables are saved to the harddisk after / during the time series loop
     ow.log_variable('res_load', 'p_mw')
     ow.log_variable('res_bus', 'vm_pu')

@@ -93,12 +93,16 @@ def compute(net, eco, devs, clustered, params, options, batData):
         powerElec = clustered["electricity"] + clustered["dhw"]
     else:
         powerElec = clustered["electricity"]
+
+    #create matrix size [d,t] with value 1 for each cell
     
     # PV efficiency
     eta_inverter = 0.97
     # compute generated power
     powerPV = options["P_pv"] *(devs["pv"]["area_mean"]/devs["pv"]["p_nom"]) * devs["pv"]["eta_el"] * eta_inverter * clustered["solar_irrad"]
-    
+    # define max powerPV for curtailment (clustered["solar_irrad"] is a value between 0 and 1)
+    powerPVMax = options["P_pv"] *(devs["pv"]["area_mean"]/devs["pv"]["p_nom"]) * devs["pv"]["eta_el"] * eta_inverter
+
 #%% extract node and line information from pandas-network
 
     # specify grid nodes for whole grid and trafo; choose and allocate load, injection and battery nodes
@@ -139,15 +143,18 @@ def compute(net, eco, devs, clustered, params, options, batData):
     # TODO: do the same with EV loads!?
     powerLoad = {}
     powerGen = {}
+    powerGenMax = {}
     for n in gridnodes:
         for t in timesteps:
             for d in days:
                 if n in nodes["load"]:
                     powerLoad[n,d,t] = powerElec[d,t]
                     powerGen[n,d,t] = powerPV[d,t]
+                    powerGenMax[n,d] = powerPVMax[d,t]
                 else:
                     powerLoad[n,d,t] = np.zeros_like(powerElec[d,t])
                     powerGen[n,d,t] = np.zeros_like(powerPV[d,t])
+                    powerGenMax[n,d] = np.zeros_like(powerPVMax[d,t])
 
 #%% optimization model
 
@@ -168,7 +175,7 @@ def compute(net, eco, devs, clustered, params, options, batData):
     revenues = model.addVars(gridnodes, vtype="C", name="revenue")
     
     # for the whole grid
-    c_dem_grid  = model.addVar(vtype="C", name="c_dem_grid")                          
+    c_dem_grid  = model.addVar(vtype="C", name="c_dem_grid")
     revenues_grid = model.addVar(vtype="C", name="revenues_grid")
     
     # variables for total node costs, total costs and total emissions
@@ -199,29 +206,29 @@ def compute(net, eco, devs, clustered, params, options, batData):
     SOC_init = model.addVars(gridnodes, days, vtype="C", name="SOC_init_"+str(n)+str(d))
     powerCh = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerCh_"+str(n)+str(t))
     powerDis = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerDis_"+str(n)+str(t))
+    # activation variable for bat load
+    yBat = model.addVars(gridnodes,days,timesteps, vtype="B", name="yBat"+str(t))
 
     #add Active Power Curailment variables to model
-    APC100 = model.addVars(gridnodes,days, timesteps, vtype="B", name="APC100_"+str(n)+str(d)+str(t))
-    APC30 = model.addVars(gridnodes,days, timesteps, vtype="B", name="APC30_"+str(n)+str(d)+str(t))
-    APC0 = model.addVars(gridnodes,days,timesteps, vtype="B", name="APC0_"+str(n)+str(d)+str(t))
+    APC100 = model.addVars(gridnodes,days, vtype="B", name="APC100_"+str(n)+str(d)+str(t))
+    APC30 = model.addVars(gridnodes,days,vtype="B", name="APC30_"+str(n)+str(d)+str(t))
+    APC0 = model.addVars(gridnodes,days, vtype="B", name="APC0_"+str(n)+str(d)+str(t))
+    powerGenRealMax = model.addVars(gridnodes, days, vtype="C", name="powerGenRealMax"+str(n)+str(d))
+    powerGenReal = model.addVars(gridnodes, days, timesteps, vtype="C", ub=powerGenRealMax, name="powerGenReal"+str(n)+str(d)+str(t))
 
-    # Load from building data
-    powerLoad = model.addVars(gridnodes,days, timesteps, vtype="C", name="powerLoad_"+str(n)+str(t))
-    # gen from PV data
-    powerGen = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerGen_"+str(n)+str(t))
     # power flowing from net into complex of bat, house and pv
     powerSubtr = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerSubtr_"+str(n)+str(t))
     # power flowing from complex of bat, house and pv back into net
     powerInj = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerInj_"+str(n)+str(t))
 
     # all variables inside the complex of house, bat and data
-    powerUsePV = model.addVars(gridnodes,days, timesteps, vtype="C", name="powerUsePV_"+str(n)+str(t))
-    powerPVChBat = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerPVChBat_"+str(n)+str(t))
-    powerInjPV = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerInjPV"+str(n)+str(t))
-    powerNetLoad = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerNetLoad_"+str(n)+str(t))
-    powerNetChBat = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerNetChBat_"+str(n)+str(t))
-    powerNetDisBat = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerNetDisBat_"+str(n)+str(t))
-    powerUseBat = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerUseBat_"+str(n)+str(t))
+    powerUsePV = model.addVars(gridnodes,days, timesteps, vtype="C", name="powerUsePV_"+str(n)+str(d)+str(t))
+    powerPVChBat = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerPVChBat_"+str(n)+str(d)+str(t))
+    powerInjPV = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerInjPV"+str(n)+str(d)+str(t))
+    powerNetLoad = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerNetLoad_"+str(n)+str(d)+str(t))
+    powerNetChBat = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerNetChBat_"+str(n)+str(d)+str(t))
+    powerNetDisBat = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerNetDisBat_"+str(n)+str(d)+str(t))
+    powerUseBat = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerUseBat_"+str(n)+str(d)+str(t))
         
     model.update()
     
@@ -358,12 +365,18 @@ def compute(net, eco, devs, clustered, params, options, batData):
     
      
     #%% grid constraints
-    
+
     # prevent trafo from simulataneous load and injection
     model.addConstrs((powerTrafoLoad[d,t] <= yTrafo[d,t] * trafo_max for d in days for t in timesteps),
                      name="trafoLoad_activation")
     model.addConstrs((powerTrafoInj[d,t] <= (1 - yTrafo[d,t]) * trafo_max for d in days for t in timesteps),
                      name="trafoInj_activation")
+
+    # prevent bat from simultaneously charging and discharging
+    model.addConstrs((powerCh[n,d,t] <= yBat[n,d,t] * capacity[n] for n in gridnodes for d in days for t in timesteps),
+                     name="batCharge_activation")
+    model.addConstrs((powerDis[n, d, t] <= (1 - yBat[n, d, t]) * capacity[n] for n in gridnodes for d in days for t in timesteps),
+                     name="batDischarge_activation")
     
     # set energy balance for all nodes
     for n in gridnodes:
@@ -371,34 +384,36 @@ def compute(net, eco, devs, clustered, params, options, batData):
             for t in timesteps:
                 if n in nodes["trafo"]:
                     #energy balance around trafo
-                    model.addConstr(powerLine.sum(n,'*',d,t) ==
-                                    powerTrafoLoad[d,t] - powerTrafoInj[d,t], name="node balance trafo_"+str(n))
+                    model.addConstr(powerLine.sum(n,'*',d,t) - powerLine.sum('*',n,d,t) ==
+                                    powerTrafoLoad[d,t] - powerTrafoInj[d,t], name="node_balance_trafo_"+str(n))
     
                 else:
                     # TODO: check if its okay to summarize all other constraints here. Only possible for node to be trafo or load, bat and pv?
                     # TODO: include curtailment in here, but in a right way..
                     #energy balance node with net
-                    model.addConstr(powerLine.sum(n,'*',d,t) ==
-                                    powerSubtr[n,d,t] - powerInj[n,d,t], name="node balance net_"+str(n))
-                    #energy balance node with pv-bat-house complex
-                    model.addConstr(powerInj[n,d,t] - powerSubtr[n,d,t] ==
-                                    powerInjPV[n,d,t] + powerNetDisBat[n,d,t] - powerNetLoad[n,d,t] - powerNetChBat[n,d,t], name="node balance complex_"+str(n))
-                    #energy balance PV device
-                    model.addConstr(powerGen[n,d,t] ==
-                                    powerUsePV[n,d,t] + powerInjPV[n,d,t]+ powerPVChBat[n,d,t], name="node balance pv_"+str(n)+str(d)+str(t))
-                    #energy balance load
-                    model.addConstr(powerLoad[n,d,t] ==
-                                    powerUsePV[n,d,t] + powerUseBat[n,d,t] + powerNetLoad[n,d,t], name="node balance load"+str(n)+str(d)+str(t))
+                    model.addConstr(powerLine.sum(n,'*',d,t) - powerLine.sum('*',n,d,t) ==
+                                    powerSubtr[n,d,t] - powerInj[n,d,t], name="node_balance net_"+str(n))
 
-    
+                    # energy balance node with pv-bat-house complex
+                    model.addConstr(powerInj[n, d, t] - powerSubtr[n, d, t] ==
+                                    powerInjPV[n, d, t] + powerNetDisBat[n, d, t] - powerNetLoad[n, d, t] -
+                                    powerNetChBat[n, d, t], name="node_balance_complex_" + str(n))
+                    # energy balance PV device
+                    model.addConstr(powerGenReal[n, d, t] ==
+                                    powerUsePV[n, d, t] + powerInjPV[n, d, t] + powerPVChBat[n, d, t],
+                                    name="node_balance_pv_" + str(n) + str(d) + str(t))
+                    # energy balance load
+                    model.addConstr(-powerUsePV[n, d, t] ==
+                                    -powerLoad[n, d, t] + powerUseBat[n, d, t] + powerNetLoad[n, d, t],
+                                    name="node_balance_load"+str(n)+str(d)+str(t))
+
     # set line limits
     # TODO: check if it's better to set line limits like this or to set lb/ub of variable to min/max values      
     for [n,m] in nodeLines:
             for d in days:
-                for t in timesteps: 
-                
-                    model.addConstr(powerLine[n,m,d,t] <= powerLine_max[n,m], name="line power max_"+str(n)+str(m)+str(t))
-                    model.addConstr(powerLine[n,m,d,t] >= (-1)*powerLine_max[n,m], name="line power min_"+str(n)+str(m)+str(t))
+                for t in timesteps:
+                    model.addConstr(powerLine[n,m,d,t] <= powerLine_max[n,m], name="line_power_max_"+str(n)+str(m)+str(t))
+                    model.addConstr(powerLine[n,m,d,t] >= (-1)*powerLine_max[n,m], name="line_power_min_"+str(n)+str(m)+str(t))
                 
                 
     #%% battery constraints
@@ -412,13 +427,13 @@ def compute(net, eco, devs, clustered, params, options, batData):
             for t in timesteps:
                 if n in nodes["bat"]:
                     
-                    model.addConstr(powerCh[n,d,t]  >= 0, name="min power_"+str(n)+str(t))
-                    model.addConstr(powerCh[n,d,t]  <= capacity[n]*batData["pc_ratio"], name="max power_"+str(n)+str(t))
-                    model.addConstr(powerDis[n,d,t] >= 0, name="min power_"+str(n)+str(t))
-                    model.addConstr(powerDis[n,d,t] <= capacity[n]*batData["pc_ratio"], name="max power_"+str(n)+str(t))
+                    model.addConstr(powerCh[n,d,t]  >= 0, name="min_power_"+str(n)+str(t))
+                    model.addConstr(powerCh[n,d,t]  <= capacity[n]*batData["pc_ratio"], name="max_power_"+str(n)+str(t))
+                    model.addConstr(powerDis[n,d,t] >= 0, name="min_power_"+str(n)+str(t))
+                    model.addConstr(powerDis[n,d,t] <= capacity[n]*batData["pc_ratio"], name="max_power_"+str(n)+str(t))
 
                     model.addConstr(powerDis[n,d,t] - powerCh[n,d,t] ==
-                                    powerNetChBat[n,d,t] + powerPVChBat[n,d,t] - powerNetDisBat[n,d,t] - powerUseBat[n,d,t], name="energy balance bat_"+str(n)+str(d)+str(t))
+                                    powerNetChBat[n,d,t] + powerPVChBat[n,d,t] - powerNetDisBat[n,d,t] - powerUseBat[n,d,t], name="energy_balance_bat_"+str(n)+str(d)+str(t))
     
     # set limitations for battery capacity
     for n in gridnodes:
@@ -429,6 +444,7 @@ def compute(net, eco, devs, clustered, params, options, batData):
             
             model.addConstrs((capacity[n] >= SOC_init[n,d] for d in days), name="Battery_capacity_SOC_init")
             model.addConstrs((capacity[n] >= SOC[n,d,t] for t in timesteps for d in days), name="Battery_capacity_SOC")
+            #model.addConstrs((SOC[n,d,t] >= 0.05 * capacity[n] for t in timesteps for d in days), name="Battery_SOC_min")
             
         else:
             
@@ -455,9 +471,14 @@ def compute(net, eco, devs, clustered, params, options, batData):
 
 
     #APC is either 0, 30 or 100 Percent, only one of them is existent
-    model.addConstrs((APC0[n,d,t] + APC30[n,d,t] + APC100[n,d,t] == 1
-                      for n in gridnodes for d in days for t in timesteps), name="APC"+str(n)+str(d)+str(t))
-
+    model.addConstrs((APC0[n,d] + APC30[n,d] + APC100[n,d] == 1
+                      for n in gridnodes for d in days), name="APC"+str(n)+str(d)+str(t))
+    # create powerGenRealMax with APC
+    model.addConstrs((powerGenRealMax[n,d] == (APC0[n,d] * 1 + APC30[n,d] * 0.7 + APC100[n,d] * 0) * powerGenMax[n,d]
+                     for n in gridnodes for d in days), name="powerGenRealMax_"+str(n)+str(d))
+    #create real power Gen in order to take curtailment into account properly
+    model.addConstrs((powerGenReal[n,d,t]  <= powerGen[n,d,t] for n in gridnodes for d in days for t in timesteps),
+                     name="powerGenRealCurtailed_"+str(n)+str(d)+str(t))
 
     #%% start optimization
     
@@ -489,8 +510,9 @@ def compute(net, eco, devs, clustered, params, options, batData):
 
 
     #%% retrieve results
+    #fpo: TODO: either delete result section completely or change it properly
     
-    # grid results    
+    # grid results
     res_powerTrafoLoad = np.array([[powerTrafoLoad[d,t].X for t in timesteps]for d in days])
     res_powerTrafoInj = np.array([[powerTrafoInj[d,t].X for t in timesteps]for d in days])
         
@@ -527,8 +549,8 @@ def compute(net, eco, devs, clustered, params, options, batData):
 
     
     for n in gridnodes:
-        res_powerLoad[n] = np.array([[powerLoad[n,d,t].X for t in timesteps] for d in days])
-        res_powerGen[n] = np.array([[powerGen[n,d,t].X for t in timesteps] for d in days])
+        #res_powerLoad[n] = np.array([[powerLoad[n,d,t].X for t in timesteps] for d in days])
+        #res_powerGen[n] = np.array([[powerGen[n,d,t].X for t in timesteps] for d in days])
         res_powerInj[n] = np.array([[powerInj[n,d,t].X for t in timesteps] for d in days])
         res_powerSubtr[n] = np.array([[powerSubtr[n,d,t].X for t in timesteps] for d in days])
         res_powerInjPV[n] = np.array([[powerInjPV[n,d,t].X for t in timesteps] for d in days])

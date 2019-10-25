@@ -136,7 +136,7 @@ extreme kerber grids:   landnetz_freileitung(), landnetz_kabel(), landnetz_freil
             
 '''
 #net = nw.create_kerber_landnetz_freileitung_2()
-net = nw.create_kerber_vorstadtnetz_kabel_2()
+net = nw.create_kerber_landnetz_freileitung_2()
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
