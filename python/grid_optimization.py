@@ -99,13 +99,17 @@ def compute(net, eco, devs, clustered, params, options, batData):
     # compute generated power
     powerGen = options["P_pv"] *(devs["pv"]["area_mean"]/devs["pv"]["p_nom"]) * devs["pv"]["eta_el"] * eta_inverter * clustered["solar_irrad"] 
     
-    # calculate thermal hp and eh capacity according to (Stinner, 2017)
+    # calculate thermal nominal hp capacity according to (Stinner, 2017)
     if options ["dhw_electric"]:
-        capa_hp = options["alpha_th"] * np.max(clustered["heat"] + clustered["dhw"])
-        capa_eh = (1-options["alpha_th"]) * np.max(clustered["heat"] + clustered["dhw"])
+        capa_hp_th = options["alpha_th"] * np.max(clustered["heat"] + clustered["dhw"])
     else: 
-        capa_hp = options["alpha_th"] * np.max(clustered["heat"])
-        capa_eh = (1-options["alpha_th"]) * np.max(clustered["heat"])
+        capa_hp_th = options["alpha_th"] * np.max(clustered["heat"])
+    
+    # electrical nominal hp capacity
+    if options ["T_VL"] == 35:
+        capa_hp = capa_hp_th/devs["hp_air"]["cop_a-7w35"]
+    elif options ["T_VL"] == 55:
+        capa_hp = capa_hp_th/devs["hp_air"]["cop_a-7w55"]
         
         # calculate tes capacity according to (Stinner, 2017)
     if options ["dhw_electric"]:

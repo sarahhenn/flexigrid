@@ -41,6 +41,7 @@ options =   {"static_emissions": True,  # True: calculation with static emission
             "dhw_electric": True,       # define if dhw is provided decentrally by electricity
             "P_pv": 10.0,               # installed peak PV power
             "with_hp": True,            # usage of heat pumps
+            "hp_mode": "energy_opt",    # choose between "energy_opt" and "grid_opt"
             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
             "alpha_th": 1.0,            # relative size of heat pump
             "beta_th": 0.2,             # relative size of thermal energy storage (tes)
