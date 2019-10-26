@@ -11,6 +11,9 @@ import gurobipy as gp
 import numpy as np
 import pickle
 
+# import own function
+import python.hpopt_energy as hpopt
+
 #%% Start:
 
 def compute(net, eco, devs, clustered, params, options, batData):
@@ -80,19 +83,8 @@ def compute(net, eco, devs, clustered, params, options, batData):
     timesteps   = [i for i in range(params["time_steps"])]
     days        = [i for i in range(params["days"])]   
     
-# =============================================================================
-#     #build dictionary with misc data
-# days = [i for i in range(number_clusters)]
-# timesteps = [i for i in range(len_day)]
-# dt = 1
-# =============================================================================
+    
 #%% set and calculate building energy system data, as well as load and injection profiles
-
-    # calculate parameters for load and generation
-    if options ["dhw_electric"]:
-        powerElec = clustered["electricity"] + clustered["dhw"]
-    else:
-        powerElec = clustered["electricity"]
     
     # calculate PV injection
     eta_inverter = 0.97
@@ -111,11 +103,26 @@ def compute(net, eco, devs, clustered, params, options, batData):
     elif options ["T_VL"] == 55:
         capa_hp = capa_hp_th/devs["hp_air"]["cop_a-7w55"]
         
-        # calculate tes capacity according to (Stinner, 2017)
+    # calculate tes capacity according to (Stinner, 2017)
     if options ["dhw_electric"]:
         capa_tes = options["beta_th"] * sum(clustered["weights"][d] * sum(clustered["heat"][d,t] for t in timesteps) for d in days) * dt / sum(clustered["weights"])
     else:
         capa_tes = options["beta_th"] * sum(clustered["weights"][d] * sum((clustered["heat"][d,t] + clustered["dhw"][d,t]) for t in timesteps) for d in days) * dt / sum(clustered["weights"])
+    
+    if options["hp_mode"] == "energy_opt":
+        
+        (res_actHP, res_powerHP, res_powerEH, res_SOC_tes, res_ch_tes, res_dch_tes, res_heatHP, res_heatEH) = hpopt.optimize(options, params, clustered, devs, capa_hp, capa_tes)
+        
+        if options ["dhw_electric"]:
+            powerElec = clustered["electricity"] + clustered["dhw"] + res_powerHP + res_powerEH
+        else:
+            powerElec = clustered["electricity"] + res_powerHP + res_powerEH
+    else:
+        
+        if options ["dhw_electric"]:
+            powerElec = clustered["electricity"] + clustered["dhw"]
+        else:
+            powerElec = clustered["electricity"]
     
 #%% extract node and line information from pandas-network
 
@@ -579,6 +586,13 @@ def compute(net, eco, devs, clustered, params, options, batData):
         pickle.dump(res_emission_nodes, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_emission_grid, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(nodes, fout, pickle.HIGHEST_PROTOCOL)
-    
+        pickle.dump(res_actHP, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerHP, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerEH, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_SOC_tes, fout, pickle.HIGHEST_PROTOCOL)   
+        pickle.dump(res_ch_tes, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_dch_tes, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_heatHP, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_heatEH, fout, pickle.HIGHEST_PROTOCOL)
     
         return (res_c_total_grid, res_emission_grid)
