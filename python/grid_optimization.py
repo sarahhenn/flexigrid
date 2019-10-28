@@ -11,6 +11,9 @@ import gurobipy as gp
 import numpy as np
 import pickle
 
+# import own function
+import python.hpopt_energy as hpopt
+
 #%% Start:
 
 def compute(net, eco, devs, clustered, params, options, batData):
@@ -80,18 +83,8 @@ def compute(net, eco, devs, clustered, params, options, batData):
     timesteps   = [i for i in range(params["time_steps"])]
     days        = [i for i in range(params["days"])]   
     
-# =============================================================================
-#     #build dictionary with misc data
-# days = [i for i in range(number_clusters)]
-# timesteps = [i for i in range(len_day)]
-# dt = 1
-# =============================================================================
+    
 #%% set and calculate building energy system data, as well as load and injection profiles
-
-    # total electric load of one household
-    if options["dhw_electric"]:
-        powerElec = clustered["electricity"] + clustered["dhw"]
-    else:
         powerElec = clustered["electricity"]
 
     #create matrix size [d,t] with value 1 for each cell
@@ -103,6 +96,39 @@ def compute(net, eco, devs, clustered, params, options, batData):
     # define max powerPV for curtailment (clustered["solar_irrad"] is a value between 0 and 1)
     powerPVMax = options["P_pv"] *(devs["pv"]["area_mean"]/devs["pv"]["p_nom"]) * devs["pv"]["eta_el"] * eta_inverter
 
+    # calculate thermal nominal hp capacity according to (Stinner, 2017)
+    if options ["dhw_electric"]:
+        capa_hp_th = options["alpha_th"] * np.max(clustered["heat"] + clustered["dhw"])
+    else: 
+        capa_hp_th = options["alpha_th"] * np.max(clustered["heat"])
+    
+    # electrical nominal hp capacity
+    if options ["T_VL"] == 35:
+        capa_hp = capa_hp_th/devs["hp_air"]["cop_a-7w35"]
+    elif options ["T_VL"] == 55:
+        capa_hp = capa_hp_th/devs["hp_air"]["cop_a-7w55"]
+        
+    # calculate tes capacity according to (Stinner, 2017)
+    if options ["dhw_electric"]:
+        capa_tes = options["beta_th"] * sum(clustered["weights"][d] * sum(clustered["heat"][d,t] for t in timesteps) for d in days) * dt / sum(clustered["weights"])
+    else:
+        capa_tes = options["beta_th"] * sum(clustered["weights"][d] * sum((clustered["heat"][d,t] + clustered["dhw"][d,t]) for t in timesteps) for d in days) * dt / sum(clustered["weights"])
+    
+    if options["hp_mode"] == "energy_opt":
+        
+        (res_actHP, res_powerHP, res_powerEH, res_SOC_tes, res_ch_tes, res_dch_tes, res_heatHP, res_heatEH) = hpopt.optimize(options, params, clustered, devs, capa_hp, capa_tes)
+        
+        if options ["dhw_electric"]:
+            powerElec = clustered["electricity"] + clustered["dhw"] + res_powerHP + res_powerEH
+        else:
+            powerElec = clustered["electricity"] + res_powerHP + res_powerEH
+    else:
+        
+        if options ["dhw_electric"]:
+            powerElec = clustered["electricity"] + clustered["dhw"]
+        else:
+            powerElec = clustered["electricity"]
+    
 #%% extract node and line information from pandas-network
 
     # specify grid nodes for whole grid and trafo; choose and allocate load, injection and battery nodes
@@ -623,6 +649,7 @@ def compute(net, eco, devs, clustered, params, options, batData):
         pickle.dump(res_emission_grid, fout, pickle.HIGHEST_PROTOCOL)
 
         pickle.dump(nodes, fout, pickle.HIGHEST_PROTOCOL)
+    
 
     # introduce retrieving variables to give to timeloop
     powInjRet = np.array([[[powerInj[n,d,t].X for t in timesteps]for n in gridnodes]for d in days])
