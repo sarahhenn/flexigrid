@@ -655,6 +655,14 @@ def compute(net, eco, devs, clustered, params, options, batData):
     powInjRet = np.array([[[powerInj[n,d,t].X for t in timesteps]for n in gridnodes]for d in days])
     powSubtrRet= np.array([[[powerSubtr[n,d,t].X for t in timesteps] for n in gridnodes] for d in days])
 
+    res_APC0 = np.array([[APC0[n,d].X for n in gridnodes]for d in days])
+    res_APC30 = np.array([[APC30[n,d].X for n in gridnodes]for d in days])
+    res_APC100 = np.array([[APC100[n,d].X for n in gridnodes]for d in days])
+    res_powerGenReal = np.array([[[powerGenReal[n,d,t].X for n in gridnodes]for d in days]for t in timesteps])
+    res_powerGenRealMax = np.array([[powerGenRealMax[n,d].X for n in gridnodes]for d in days])
+
+
+
     print("optimization successfull")
 
     return (res_c_total_grid, res_emission_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes)
