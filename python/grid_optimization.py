@@ -465,18 +465,24 @@ def compute(net, eco, devs, clustered, params, options, batData):
     
     # set objective function
     
-    model.setObjective(sum(sum((powerTrafoLoad[d,t]-powerTrafoInj[d,t])*clustered["co2_dyn"][d,t] 
-                                for t in timesteps) for d in days), gp.GRB.MINIMIZE)                
+    model.setObjective(sum((Inj_total_node[n]) for n in gridnodes) - sum((Load_total_node[n]) for n in gridnodes), gp.GRB.MINIMIZE)                
+    
+# =============================================================================
+#     model.setObjective(sum(sum((powerTrafoLoad[d,t]-powerTrafoInj[d,t])*clustered["co2_dyn"][d,t] 
+#                                 for t in timesteps) for d in days), gp.GRB.MINIMIZE)    
+# =============================================================================
     
     # adgust gurobi settings
-    model.Params.TimeLimit = 25
+    model.Params.TimeLimit = 50
     
-    model.Params.MIPGap = 0.02
+    model.Params.MIPGap = 0.05
     model.Params.NumericFocus = 3
     model.Params.MIPFocus = 3
     model.Params.Aggregate = 1
+    model.Params.DualReductions = 0
     
     model.optimize()
+    print('Optimization ended with status %d' % model.status)
     
     if model.status==gp.GRB.Status.INFEASIBLE:
         model.computeIIS()
