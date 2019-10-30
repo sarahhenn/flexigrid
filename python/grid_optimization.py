@@ -437,14 +437,21 @@ def compute(net, eco, devs, clustered, params, options, batData):
                       for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))         
                 
     #%% start optimization
-    
+
     # set objective function
     
     model.setObjective(sum(sum((powerTrafoLoad[d,t]-powerTrafoInj[d,t])*clustered["co2_dyn"][d,t] 
                                 for t in timesteps) for d in days), gp.GRB.MINIMIZE)                
+   
+    ''' Alternatives
+    model.setObjective(sum(sum(revenues_grid 
+                                for t in timesteps) for d in days), gp.GRB.MAXIMIZE)
+    
+    '''
     
     # adgust gurobi settings
-    model.Params.TimeLimit = 25
+#    model.Params.TimeLimit = 25
+    model.Params.TimeLimit = 200
     
     model.Params.MIPGap = 0.02
     model.Params.NumericFocus = 3

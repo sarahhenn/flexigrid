@@ -40,7 +40,7 @@ options =   {"static_emissions": True,  # True: calculation with static emission
                                         # False: no emissions revenues for feed-in
             "dhw_electric": True,       # define if dhw is provided decentrally by electricity
             "P_pv": 10.0,               # installed peak PV power
-            "show_grid_plots": False,   # show gridplots before and after optimization
+            "show_grid_plots": True,    # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl"
@@ -49,15 +49,16 @@ options =   {"static_emissions": True,  # True: calculation with static emission
 # TODO: load this data from list of devices 
 # -> only possible if there's a binary variable for Bat -> TODO!
 # build dictionary with technical data
+
 batData =   {"pc_ratio": 1.0,
              "c_inv": 800.0, # price for battery [€/kW]
              "c_om_rel": 0.05 # percentual share for operation and maintenance costs
              }
-                     
+                    
 #%% data import
 
 #determine the optimization folder in which all input data and results are placed
-operationFolder="D:\\git\\flexigrid"
+operationFolder="C:\\Users\\Chrissi\\Git\\Flexigrid"
 #the input data is always in this source folder
 sourceFolder=operationFolder+"\\input"
 
@@ -71,7 +72,7 @@ raw_inputs["temperature"] = np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_t
 
 emi_input = pd.read_csv(sourceFolder+"\\emission_factor_"+emission_year+".csv", header=0, usecols=[2])
 raw_inputs["co2_dyn"] = np.zeros([8760])    
-for t in range (0, 8760):
+for t in range (0, 8760):   
     i=t*4
     raw_inputs["co2_dyn"][t]= np.mean(emi_input[i:(i+4)])
 
@@ -105,7 +106,7 @@ clustered["co2_dyn"]        = inputs[5]
 clustered["co2_stat"]       = np.zeros_like(clustered["co2_dyn"])
 clustered["co2_stat"][:,:]  = np.mean(raw_inputs["co2_dyn"])
 clustered["weights"]        = nc
-clustered["z"]               = z
+clustered["z"]              = z
 
 #%% load devices, econmoics, etc.
    
@@ -122,18 +123,34 @@ params    = pik.compute_parameters(params, number_clusters, len_day)
 
 # load example net (IEEE 9 buses)
 '''
-typical kerber grids:   landnetz_freileitung_1(), landnetz_freileitung_2(), landnetz_kabel_1(), landnetz_kabel_2(),
-                        dorfnetz(), vorstadtnetz_kabel_1(), vorstadtnetz_kabel_2()
+typical kerber grids:   landnetz_freileitung_1(), 
+                        landnetz_freileitung_2(),  
+                        landnetz_kabel_1(), 
+                        landnetz_kabel_2(),
+                        dorfnetz(), 
+                        vorstadtnetz_kabel_1(), 
+                        vorstadtnetz_kabel_2()
     -> create network with nw.create_kerber_name
                         
-extreme kerber grids:   landnetz_freileitung(), landnetz_kabel(), landnetz_freileitung_trafo(), landnetz_kabel_trafo(), 
-                        dorfnetz(), dorfnetz_trafo(), 
-                        vorstadtnetz_1(), vorstadtnetz_2(), vorstadtnetz_trafo_1(), vorstadtnetz_trafo_2()
+extreme kerber grids:   landnetz_freileitung(), 
+                        landnetz_kabel(), 
+                        landnetz_freileitung_trafo(), 
+                        landnetz_kabel_trafo(), 
+                        dorfnetz(), 
+                        dorfnetz_trafo(), 
+                        vorstadtnetz_1(), 
+                        vorstadtnetz_2(), 
+                        vorstadtnetz_trafo_1(), 
+                        vorstadtnetz_trafo_2()
     -> create network with nw.kb_extrem_name   
             
 '''
-#net = nw.create_kerber_landnetz_freileitung_2()
+#net = nw.create_kerber_vorstadtnetz_kabel_2()
+#net = nw.create_kerber_dorfnetz()
 net = nw.create_kerber_landnetz_freileitung_2()
+#net = nw.create_kerber_landnetz_kabel_2()
+
+#net = nw.kb_extrem_dorfnetz_trafo()
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
