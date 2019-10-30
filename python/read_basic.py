@@ -43,6 +43,14 @@ def read_results(name):
         results["res_emission_nodes"] = pickle.load(fin)
         results["res_emission_grid"] = pickle.load(fin)
         results["nodes"] = pickle.load(fin)
+        results["res_actHP"] = pickle.load(fin)
+        results["res_powerHP"] = pickle.load(fin)
+        results["res_powerEH"] = pickle.load(fin)
+        results["res_SOC_tes"] = pickle.load(fin)
+        results["res_ch_tes"] = pickle.load(fin)
+        results["res_dch_tes"] = pickle.load(fin)
+        results["res_heatHP"] = pickle.load(fin)
+        results["res_heatEH"] = pickle.load(fin)
 
     return results
 
