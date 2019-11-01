@@ -242,7 +242,7 @@ def compute(net, eco, devs, clustered, params, options, batData):
     APC30 = model.addVars(gridnodes,days,vtype="B", name="APC30_"+str(n)+str(d)+str(t))
     APC0 = model.addVars(gridnodes,days, vtype="B", name="APC0_"+str(n)+str(d)+str(t))
     powerGenRealMax = model.addVars(gridnodes, days, vtype="C", name="powerGenRealMax"+str(n)+str(d))
-    powerGenReal = model.addVars(gridnodes, days, timesteps, vtype="C", ub=powerGenRealMax, name="powerGenReal"+str(n)+str(d)+str(t))
+    powerGenReal = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerGenReal"+str(n)+str(d)+str(t))
 
     # power flowing from net into complex of bat, house and pv
     powerSubtr = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerSubtr_"+str(n)+str(t))
@@ -414,10 +414,11 @@ def compute(net, eco, devs, clustered, params, options, batData):
                     #energy balance around trafo
                     model.addConstr(powerLine.sum(n,'*',d,t) - powerLine.sum('*',n,d,t) ==
                                     powerTrafoLoad[d,t] - powerTrafoInj[d,t], name="node_balance_trafo_"+str(n))
+
+                    model.addConstr(powerInj[n,d,t] == 0, name="define_inj_on_trafo")
+                    model.addConstr(powerSubtr[n,d,t] == 0, name="define_subtr_on_trafo")
     
                 else:
-                    # TODO: check if its okay to summarize all other constraints here. Only possible for node to be trafo or load, bat and pv?
-                    # TODO: include curtailment in here, but in a right way..
                     #energy balance node with net
                     model.addConstr(powerLine.sum(n,'*',d,t) - powerLine.sum('*',n,d,t) ==
                                     powerSubtr[n,d,t] - powerInj[n,d,t], name="node_balance net_"+str(n))
@@ -515,17 +516,20 @@ def compute(net, eco, devs, clustered, params, options, batData):
     
     # set objective function
     
-    model.setObjective(sum(sum((powerTrafoLoad[d,t]-powerTrafoInj[d,t])*clustered["co2_dyn"][d,t]
-                                for t in timesteps) for d in days), gp.GRB.MINIMIZE)                
-    
+    """model.setObjective(sum((emission_nodes[n])for n in gridnodes), gp.GRB.MINIMIZE)"""
+
+    model.setObjective(sum(sum(sum((powerSubtr[n, d, t] - powerInj[n, d, t])for n in gridnodes) * clustered["co2_stat"][d,t]
+                               for t in timesteps) for d in days), gp.GRB.MINIMIZE)
+
     # adgust gurobi settings
-    model.Params.TimeLimit = 25
+    #model.Params.TimeLimit = 60
     
     model.Params.MIPGap = 0.02
     model.Params.NumericFocus = 3
     model.Params.MIPFocus = 3
     model.Params.Aggregate = 1
-    
+    model.Params.DualReductions = 0
+
     model.optimize()
 
     # TODO: something with: gp.GurobiError()? So he allways gives out an error report
@@ -667,8 +671,9 @@ def compute(net, eco, devs, clustered, params, options, batData):
     
 
     # introduce retrieving variables to give to timeloop
-    powInjRet = np.array([[[powerInj[n,d,t].X for t in timesteps]for n in gridnodes]for d in days])
-    powSubtrRet= np.array([[[powerSubtr[n,d,t].X for t in timesteps] for n in gridnodes] for d in days])
+    # divide by 1000 to convert from kW to MW
+    powInjRet = np.array([[[((powerInj[n,d,t].X)/1000) for t in timesteps]for n in gridnodes]for d in days])
+    powSubtrRet= np.array([[[((powerSubtr[n,d,t].X)/1000) for t in timesteps] for n in gridnodes] for d in days])
 
     res_APC0 = np.array([[APC0[n,d].X for n in gridnodes]for d in days])
     res_APC30 = np.array([[APC30[n,d].X for n in gridnodes]for d in days])

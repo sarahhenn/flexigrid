@@ -28,6 +28,7 @@ def timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, g
 
     #the main time series function
     run_timeseries(net, time_steps, output_writer=ow, continue_on_divergence=True)
+    #pp.diagnostic(net)
 
 def retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes):
 
