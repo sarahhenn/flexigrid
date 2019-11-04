@@ -4,6 +4,8 @@ Created on Wed Jun 26 15:34:57 2019
 
 @author: she
 """
+        
+
 
 # import extern functions
 import numpy as np
@@ -41,9 +43,9 @@ options =   {"static_emissions": True,  # True: calculation with static emission
                                         # False: calculation with timevariant emissions
             "rev_emissions": True,      # True: emissions revenues for feed-in
                                         # False: no emissions revenues for feed-in
-            "dhw_electric": True,       # define if dhw is provided decentrally by electricity
+            "dhw_electric": False,       # define if dhw is provided decentrally by electricity
             "P_pv": 10.00,              # installed peak PV power
-            "with_hp": True,            # usage of heat pumps
+            "with_hp": False,            # usage of heat pumps
             "hp_mode": "energy_opt",    # choose between "energy_opt" and "grid_opt"
             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
             "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
@@ -51,7 +53,11 @@ options =   {"static_emissions": True,  # True: calculation with static emission
             "show_grid_plots": False,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
-                                                   building_age + ".pkl"
+                                                   building_age + ".pkl",
+            "apc_while_voltage_violation": True,    #True: uses apc, when voltage violations occur
+                                                    #False: does not use apc, when voltage violations occur
+            "bat_ch_while_voltage_violation": True, #True: increases battery charge, when voltage violations occur
+                                                    #False: does not increase battery charge, when voltage violations occur
             }
 
 # TODO: load this data from list of devices 
@@ -141,7 +147,7 @@ extreme kerber grids:   landnetz_freileitung(), landnetz_kabel(), landnetz_freil
             
 '''
 #net = nw.create_kerber_landnetz_freileitung_2()
-net = nw.create_kerber_vorstadtnetz_kabel_2()
+net = nw.create_kerber_landnetz_freileitung_1()
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
@@ -153,13 +159,13 @@ filename = "results/inputs_" + building_type + "_" + building_age + ".pkl"
 with open(filename, "wb") as f_in:
     pickle.dump(clustered, f_in, pickle.HIGHEST_PROTOCOL)
 
-#%% Define dummy parameters, options and start optimization
+"""#%% Define dummy parameters, options and start optimization
          
-(costs, emission, timesteps, days, powInjRet, powSubtrRet, gridnodes) = opti.compute(net, eco, devs, clustered, params, options, batData)
+(costs, emission, timesteps, days, powInjRet, powSubtrRet, gridnodes) = opti.compute(net, eco, devs, clustered, params, options, batData)"""
 
 outputs = reader.read_results(building_type + "_" + building_age)
 
-#%% plot grid with batteries highlighted
+"""#%% plot grid with batteries highlighted
 
 if options["show_grid_plots"]:
     
@@ -170,11 +176,101 @@ if options["show_grid_plots"]:
     
     netx=net
     netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
-    simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
+    simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')"""
 
-#run timeloop_flexigrid_now
+"""#run timeloop_flexigrid_now
 
-loop.run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes)
+loop.run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes)"""
 
-# additional constraint gets inserted here
-# usage of a logger
+#TODO: Insert this properly into run file
+
+
+# specify grid nodes for whole grid and trafo; choose and allocate load, injection and battery nodes
+# draw parameters from pandapower network
+nodes = {}
+
+nodes["grid"] = net.bus.index.to_numpy()
+nodes["trafo"] = net.trafo['lv_bus'].to_numpy()
+nodes["load"] = net.load['bus'].to_numpy()
+nodes["bat"] = net.load['bus'].to_numpy()
+
+#define gridnodes, days and timesteps
+gridnodes = list(nodes["grid"])
+days        = [i for i in range(params["days"])]
+timesteps   = [i for i in range(params["time_steps"])]
+
+
+# solution_found as continuos variable for while loop
+solution_found = False
+# constraint_apc models APC, gets reduced from 1 to 0 in iteration steps with range 0.1
+constraint_apc = {}
+# constraint_bat models forced battery charging. Gets raised by 1kW in case of voltage violation
+constraint_bat = {}
+# create array to flag whether values are critical for powerflow. If not critical: 0, if critical: 1
+critical_flag = {}
+for n in gridnodes:
+    for d in days:
+        for t in timesteps:
+            critical_flag[n, d, t] = 0
+            constraint_apc[n, d, t] = 1
+            constraint_bat[n, d, t] = 0
+
+while (solution_found == False):
+
+    #run DC-optimization
+    (costs, emission, timesteps, days, powInjRet, powSubtrRet, gridnodes) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered,params, options, batData, constraint_apc, constraint_bat,critical_flag)
+
+    # %% plot grid with batteries highlighted
+    if options["show_grid_plots"]:
+
+        bat_ex = np.zeros(len(outputs["nodes"]["grid"]))
+        for n in outputs["nodes"]["grid"]:
+            if outputs["res_capacity"][n] > 0:
+                bat_ex[n] = 1
+
+        netx = net
+        netx['bat'] = pd.DataFrame(bat_ex, columns=['ex'])
+        simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
+
+    # run AC-Powerflow-Solver
+    (output_dir, critical_flag, solution_found) = loop.run_timeloop(net, timesteps, days, powInjRet, powSubtrRet,gridnodes, critical_flag, solution_found)
+
+
+    # hier müssen irgendwie noch die werte für critical_flag und die beiden constraints gesetzt werden.
+    if (solution_found == False):
+
+        if options["apc_while_voltage_violation"]:
+            if options["bat_ch_while_voltage_violation"]:
+                print("You selected both apc and additional battery charge in case of voltage violations.")
+                for n in gridnodes:
+                    for d in days:
+                        if ((critical_flag[n, d, t] == 0 for t in timesteps) == False):
+                            for t in timesteps:
+                                constraint_apc[n,d,t] -= 0.1
+                        for t in timesteps:
+                            if(critical_flag[n,d,t] == 1):
+                                constraint_bat += 1
+
+            else:
+                print("You selected only apc in case of voltage violations.")
+                for n in gridnodes:
+                    for d in days:
+                        if ((critical_flag[n, d, t] == 0 for t in timesteps) == False):
+                            for t in timesteps:
+                                constraint_apc[n,d,t] -= 0.1
+
+        elif options["bat_ch_while_voltage_violation"]:
+            print("You selected only additional battery charge in case of voltage violations.")
+            for n in gridnodes:
+                for d in days:
+                    for t in timesteps:
+                        if (critical_flag[n, d, t] == 1):
+                            constraint_bat += 1
+
+        elif (options["bat_ch_while_voltage_violation"] == False and options["apc_while_voltage_violation"] == False):
+            print("Error: You did not select any measure in case of voltage violations!")
+
+
+    if (solution_found == True):
+        print("Solution was successfully found!")
+        break
