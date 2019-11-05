@@ -62,7 +62,7 @@ batData =   {"pc_ratio": 1.0,
 #%% data import
 
 #determine the optimization folder in which all input data and results are placed
-operationFolder="D:\\git\\flexigrid"
+operationFolder="C:\\users\\flori\\pycharmprojects\\flexigrid"
 #the input data is always in this source folder
 sourceFolder=operationFolder+"\\input"
 
@@ -138,7 +138,7 @@ extreme kerber grids:   landnetz_freileitung(), landnetz_kabel(), landnetz_freil
             
 '''
 #net = nw.create_kerber_landnetz_freileitung_2()
-net = nw.create_kerber_landnetz_freileitung_2()
+net = nw.create_kerber_dorfnetz()
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates

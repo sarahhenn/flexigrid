@@ -379,7 +379,10 @@ def compute(net, eco, devs, clustered, params, options, batData):
                 
                     model.addConstr(powerLine.sum(n,'*',d,t) - powerLine.sum('*',n,d,t) == 
                                     powerTrafoLoad[d,t] - powerTrafoInj[d,t], name="node balance_"+str(n))
-    
+
+                    model.addConstr(powerInj[n,d,t] == 0, name="define_inj_on_trafo")
+                    model.addConstr(powerLoad[n,d,t] == 0, name="define_load_on_trafo")
+
                 else:
                     model.addConstr(powerLine.sum(n,'*',d,t) - powerLine.sum('*',n,d,t) == 
                                     powerInj[n,d,t] - powerLoad[n,d,t], name="node balance_"+str(n))
