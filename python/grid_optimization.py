@@ -506,38 +506,24 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                     
     # SOC repetitions: SOC at the end of typeday == SOC at the beginning of typeday
     for n in gridnodes:   
-        for d in days:   
+        for d in days:
+            if n in nodes["bat"]:
             
-            model.addConstr(SOC_init[n,d] == SOC[n,d,len(timesteps)-1],
+                model.addConstr(SOC_init[n,d] == SOC[n,d,len(timesteps)-1],
                                                            name="repetitions_" +str(d))
     
     for n in gridnodes:   
         for d in days:         
             for t in timesteps:
-                if t == 0:
-                    SOC_previous = SOC_init[n,d]
-                else:
-                    SOC_previous = SOC[n,d,t-1]
-            
-                model.addConstr(SOC[n,d,t] == SOC_previous
-                            + (dt * (powerCh[n,d,t] * devs["bat"]["eta"] - powerDis[n,d,t]/devs["bat"]["eta"]))
-                            - devs["bat"]["k_loss"]*dt*SOC_previous, name="storage balance_"+str(n)+str(t))
+                if n in nodes["bat"]:
+                    if t == 0:
+                        SOC_previous = SOC_init[n,d]
+                    else:
+                        SOC_previous = SOC[n,d,t-1]
 
-
-    """#APC is either 0, 30 or 100 Percent, only one of them is existent
-    model.addConstrs((APC0[n,d] + APC30[n,d] + APC100[n,d] == 1
-                      for n in gridnodes for d in days), name="APC"+str(n)+str(d)+str(t))"""
-
-    # create powerGenRealMax with APC
-    """model.addConstrs((powerGenRealMax[n,d] == (APC0[n,d] * 1 + APC30[n,d] * 0.7 + APC100[n,d] * 0) * powerGenMax[n,d]
-                     for n in gridnodes for d in days), name="powerGenRealMax_"+str(n)+str(d))"""
-
-    """#create real power Gen in order to take curtailment into account properly
-    model.addConstrs((powerGenReal[n,d,t]  <= powerGen[n,d,t] for n in gridnodes for d in days for t in timesteps),
-                     name="powerGenRealCurtailed_"+str(n)+str(d)+str(t))
-    model.addConstrs((powerGenReal[n,d,t]  <= powerGenRealMax[n,d] for n in gridnodes for d in days for t in timesteps),
-                     name="powerGenRealCurtailed_"+str(n)+str(d)+str(t))"""
-
+                    model.addConstr(SOC[n,d,t] == SOC_previous
+                                + (dt * (powerCh[n,d,t] * devs["bat"]["eta"] - powerDis[n,d,t]/devs["bat"]["eta"]))
+                                - devs["bat"]["k_loss"]*dt*SOC_previous, name="storage balance_"+str(n)+str(t))
 
     #%% start optimization
     
@@ -703,13 +689,6 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     # divide by 1000 to convert from kW to MW
     powInjRet = np.array([[[((powerInj[n,d,t].X)/1000) for t in timesteps]for n in gridnodes]for d in days])
     powSubtrRet= np.array([[[((powerSubtr[n,d,t].X)/1000) for t in timesteps] for n in gridnodes] for d in days])
-
-    """res_APC0 = np.array([[APC0[n,d].X for n in gridnodes]for d in days])
-    res_APC30 = np.array([[APC30[n,d].X for n in gridnodes]for d in days])
-    res_APC100 = np.array([[APC100[n,d].X for n in gridnodes]for d in days])
-    res_powerGenReal = np.array([[[powerGenReal[n,d,t].X for n in gridnodes]for d in days]for t in timesteps])
-    res_powerGenRealMax = np.array([[powerGenRealMax[n,d].X for n in gridnodes]for d in days])
-    res_powerGen = np.array([[[powerGen[n,d,t] for n in gridnodes]for d in days]for t in timesteps])"""
 
 
 
