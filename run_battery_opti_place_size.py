@@ -40,11 +40,10 @@ options =   {"static_emissions": True,  # True: calculation with static emission
                                         # False: no emissions revenues for feed-in
             "dhw_electric": True,       # define if dhw is provided decentrally by electricity
             "P_pv": 10.0,               # installed peak PV power
-            "with_hp": True,            # usage of heat pumps
-            "hp_mode": "energy_opt",    # choose between "energy_opt" and "grid_opt"
+            "hp_mode": "grid_opt",    # choose between "off" (no hp) and "energy_opt" and "grid_opt"
             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
             "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
-            "beta_th": 0.2,             # relative size of thermal energy storage (between 0 and 1)
+            "beta_th": 1.,             # relative size of thermal energy storage (between 0 and 1)
             "show_grid_plots": False,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
@@ -168,3 +167,6 @@ if options["show_grid_plots"]:
     netx=net
     netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
     simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
+
+
+test = 0

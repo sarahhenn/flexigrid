@@ -51,6 +51,12 @@ def read_results(name):
         results["res_dch_tes"] = pickle.load(fin)
         results["res_heatHP"] = pickle.load(fin)
         results["res_heatEH"] = pickle.load(fin)
+        results["res_powerHPGrid"] = pickle.load(fin)
+        results["res_powerHPPV"] = pickle.load(fin)
+        results["res_powerHPBat"] = pickle.load(fin)
+        results["res_powerEHGrid"] = pickle.load(fin)
+        results["res_powerEHPV"] = pickle.load(fin)
+        results["res_powerEHBat"] = pickle.load(fin)
 
     return results
 
