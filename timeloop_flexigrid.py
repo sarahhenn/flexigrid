@@ -99,21 +99,23 @@ def run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
 
         # read out json files for voltages and return time and place of violation
         vm_pu_file = os.path.join(output_dir, "res_bus", "vm_pu.json")
-        vm_pu = pd.read_json(vm_pu_file)
+        vm_pu = pd.read_json(vm_pu_file, convert_axes=True)
         # sort dataframe to get timesteps(rows) in the correct order
         vm_pu = vm_pu.sort_index(axis=0)
+        # vm_pu was creating keyerror, so changed into array
+        vm_pu_final = vm_pu.values
+
         for n in gridnodes:
             for t in timesteps:
 
                 #TODO: [t,n] okay oder andersherum?
-                if(vm_pu[t,n] < 0.96 or vm_pu[t,n] > 1.04):
+                if(vm_pu_final[t,n] < 0.96 or vm_pu_final[t,n] > 1.04):
                     if(n in nodes["bat"]):
                         critical_flag[n,d,t] = 1
                         solution_found = False
                         print("voltage violation found for node "+str(n)+" and timestep "+str(t))
                 else:
                     solution_found = True
-                    print("No voltage violations found!")
 
 
     return output_dir,critical_flag,solution_found
