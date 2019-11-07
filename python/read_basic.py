@@ -57,6 +57,8 @@ def read_results(name):
         results["res_powerEHGrid"] = pickle.load(fin)
         results["res_powerEHPV"] = pickle.load(fin)
         results["res_powerEHBat"] = pickle.load(fin)
+        results["res_exBat"] = pickle.load(fin)
+        results["res_actBat"] = pickle.load(fin)
 
     return results
 

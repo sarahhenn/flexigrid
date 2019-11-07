@@ -16,7 +16,7 @@ import python.hpopt_energy as hpopt
 
 #%% Start:
 
-def compute(net, eco, devs, clustered, params, options, batData):
+def compute(net, eco, devs, clustered, params, options):
     """
     Compute the optimal building energy system consisting of pre-defined 
     devices (devs) for a given building. Furthermore the program can choose
@@ -249,8 +249,8 @@ def compute(net, eco, devs, clustered, params, options, batData):
     powerLine = model.addVars(nodeLines,days,timesteps, vtype="C", lb=-10000, name="powerLine_")
     
     # add bat variables to model
-    # x = model.addVars(dridnodes, vtype="B", name="bat_existance_"+str(n))      
-    # y = model.addVars(gridnodes, days, timesteps, vtype="B", name= "activation_charge_"+str(n)+str(t))
+    x_bat = model.addVars(gridnodes, vtype="B", name="bat_existance_"+str(n))      
+    y_bat = model.addVars(gridnodes, days, timesteps, vtype="B", name= "activation_charge_"+str(n)+str(t))
     capacity = model.addVars(gridnodes, vtype="C", name="Cap_"+str(n))
     SOC = model.addVars(gridnodes, days, timesteps, vtype="C", name="SOC_"+str(n)+str(d)+str(t))
     SOC_init = model.addVars(gridnodes, days, vtype="C", name="SOC_init_"+str(n)+str(d))
@@ -309,11 +309,12 @@ def compute(net, eco, devs, clustered, params, options, batData):
                                      
          
     # compute annual investment costs per load node
-    model.addConstrs((c_inv[n] == eco["crf"] * devs["bat"]["rval"] * batData["c_inv"] * capacity[n]
-                        for n in gridnodes), name="investment_costs"+str(n))
+    model.addConstrs((c_inv[n] == eco["crf"] * devs["bat"]["rval"] * 
+                      (x_bat[n]*devs["bat"]["c_inv_fix"] + capacity[n]*devs["bat"]["c_inv_var"])
+                      for n in gridnodes), name="investment_costs"+str(n))
     
     # compute annual operation and maintenance costs per load node
-    model.addConstrs((c_om[n] == eco["b"]["infl"] * batData["c_om_rel"] * c_inv[n]
+    model.addConstrs((c_om[n] == eco["b"]["infl"] * devs["bat"]["c_om_rel"] * c_inv[n]
                         for n in gridnodes), name="maintenance_costs"+str(n))
     
     # compute annual fix costs for electricity per load node
@@ -381,14 +382,14 @@ def compute(net, eco, devs, clustered, params, options, batData):
         
         # calculate emissions with static CO2-factor and revenues
         if options["rev_emissions"]:
-            model.addConstrs((emission_nodes[n] == Load_total_node[n] - emissions_Inj_nodes[n]
+            model.addConstrs((emission_nodes[n] == emissions_Load_nodes[n] - emissions_Inj_nodes[n]
                             for n in gridnodes), name= "emissions_stat_rev_node"+str(n)) 
             model.addConstr(emission_grid == emissions_Load_grid - emissions_Inj_grid,
                             name= "emissions_stat_rev_grid")
             
         # calculate emissions with static CO2-factor without revenues
         else:
-            model.addConstrs((emission_nodes[n] == Load_total_node[n]
+            model.addConstrs((emission_nodes[n] == emissions_Load_nodes[n]
                              for n in gridnodes), name= "emissions_stat_rev_node"+str(n))     
             model.addConstr(emission_grid == emissions_Load_grid,
                             name= "emissions_stat_rev_grid")      
@@ -412,14 +413,14 @@ def compute(net, eco, devs, clustered, params, options, batData):
         
         # calculate emissions with timevariant CO2-factor and revenues
         if options["rev_emissions"]:
-            model.addConstrs((emission_nodes[n] == Load_total_node[n] - emissions_Inj_nodes[n]
+            model.addConstrs((emission_nodes[n] == emissions_Load_nodes[n] - emissions_Inj_nodes[n]
                              for n in gridnodes), name= "emissions_dyn_rev_node") 
             model.addConstr(emission_grid == emissions_Load_grid - emissions_Inj_grid,
                             name= "emissions_dyn_rev_grid")
             
         # calculate emissions with timevariant CO2-factor without revenues
         else:
-            model.addConstrs((emission_nodes[n] == Load_total_node[n]
+            model.addConstrs((emission_nodes[n] == emissions_Load_nodes[n]
                              for n in gridnodes), name= "emissions_dyn_rev_node")     
             model.addConstr(emission_grid == emissions_Load_grid,
                             name= "emissions_dyn_rev_grid")
@@ -461,7 +462,9 @@ def compute(net, eco, devs, clustered, params, options, batData):
                 
     #%% battery constraints
     
-    # binary variables x/y needed? don't think so right  now -> build LP
+    # Battery can be switched on only if it has been purchased       
+    for n in gridnodes:
+        model.addConstr(params["time_steps"]*params["days"]*x_bat[n] >= sum(sum(y_bat[n,d,t] for t in timesteps) for d in days),  name="Activation_bat")
     
     # maximum power is defined by power/capacity ratio       
     for n in gridnodes:
@@ -469,17 +472,17 @@ def compute(net, eco, devs, clustered, params, options, batData):
             for t in timesteps:
                 if n in nodes["bat"]:
                     
-                    model.addConstr(powerCh[n,d,t]  >= 0, name="min power_"+str(n)+str(t))
-                    model.addConstr(powerCh[n,d,t]  <= capacity[n]*batData["pc_ratio"], name="max power_"+str(n)+str(t))
-                    model.addConstr(powerDis[n,d,t] >= 0, name="min power_"+str(n)+str(t))
-                    model.addConstr(powerDis[n,d,t] <= capacity[n]*batData["pc_ratio"], name="max power_"+str(n)+str(t))
+                    model.addConstr(powerCh[n,d,t]  <= y_bat[n,d,t]*(devs["bat"]["P_ch_fix"] + capacity[n]*devs["bat"]["P_ch_var"]), 
+                                    name="max power_"+str(n)+str(t))
+                    model.addConstr(powerDis[n,d,t] <= (1-y_bat[n,d,t])*(devs["bat"]["P_dch_fix"] + capacity[n]*devs["bat"]["P_dch_var"]), 
+                                    name="max power_"+str(n)+str(t))
     
     # set limitations for battery capacity
     for n in gridnodes:
         if n in nodes["bat"]:
     
-            model.addConstr(capacity[n] <= capBat_max[n], name="Battery_capacity_max")
-            model.addConstr(capacity[n] >= capBat_min[n], name="Battery_capacity_min")
+            model.addConstr(capacity[n] <= x_bat[n]*capBat_max[n], name="Battery_capacity_max")
+            model.addConstr(capacity[n] >= x_bat[n]*capBat_min[n], name="Battery_capacity_min")
             
             model.addConstrs((capacity[n] >= SOC_init[n,d] for d in days), name="Battery_capacity_SOC_init")
             model.addConstrs((capacity[n] >= SOC[n,d,t] for d in days for t in timesteps), name="Battery_capacity_SOC")
@@ -530,9 +533,8 @@ def compute(net, eco, devs, clustered, params, options, batData):
             model.addConstrs((soc_init_tes[n, d] == soc_tes[n, d,params["time_steps"]-1] for n in gridnodes for d in days), name="repetitions_tes")
                          
             
-        k_loss = devs["tes"]["k_loss"]
-        eta_ch = devs["tes"]["eta_ch"]
-        eta_dch = devs["tes"]["eta_dch"]
+        #k_loss = devs["tes"]["k_loss"]
+        k_loss = 0
             
         for d in days:
             for t in timesteps:
@@ -546,11 +548,8 @@ def compute(net, eco, devs, clustered, params, options, batData):
                         soc_prev = soc_init_tes[n,d]
                 else:
                     soc_prev = soc_tes[n,d,t-1]
-                                            
-        charge = eta_ch * ch_tes[n,d,t]
-        discharge = 1 / eta_dch * dch_tes[n,d,t]
             
-        model.addConstr(soc_tes[n,d,t] == (1 - k_loss) * soc_prev + dt * (charge - discharge), name="Storage_balance_tes")
+        model.addConstrs((soc_tes[n,d,t] == (1 - k_loss) * soc_prev + dt * (ch_tes[n,d,t]*devs["tes"]["eta_ch"]  -  dch_tes[n,d,t]/devs["tes"]["eta_dch"]) for n in gridnodes for d in days for t in timesteps), name="Storage_balance_tes")
  
         model.addConstrs((ch_tes[n,d,t]  == (heat_hp[n,d,t] + heat_eh[n,d,t]) for n in gridnodes for d in days for t in timesteps), name="Thermal_max_charge_tes")
     
@@ -568,49 +567,28 @@ def compute(net, eco, devs, clustered, params, options, batData):
                       for n in gridnodes for d in days for t in timesteps), name="powerInj"+str(n)+str(d)+str(t))
         
     if options["hp_mode"] == "grid_opt":
-        
-        if options["dhw_electric"]:
-        
-            # split power from PV generation in injected and used power
-            model.addConstrs((powerInjPV[n,d,t] == powerPV[n,d,t] - powerUsePV[n,d,t] - powerHPPV[n,d,t]
-                              for n in gridnodes for d in days for t in timesteps), name="powerInjPV"+str(n)+str(d)+str(t))
-    
-            # split battery discharging power in injected and used power
-            model.addConstrs((powerDis[n,d,t] == powerInjBat[n,d,t] + powerUseBat[n,d,t] + powerHPBat[n,d,t]
-                              for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))
-    
-            # node energy balance
-            model.addConstrs((powerPlug[n,d,t] + powerCh[n,d,t] + powerHPGrid[n,d,t] == 
-                              powerLoad[n,d,t] + powerUsePV[n,d,t] + powerUseBat[n,d,t] + powerHPPV[n,d,t] + powerHPBat[n,d,t] 
-                              for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))         
-        
-            model.addConstrs((power_hp[n,d,t] == 
-                              powerHPGrid[n,d,t] + powerHPPV[n,d,t] + powerHPBat[n,d,t] 
-                              for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))                 
-        
-        else:
             
-            # split power from PV generation in injected and used power
-            model.addConstrs((powerInjPV[n,d,t] == powerPV[n,d,t] - powerUsePV[n,d,t] - powerHPPV[n,d,t] - powerEHPV[n,d,t]
-                              for n in gridnodes for d in days for t in timesteps), name="powerInjPV"+str(n)+str(d)+str(t))
+        # split power from PV generation in injected and used power
+        model.addConstrs((powerInjPV[n,d,t] == powerPV[n,d,t] - powerUsePV[n,d,t] - powerHPPV[n,d,t] - powerEHPV[n,d,t]
+                            for n in gridnodes for d in days for t in timesteps), name="powerInjPV"+str(n)+str(d)+str(t))
     
-            # split battery discharging power in injected and used power
-            model.addConstrs((powerDis[n,d,t] == powerInjBat[n,d,t] + powerUseBat[n,d,t] + powerHPBat[n,d,t] + powerEHBat[n,d,t]
-                              for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))
+        # split battery discharging power in injected and used power
+        model.addConstrs((powerDis[n,d,t] == powerInjBat[n,d,t] + powerUseBat[n,d,t] + powerHPBat[n,d,t] + powerEHBat[n,d,t]
+                          for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))
+
+        # node energy balance
+        model.addConstrs((powerPlug[n,d,t] + powerCh[n,d,t] + powerHPGrid[n,d,t] + powerEHGrid[n,d,t] == 
+                          powerLoad[n,d,t] + powerUsePV[n,d,t] + powerUseBat[n,d,t] 
+                          + powerHPPV[n,d,t] + powerHPBat[n,d,t] + powerEHPV[n,d,t] + powerEHBat[n,d,t]
+                          for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))         
     
-            # node energy balance
-            model.addConstrs((powerPlug[n,d,t] + powerCh[n,d,t] + powerHPGrid[n,d,t] + powerEHGrid[n,d,t] == 
-                              powerLoad[n,d,t] + powerUsePV[n,d,t] + powerUseBat[n,d,t] 
-                              + powerHPPV[n,d,t] + powerHPBat[n,d,t] + powerEHPV[n,d,t] + powerEHBat[n,d,t]
-                              for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))         
+        model.addConstrs((power_hp[n,d,t] == 
+                          powerHPGrid[n,d,t] + powerHPPV[n,d,t] + powerHPBat[n,d,t] 
+                          for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))       
         
-            model.addConstrs((power_hp[n,d,t] == 
-                              powerHPGrid[n,d,t] + powerHPPV[n,d,t] + powerHPBat[n,d,t] 
-                              for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))       
-            
-            model.addConstrs((power_eh[n,d,t] == 
-                              powerEHGrid[n,d,t] + powerEHPV[n,d,t] + powerEHBat[n,d,t] 
-                              for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))       
+        model.addConstrs((power_eh[n,d,t] == 
+                          powerEHGrid[n,d,t] + powerEHPV[n,d,t] + powerEHBat[n,d,t] 
+                          for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))       
         
     else:
         # split power from PV generation in injected and used power
@@ -640,7 +618,7 @@ def compute(net, eco, devs, clustered, params, options, batData):
 #    powerInj[n,d,t] - powerLoad[n,d,t]
     
     # adgust gurobi settings
-    model.Params.TimeLimit = 50
+    model.Params.TimeLimit = 1000
     
     model.Params.MIPGap = 0.05
     model.Params.NumericFocus = 3
@@ -750,6 +728,15 @@ def compute(net, eco, devs, clustered, params, options, batData):
     else: 
         pass
     
+    res_exBat = {}
+    res_actBat = {}
+    
+    for n in gridnodes:
+            
+        res_exBat[n] = x_bat[n].X
+        res_actBat[n] = np.array([[y_bat[n,d,t].X for t in timesteps] for d in days])
+        
+    
     # save results 
     with open(options["filename_results"], "wb") as fout:
         pickle.dump(model.ObjVal, fout, pickle.HIGHEST_PROTOCOL)
@@ -798,5 +785,8 @@ def compute(net, eco, devs, clustered, params, options, batData):
         pickle.dump(res_powerEHGrid, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerEHPV, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerEHBat, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_exBat, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_actBat, fout, pickle.HIGHEST_PROTOCOL)
+        
     
         return (res_c_total_grid, res_emission_grid)
