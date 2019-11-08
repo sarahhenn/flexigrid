@@ -44,13 +44,13 @@ options =   {"static_emissions": True,  # True: calculation with static emission
             "rev_emissions": True,      # True: emissions revenues for feed-in
                                         # False: no emissions revenues for feed-in
             "dhw_electric": True,       # define if dhw is provided decentrally by electricity
-            "P_pv": 13.00,              # installed peak PV power
+            "P_pv": 10.00,              # installed peak PV power
             "with_hp": True,            # usage of heat pumps
-            "hp_mode": "energy_opt",    # choose between "energy_opt" and "grid_opt"
+            "hp_mode": "grid_opt",    # choose between "energy_opt" and "grid_opt"
             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
             "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
             "beta_th": 0.2,             # relative size of thermal energy storage (between 0 and 1)
-            "show_grid_plots": False,   # show gridplots before and after optimization
+            "show_grid_plots": True,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl",
@@ -58,15 +58,11 @@ options =   {"static_emissions": True,  # True: calculation with static emission
                                                     #False: does not use apc, when voltage violations occur
             "bat_ch_while_voltage_violation": True, #True: increases battery charge, when voltage violations occur
                                                     #False: does not increase battery charge, when voltage violations occur
+             #note: power costs for heatpump can only be separated for a cost calculation for sum(nodes), not for grid in total!
+             #select your cost function calculation through objective function in grid_optimization
+            "heatpump_seperated_costs": True,       #True: Heatpumps power costs: 18.56 ct/kWh (apart from other power users)
+                                                    #False: Heatpump power costs: 27.8 ct/kWh (equal to other power users)
             }
-
-# TODO: load this data from list of devices 
-# -> only possible if there's a binary variable for Bat -> TODO!
-# build dictionary with technical data
-batData =   {"pc_ratio": 1.0,
-             "c_inv": 800.0, # price for battery [€/kW]
-             "c_om_rel": 0.05 # percentual share for operation and maintenance costs
-             }
                      
 #%% data import
 
@@ -163,8 +159,6 @@ with open(filename, "wb") as f_in:
          
 (costs, emission, timesteps, days, powInjRet, powSubtrRet, gridnodes) = opti.compute(net, eco, devs, clustered, params, options, batData)"""
 
-outputs = reader.read_results(building_type + "_" + building_age)
-
 """#%% plot grid with batteries highlighted
 
 if options["show_grid_plots"]:
@@ -218,8 +212,9 @@ for n in gridnodes:
 while (solution_found == False):
 
     #run DC-optimization
-    (costs, emission, timesteps, days, powInjRet, powSubtrRet, gridnodes) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered,params, options, batData, constraint_apc, constraint_bat,critical_flag)
+    (costs, emission, timesteps, days, powInjRet, powSubtrRet, gridnodes) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered,params, options, constraint_apc, constraint_bat,critical_flag)
 
+    outputs = reader.read_results(building_type + "_" + building_age)
     # %% plot grid with batteries highlighted
     if options["show_grid_plots"]:
 
