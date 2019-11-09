@@ -46,11 +46,11 @@ options =   {"static_emissions": True,  # True: calculation with static emission
             "dhw_electric": True,       # define if dhw is provided decentrally by electricity
             "P_pv": 10.00,              # installed peak PV power
             "with_hp": True,            # usage of heat pumps
-            "hp_mode": "grid_opt",    # choose between "energy_opt" and "grid_opt"
+            "hp_mode": "energy_opt",    # choose between "energy_opt" and "grid_opt"
             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
             "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
             "beta_th": 0.2,             # relative size of thermal energy storage (between 0 and 1)
-            "show_grid_plots": True,   # show gridplots before and after optimization
+            "show_grid_plots": False,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl",
@@ -195,7 +195,9 @@ timesteps   = [i for i in range(params["time_steps"])]
 
 
 # solution_found as continuos variable for while loop
-solution_found = False
+solution_found = []
+for d in days:
+    solution_found.append(False)
 # constraint_apc models APC, gets reduced from 1 to 0 in iteration steps with range 0.1
 constraint_apc = {}
 # constraint_bat models forced battery charging. Gets raised by 1kW in case of voltage violation
@@ -209,7 +211,7 @@ for n in gridnodes:
             constraint_apc[n, d, t] = 1
             constraint_bat[n, d, t] = 0
 
-while (solution_found == False):
+while ((solution_found[d] != True) for d in days):
 
     #run DC-optimization
     (costs, emission, timesteps, days, powInjRet, powSubtrRet, gridnodes) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered,params, options, constraint_apc, constraint_bat,critical_flag)
@@ -230,42 +232,42 @@ while (solution_found == False):
     # run AC-Powerflow-Solver
     (output_dir, critical_flag, solution_found) = loop.run_timeloop(net, timesteps, days, powInjRet, powSubtrRet,gridnodes, critical_flag, solution_found)
 
+    for d in days:
+        if (solution_found[d] == False):
 
-    # hier müssen irgendwie noch die werte für critical_flag und die beiden constraints gesetzt werden.
-    if (solution_found == False):
+            print("Additional constrains have to be set for day" +str(d))
+            if options["apc_while_voltage_violation"]:
+                if options["bat_ch_while_voltage_violation"]:
+                    print("You selected both apc and additional battery charge in case of voltage violations.")
+                    for n in gridnodes:
+                        for d in days:
+                            if ((critical_flag[n, d, t] == 0 for t in timesteps) == False):
+                                for t in timesteps:
+                                    constraint_apc[n,d,t] -= 0.1
+                            for t in timesteps:
+                                if(critical_flag[n,d,t] == 1):
+                                    constraint_bat += 1
 
-        if options["apc_while_voltage_violation"]:
-            if options["bat_ch_while_voltage_violation"]:
-                print("You selected both apc and additional battery charge in case of voltage violations.")
+                else:
+                    print("You selected only apc in case of voltage violations.")
+                    for n in gridnodes:
+                        for d in days:
+                            if ((critical_flag[n, d, t] == 0 for t in timesteps) == False):
+                                for t in timesteps:
+                                    constraint_apc[n,d,t] -= 0.1
+
+            elif options["bat_ch_while_voltage_violation"]:
+                print("You selected only additional battery charge in case of voltage violations.")
                 for n in gridnodes:
                     for d in days:
-                        if ((critical_flag[n, d, t] == 0 for t in timesteps) == False):
-                            for t in timesteps:
-                                constraint_apc[n,d,t] -= 0.1
                         for t in timesteps:
-                            if(critical_flag[n,d,t] == 1):
+                            if (critical_flag[n, d, t] == 1):
                                 constraint_bat += 1
 
-            else:
-                print("You selected only apc in case of voltage violations.")
-                for n in gridnodes:
-                    for d in days:
-                        if ((critical_flag[n, d, t] == 0 for t in timesteps) == False):
-                            for t in timesteps:
-                                constraint_apc[n,d,t] -= 0.1
-
-        elif options["bat_ch_while_voltage_violation"]:
-            print("You selected only additional battery charge in case of voltage violations.")
-            for n in gridnodes:
-                for d in days:
-                    for t in timesteps:
-                        if (critical_flag[n, d, t] == 1):
-                            constraint_bat += 1
-
-        elif (options["bat_ch_while_voltage_violation"] == False and options["apc_while_voltage_violation"] == False):
-            print("Error: You did not select any measure in case of voltage violations!")
+            elif (options["bat_ch_while_voltage_violation"] == False and options["apc_while_voltage_violation"] == False):
+                print("Error: You did not select any measure in case of voltage violations!")
 
 
-    if (solution_found == True):
-        print("Solution was successfully found!")
-        break
+        if (solution_found[d] == True):
+            print("Solution was successfully found for day" +str(d))
+            break

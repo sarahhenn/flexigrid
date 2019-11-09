@@ -112,10 +112,13 @@ def run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
                 if(vm_pu_final[t,n] < 0.96 or vm_pu_final[t,n] > 1.04):
                     if(n in nodes["bat"]):
                         critical_flag[n,d,t] = 1
-                        solution_found = False
+                        solution_found[d] = False
                         print("voltage violation found for node "+str(n)+" and timestep "+str(t))
                 else:
-                    solution_found = True
+                    pass
+
+        if((vm_pu_final[t,n] >= 0.96 and vm_pu_final[t,n] <= 1.04) for n in gridnodes for t in timesteps):
+            solution_found[d] = True
 
 
     return output_dir,critical_flag,solution_found
