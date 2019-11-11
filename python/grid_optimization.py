@@ -196,7 +196,7 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                     powerLoad[n,d,t] = np.zeros_like(powerElec[d,t])
                     powerGen[n,d,t] = np.zeros_like(powerPV[d,t])
 
-    powerGenReal = {}
+    """powerGenReal = {}
     powerGenRealMax = {}
     for n in gridnodes:
         for t in timesteps:
@@ -212,7 +212,7 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                     powerGenReal[n,d,t] = 0
 
     powerGenReal_array = np.array([[[powerGenReal[n,d,t] for n in gridnodes]for d in days] for t in timesteps])
-    powerGen_array = np.array([[[powerGen[n,d,t] for n in gridnodes]for d in days] for t in timesteps])
+    powerGen_array = np.array([[[powerGen[n,d,t] for n in gridnodes]for d in days] for t in timesteps])"""
 
 #%% optimization model
 
@@ -269,11 +269,10 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     powerDis = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerDis_"+str(n)+str(t))
 
     #add Active Power Curailment variables to model
-    """APC100 = model.addVars(gridnodes,days, vtype="B", name="APC100_"+str(n)+str(d)+str(t))
-    APC30 = model.addVars(gridnodes,days,vtype="B", name="APC30_"+str(n)+str(d)+str(t))
-    APC0 = model.addVars(gridnodes,days, vtype="B", name="APC0_"+str(n)+str(d)+str(t))
-    powerGenRealMax = model.addVars(gridnodes, days, vtype="C", name="powerGenRealMax"+str(n)+str(d))
-    powerGenReal = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerGenReal"+str(n)+str(d)+str(t))"""
+    apc_var = model.addVars(gridnodes, days, vtype="C", ub=1, name="apc_var"+str(n)+str(d))
+    apc_total = model.addVars(gridnodes, days, vtype="C", ub=1, name="apc_total"+str(n)+str(d))
+    powerGenRealMax = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerGenRealMax"+str(n)+str(d))
+    powerGenReal = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerGenReal"+str(n)+str(d)+str(t))
 
     # power flowing from net into complex of bat, house, pv and eh (hp seperated)
     powerSubtr = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerSubtr_"+str(n)+str(t))
@@ -490,6 +489,16 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                      name="trafoLoad_activation")
     model.addConstrs((powerTrafoInj[d,t] <= ((1 - yTrafo[d,t]) * trafo_max) for d in days for t in timesteps),
                      name="trafoInj_activation")
+
+    #apc constraints
+
+    for n in gridnodes:
+        for d in days:
+            model.addConstr(apc_total[n, d] == apc_var[n, d] + constraint_apc[n, d],name="total_apc_constr" + str(n) + str(d))
+            for t in timesteps:
+                model.addConstr(powerGenRealMax[n, d, t] == (1 - apc_total[n, d]) * powerPVMax)
+                model.addConstr(powerGenReal[n, d, t] <= powerGen[n, d, t])
+                model.addConstr(powerGenReal[n,d,t] <= powerGenRealMax[n,d,t])
 
     
     # set energy balance for all nodes
@@ -748,6 +757,8 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                             for t in timesteps), name="Thermal_max_discharge_tes")
 
 
+
+
     #%% energy balances for every node
 
     if options["hp_mode"] == "grid_opt":
@@ -971,8 +982,11 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
     # introduce retrieving variables to give to timeloop
     # divide by 1000 to convert from kW to MW
-    powInjRet = np.array([[[((powerInj[n,d,t].X)/1000) for t in timesteps]for n in gridnodes]for d in days])
-    powSubtrRet= np.array([[[((powerSubtr[n,d,t].X)/1000) for t in timesteps] for n in gridnodes] for d in days])
+    if options["hp_mode"] == "grid_opt":
+        powSubtrRet= np.array([[[(((powerSubtr[n,d,t].X) + (powerHPNet[n,d,t].X))/1000) for t in timesteps] for n in gridnodes] for d in days])
+    else:
+        powSubtrRet = np.array([[[((powerSubtr[n, d, t].X) / 1000) for t in timesteps] for n in gridnodes] for d in days])
+    powInjRet = np.array([[[((powerInj[n, d, t].X) / 1000) for t in timesteps] for n in gridnodes] for d in days])
 
 
     """BatCharge = np.array([[[(powerCh[n,d,t].X) for t in timesteps] for d in days] for n in gridnodes])
@@ -985,6 +999,15 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                     print("Achtung, simultanes laden und entladen")
                 else:
                     print("kein sychrones be und entladen")"""
+
+    #test read-out:
+
+    apc_total_array = np.array([[apc_total[n,d].X for d in days] for n in gridnodes])
+    apc_var_array = np.array([[apc_var[n,d].X for d in days] for n in gridnodes])
+    powerGenReal_array = np.array([[[powerGenReal[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
+    powerGenRealMax_array = np.array([[[powerGenRealMax[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
+    powerGen_array = np.array([[[powerGen[n,d,t] for t in timesteps] for d in days] for n in gridnodes])
+
 
 
 

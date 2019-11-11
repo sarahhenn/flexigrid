@@ -25,6 +25,7 @@ import python.parse_inputs as pik
 import python.grid_optimization as opti
 import python.read_basic as reader
 import timeloop_flexigrid as loop
+import python.flexigrid_plotting_results as plot
 
 # set parameters 
 building_type = "EFH"       # EFH, ZFH, MFH_6WE, MFH_10WE, MFH_15WE
@@ -208,7 +209,7 @@ for n in gridnodes:
     for d in days:
         for t in timesteps:
             critical_flag[n, d, t] = 0
-            constraint_apc[n, d, t] = 1
+            constraint_apc[n, d] = 0
             constraint_bat[n, d, t] = 0
 
 while ((solution_found[d] != True) for d in days):
@@ -242,19 +243,26 @@ while ((solution_found[d] != True) for d in days):
                     for n in gridnodes:
                         for d in days:
                             if ((critical_flag[n, d, t] == 0 for t in timesteps) == False):
+                                constraint_apc[n,d] += 0.1
+                                if(constraint_apc[n,d] >= 1):
+                                    print("You have reached the maximal amount of curtailment!")
+                                    print("Will set curtailment to 100 Percent automatically.")
+                                    constraint_apc[n,d] = 1
                                 for t in timesteps:
-                                    constraint_apc[n,d,t] -= 0.1
-                            for t in timesteps:
-                                if(critical_flag[n,d,t] == 1):
-                                    constraint_bat += 1
+                                    if(critical_flag[n,d,t] == 1):
+                                        constraint_bat += 1
+
 
                 else:
                     print("You selected only apc in case of voltage violations.")
                     for n in gridnodes:
                         for d in days:
                             if ((critical_flag[n, d, t] == 0 for t in timesteps) == False):
-                                for t in timesteps:
-                                    constraint_apc[n,d,t] -= 0.1
+                                constraint_apc[n,d] += 0.1
+                                if (constraint_apc[n, d] >= 1):
+                                    print("You have reached the maximal amount of curtailment!")
+                                    print("Will set curtailment to 100 Percent automatically.")
+                                    constraint_apc[n, d] = 1
 
             elif options["bat_ch_while_voltage_violation"]:
                 print("You selected only additional battery charge in case of voltage violations.")
@@ -271,3 +279,5 @@ while ((solution_found[d] != True) for d in days):
         if (solution_found[d] == True):
             print("Solution was successfully found for day" +str(d))
             break
+            
+plot.plot_results(output_dir)
