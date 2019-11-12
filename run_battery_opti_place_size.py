@@ -279,5 +279,5 @@ while ((solution_found[d] != True) for d in days):
         if (solution_found[d] == True):
             print("Solution was successfully found for day" +str(d))
             break
-            
+
 plot.plot_results(output_dir)

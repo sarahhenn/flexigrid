@@ -728,19 +728,19 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
         # k_loss = devs["tes"]["k_loss"]
         k_loss = 0
-
-        for d in days:
-            for t in timesteps:
-                if t == 0:
-                    if np.max(clustered["weights"]) == 1:
-                        if d == 0:
-                            soc_prev = soc_init_tes[n, d]
+        for n in gridnodes:
+            for d in days:
+                for t in timesteps:
+                    if t == 0:
+                        if np.max(clustered["weights"]) == 1:
+                            if d == 0:
+                                soc_prev = soc_init_tes[n, d]
+                            else:
+                                soc_prev = soc_tes[n, d - 1, params["time_steps"] - 1]
                         else:
-                            soc_prev = soc_tes[n, d - 1, params["time_steps"] - 1]
+                            soc_prev = soc_init_tes[n, d]
                     else:
-                        soc_prev = soc_init_tes[n, d]
-                else:
-                    soc_prev = soc_tes[n, d, t - 1]
+                        soc_prev = soc_tes[n, d, t - 1]
 
         model.addConstrs((soc_tes[n, d, t] == (1 - k_loss) * soc_prev + dt * (ch_tes[n, d, t] * devs["tes"]["eta_ch"]
                             - dch_tes[n, d, t] / devs["tes"]["eta_dch"]) for n in gridnodes for d in days for t in timesteps), name="Storage_balance_tes")
@@ -765,69 +765,69 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
         # powerHPNet kürzt sich aus der nachfolgenden Gleichung raus
         # energy balance node with pv-bat-house-hp-eh complex
-        model.addConstr(powerInj[n, d, t] - powerSubtr[n, d, t] ==
+        model.addConstrs((powerInj[n, d, t] - powerSubtr[n, d, t] ==
                         powerInjPV[n, d, t] + powerNetDisBat[n, d, t] - powerNetLoad[n, d, t] -
-                        powerNetChBat[n, d, t] - powerEHNet[n, d, t], name="node_balance_complex_" + str(n))
+                        powerNetChBat[n, d, t] - powerEHNet[n, d, t] for n in gridnodes for d in days for t in timesteps) , name="node_balance_complex_" + str(n))
 
         # define powerInj and powerSubtr
-        model.addConstr(powerInj[n, d, t] ==
-                        powerInjPV[n, d, t] + powerNetDisBat[n, d, t],
+        model.addConstrs((powerInj[n, d, t] ==
+                        powerInjPV[n, d, t] + powerNetDisBat[n, d, t] for n in gridnodes for d in days for t in timesteps),
                         name="balance_powerInj_" + str(n))
         # auch hier kürzt sich powerHPNet raus!
-        model.addConstr(powerSubtr[n, d, t] ==
-                        powerNetLoad[n, d, t] + powerNetChBat[n, d, t] + powerEHNet[n, d, t],
+        model.addConstrs((powerSubtr[n, d, t] ==
+                        powerNetLoad[n, d, t] + powerNetChBat[n, d, t] + powerEHNet[n, d, t] for n in gridnodes for d in days for t in timesteps),
                         name="balance_powerSubtr_" + str(n))
 
         # energy balance PV device
-        model.addConstr(-powerUsePV[n, d, t] - powerEHPV[n, d, t] - powerHPPV[n, d, t] ==
-                        -powerGenReal[n, d, t] + powerInjPV[n, d, t] + powerPVChBat[n, d, t],
+        model.addConstrs((-powerUsePV[n, d, t] - powerEHPV[n, d, t] - powerHPPV[n, d, t] ==
+                        -powerGenReal[n, d, t] + powerInjPV[n, d, t] + powerPVChBat[n, d, t] for n in gridnodes for d in days for t in timesteps),
                         name="node_balance_pv_" + str(n) + str(d) + str(t))
 
         # energy balance load
-        model.addConstr(-powerUsePV[n, d, t] ==
-                        -powerLoad[n, d, t] + powerUseBat[n, d, t] + powerNetLoad[n, d, t],
+        model.addConstrs((-powerUsePV[n, d, t] ==
+                        -powerLoad[n, d, t] + powerUseBat[n, d, t] + powerNetLoad[n, d, t] for n in gridnodes for d in days for t in timesteps),
                         name="node_balance_load" + str(n) + str(d) + str(t))
 
         # energy balance bat
-        model.addConstr(powerDis[n, d, t] - powerCh[n, d, t] ==
+        model.addConstrs((powerDis[n, d, t] - powerCh[n, d, t] ==
                         powerNetChBat[n, d, t] + powerPVChBat[n, d, t] - powerNetDisBat[n, d, t] - powerUseBat[n, d, t]
-                        - powerHPBat[n, d, t] - powerEHBat[n, d, t],
+                        - powerHPBat[n, d, t] - powerEHBat[n, d, t] for n in gridnodes for d in days for t in timesteps),
                         name="energy_balance_bat_" + str(n) + str(d) + str(t))
 
     else:
 
         # energy balance node with pv-bat-house complex
-        model.addConstr(powerInj[n, d, t] - powerSubtr[n, d, t] ==
+        model.addConstrs((powerInj[n, d, t] - powerSubtr[n, d, t] ==
                         powerInjPV[n, d, t] + powerNetDisBat[n, d, t] - powerNetLoad[n, d, t] -
-                        powerNetChBat[n, d, t], name="node_balance_complex_" + str(n))
+                        powerNetChBat[n, d, t] for n in gridnodes for d in days for t in timesteps), name="node_balance_complex_" + str(n))
         # define powerInj and powerSubtr
-        model.addConstr(powerInj[n, d, t] ==
-                        powerInjPV[n, d, t] + powerNetDisBat[n, d, t], name="balance_powerInj_" + str(n))
-        model.addConstr(powerSubtr[n, d, t] ==
-                        powerNetLoad[n, d, t] + powerNetChBat[n, d, t], name="balance_powerSubtr_" + str(n))
+        model.addConstrs((powerInj[n, d, t] ==
+                        powerInjPV[n, d, t] + powerNetDisBat[n, d, t] for n in gridnodes for d in days for t in timesteps), name="balance_powerInj_" + str(n))
+        model.addConstrs((powerSubtr[n, d, t] ==
+                        powerNetLoad[n, d, t] + powerNetChBat[n, d, t] for n in gridnodes for d in days for t in timesteps), name="balance_powerSubtr_" + str(n))
         # energy balance PV device
-        model.addConstr(-powerUsePV[n, d, t] ==
-                        -powerGenReal[n, d, t] + powerInjPV[n, d, t] + powerPVChBat[n, d, t],
+        model.addConstrs((-powerUsePV[n, d, t] ==
+                        -powerGenReal[n, d, t] + powerInjPV[n, d, t] + powerPVChBat[n, d, t] for n in gridnodes for d in days for t in timesteps),
                         name="node_balance_pv_" + str(n) + str(d) + str(t))
         # energy balance load
-        model.addConstr(-powerUsePV[n, d, t] ==
-                        -powerLoad[n, d, t] + powerUseBat[n, d, t] + powerNetLoad[n, d, t],
+        model.addConstrs((-powerUsePV[n, d, t] ==
+                        -powerLoad[n, d, t] + powerUseBat[n, d, t] + powerNetLoad[n, d, t] for n in gridnodes for d in days for t in timesteps),
                         name="node_balance_load" + str(n) + str(d) + str(t))
 
         # energy balance bat
-        model.addConstr(powerDis[n, d, t] - powerCh[n, d, t] ==
+        model.addConstrs((powerDis[n, d, t] - powerCh[n, d, t] ==
                         powerNetChBat[n, d, t] + powerPVChBat[n, d, t] - powerNetDisBat[n, d, t] -
-                        powerUseBat[n, d, t], name="energy_balance_bat_" + str(n) + str(d) + str(t))
+                        powerUseBat[n, d, t] for n in gridnodes for d in days for t in timesteps), name="energy_balance_bat_" + str(n) + str(d) + str(t))
 
 
     #%% start optimization
     
     # set objective function
     
-    #model.setObjective(sum((emission_nodes[n])for n in gridnodes), gp.GRB.MINIMIZE)
+    model.setObjective(sum((emission_nodes[n])for n in gridnodes), gp.GRB.MINIMIZE)
 
-    model.setObjective(sum(sum(sum((powerSubtr[n, d, t] - powerInj[n, d, t])for n in gridnodes) * clustered["co2_stat"][d,t]
-                               for t in timesteps) for d in days), gp.GRB.MINIMIZE)
+    #model.setObjective(sum(sum(sum((powerSubtr[n, d, t] - powerInj[n, d, t])for n in gridnodes) * clustered["co2_stat"][d,t]
+                               #for t in timesteps) for d in days), gp.GRB.MINIMIZE)
     #model.setObjective(c_total_nodes, gp.GRB.MINIMIZE)
 
     # adgust gurobi settings
@@ -1006,6 +1006,13 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     apc_var_array = np.array([[apc_var[n,d].X for d in days] for n in gridnodes])
     powerGenReal_array = np.array([[[powerGenReal[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
     powerGenRealMax_array = np.array([[[powerGenRealMax[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
+    powerUsePV_array = np.array([[[powerUsePV[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
+    powerNetLoad_array = np.array([[[powerNetLoad[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
+    powerPVChBat_array = np.array([[[powerPVChBat[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
+    powerInjPV_array = np.array([[[powerInjPV[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
+    powerInj_array = np.array([[[powerInj[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
+    powerNetDisBat_array = np.array([[[powerNetDisBat[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
+
     powerGen_array = np.array([[[powerGen[n,d,t] for t in timesteps] for d in days] for n in gridnodes])
 
 
