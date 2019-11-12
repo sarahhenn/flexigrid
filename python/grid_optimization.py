@@ -116,7 +116,7 @@ def compute(net, eco, devs, clustered, params, options):
     
     if options["hp_mode"] == "energy_opt":
         
-        (res_actHP, res_powerHP, res_powerEH, res_SOC_tes, res_ch_tes, res_dch_tes, res_heatHP, res_heatEH) = hpopt.optimize(options, params, clustered, devs, capa_hp, capa_tes)
+        (res_actHP, res_powerHP, res_powerEH, res_SOC_tes, res_SOC_init_tes, res_ch_tes, res_dch_tes, res_heatHP, res_heatEH) = hpopt.optimize(options, params, clustered, devs, capa_hp, capa_tes)
         
         res_powerHPGrid = {} 
         res_powerHPPV = {}
@@ -135,6 +135,7 @@ def compute(net, eco, devs, clustered, params, options):
         res_powerHP = {}
         res_powerEH = {}
         res_SOC_tes = {} 
+        res_SOC_init_tes = {}
         res_ch_tes = {}
         res_dch_tes = {}
         res_heatHP = {}
@@ -179,11 +180,15 @@ def compute(net, eco, devs, clustered, params, options):
     # extract battery nodes and define technical data for them
     capBat_max = {}
     capBat_min = {}
+    chBat_max = {}
+    chBat_min = {}
     
     for n in gridnodes:
         if n in nodes["bat"]:
             capBat_max[n] = devs["bat"]["cap_max"]
             capBat_min[n] = devs["bat"]["cap_min"]
+            chBat_max[n] = devs["bat"]["cap_max"]
+            chBat_min[n] = devs["bat"]["cap_min"]
     
     # attach plug-in loads and PV generatrion to building nodes
     # TODO: do the same with EV loads!?
@@ -228,8 +233,8 @@ def compute(net, eco, devs, clustered, params, options):
     revenues_grid = model.addVar(vtype="C", name="revenue_grid")
     
     # variables for total node costs, total costs and total emissions
-    c_total_nodes = model.addVar(vtype="C", name="c_total", lb= -gp.GRB.INFINITY)
-    c_total_grid = model.addVar(vtype="C", name="c_total", lb= -gp.GRB.INFINITY)
+    c_total_nodes = model.addVar(vtype="C", name="c_total_nodes", lb= -gp.GRB.INFINITY)
+    c_total_grid = model.addVar(vtype="C", name="c_total_grid", lb= -gp.GRB.INFINITY)
     emission_nodes = model.addVars(gridnodes, vtype="C", name= "CO2_emission", lb= -gp.GRB.INFINITY) 
     emission_grid = model.addVar(vtype="C", name= "CO2_emission", lb= -gp.GRB.INFINITY)  
     
@@ -280,7 +285,7 @@ def compute(net, eco, devs, clustered, params, options):
         ch_tes = model.addVars(gridnodes, days, timesteps, vtype="C", name="ch_tes")
         dch_tes = model.addVars(gridnodes, days, timesteps,vtype="C", name="dch_tes")
         soc_tes = model.addVars(gridnodes, days, timesteps,vtype="C", name="soc_tes")
-        soc_init_tes = model.addVars(gridnodes, days,vtype="C", name="soc_init_tes")
+        soc_init_tes = model.addVars(gridnodes, days, vtype="C", name="soc_init_tes")
         
         # heatpump auxilary variables for energy balances
         powerHPGrid = model.addVars(gridnodes, days, timesteps, vtype="C",  name="powerHPGrid") 
@@ -472,10 +477,12 @@ def compute(net, eco, devs, clustered, params, options):
             for t in timesteps:
                 if n in nodes["bat"]:
                     
-                    model.addConstr(powerCh[n,d,t]  <= y_bat[n,d,t]*(devs["bat"]["P_ch_fix"] + capacity[n]*devs["bat"]["P_ch_var"]), 
+                    model.addConstr(powerCh[n,d,t]  <= devs["bat"]["P_ch_fix"] + capacity[n]*devs["bat"]["P_ch_var"], 
                                     name="max power_"+str(n)+str(t))
-                    model.addConstr(powerDis[n,d,t] <= (1-y_bat[n,d,t])*(devs["bat"]["P_dch_fix"] + capacity[n]*devs["bat"]["P_dch_var"]), 
+                    model.addConstr(powerCh[n,d,t]  <= y_bat[n,d,t]*chBat_max[n], name="bigM_power_"+str(n)+str(t))
+                    model.addConstr(powerDis[n,d,t] <= devs["bat"]["P_dch_fix"] + capacity[n]*devs["bat"]["P_dch_var"], 
                                     name="max power_"+str(n)+str(t))
+                    model.addConstr(powerDis[n,d,t]  <= (1-y_bat[n,d,t])*chBat_max[n], name="bigM_power_"+str(n)+str(t))
     
     # set limitations for battery capacity
     for n in gridnodes:
@@ -529,29 +536,24 @@ def compute(net, eco, devs, clustered, params, options):
         # SOC limit for every timestep            
         model.addConstrs((soc_tes[n,d,t] <= capa_tes for n in gridnodes for d in days for t in timesteps), name="SOC_tes")
         # SOC repetitions >> SOC at the end of the day has to be SOC at the beginning of this day
-        if np.max(clustered["weights"]) > 1:
-            model.addConstrs((soc_init_tes[n, d] == soc_tes[n, d,params["time_steps"]-1] for n in gridnodes for d in days), name="repetitions_tes")
+        model.addConstrs((soc_init_tes[n, d] == soc_tes[n, d,params["time_steps"]-1] for n in gridnodes for d in days), name="repetitions_tes")
                          
             
         #k_loss = devs["tes"]["k_loss"]
         k_loss = 0
             
-        for d in days:
-            for t in timesteps:
-                if t == 0:
-                    if np.max(clustered["weights"]) == 1:
-                        if d == 0:
-                            soc_prev = soc_init_tes[n,d]
-                        else:
-                            soc_prev = soc_tes[n,d-1,params["time_steps"]-1]
-                    else:
+        for n in gridnodes: 
+            for d in days:
+                for t in timesteps:
+                    if t == 0:
                         soc_prev = soc_init_tes[n,d]
-                else:
-                    soc_prev = soc_tes[n,d,t-1]
+                    else:
+                        soc_prev = soc_tes[n,d,t-1]
             
-        model.addConstrs((soc_tes[n,d,t] == (1 - k_loss) * soc_prev + dt * (ch_tes[n,d,t]*devs["tes"]["eta_ch"]  -  dch_tes[n,d,t]/devs["tes"]["eta_dch"]) for n in gridnodes for d in days for t in timesteps), name="Storage_balance_tes")
+                    model.addConstr(soc_tes[n,d,t] == (1 - k_loss) * soc_prev + dt * (ch_tes[n,d,t]*devs["tes"]["eta_ch"]  -  dch_tes[n,d,t]/devs["tes"]["eta_dch"]), name="Storage_balance_tes")
+#                    model.addConstr(soc_tes[n,d,t] ==  (soc_prev + ch_tes[n,d,t] - dch_tes[n,d,t]), name="Storage_balance_tes")
  
-        model.addConstrs((ch_tes[n,d,t]  == (heat_hp[n,d,t] + heat_eh[n,d,t]) for n in gridnodes for d in days for t in timesteps), name="Thermal_max_charge_tes")
+                    model.addConstr(ch_tes[n,d,t]  == (heat_hp[n,d,t] + heat_eh[n,d,t]), name="Thermal_max_charge_tes")
     
         # differentiation for dhw-heating: either electric or via heating system
         if options["dhw_electric"]:
@@ -613,20 +615,21 @@ def compute(net, eco, devs, clustered, params, options):
 #                                 for t in timesteps) for d in days), gp.GRB.MINIMIZE)    
 # =============================================================================
     
-    model.setObjective(sum(sum(sum((powerInj[n,d,t] - powerLoad[n,d,t]) for n in gridnodes)*clustered["co2_dyn"][d,t] 
-                                 for t in timesteps) for d in days), gp.GRB.MINIMIZE)   
+    model.setObjective(sum(emission_nodes[n] for n in gridnodes), gp.GRB.MINIMIZE)   
 #    powerInj[n,d,t] - powerLoad[n,d,t]
     
     # adgust gurobi settings
     model.Params.TimeLimit = 1000
     
-    model.Params.MIPGap = 0.05
+    model.Params.MIPGap = 0.00
     model.Params.NumericFocus = 3
     model.Params.MIPFocus = 3
     model.Params.Aggregate = 1
     model.Params.DualReductions = 0
     
+    model.write("debug.lp")
     model.optimize()
+    
     print('Optimization ended with status %d' % model.status)
     
     if model.status==gp.GRB.Status.INFEASIBLE:
@@ -715,6 +718,7 @@ def compute(net, eco, devs, clustered, params, options):
             res_heatEH[n] = np.array([[heat_eh[n,d,t].X for t in timesteps] for d in days])
             
             res_SOC_tes[n] = np.array([[soc_tes[n,d,t].X for t in timesteps] for d in days]) 
+            res_SOC_init_tes[n] = np.array([soc_init_tes[n,d].X for d in days])
             res_ch_tes[n] = np.array([[ch_tes[n,d,t].X for t in timesteps] for d in days]) 
             res_dch_tes[n] = np.array([[dch_tes[n,d,t].X for t in timesteps] for d in days]) 
 
@@ -774,7 +778,8 @@ def compute(net, eco, devs, clustered, params, options):
         pickle.dump(res_actHP, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerHP, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerEH, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_SOC_tes, fout, pickle.HIGHEST_PROTOCOL)   
+        pickle.dump(res_SOC_tes, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_SOC_init_tes, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_ch_tes, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_dch_tes, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_heatHP, fout, pickle.HIGHEST_PROTOCOL)

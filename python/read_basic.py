@@ -47,6 +47,7 @@ def read_results(name):
         results["res_powerHP"] = pickle.load(fin)
         results["res_powerEH"] = pickle.load(fin)
         results["res_SOC_tes"] = pickle.load(fin)
+        results["res_SOC_init_tes"] = pickle.load(fin)
         results["res_ch_tes"] = pickle.load(fin)
         results["res_dch_tes"] = pickle.load(fin)
         results["res_heatHP"] = pickle.load(fin)

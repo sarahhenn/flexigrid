@@ -167,7 +167,8 @@ def optimize(options, params, clustered, devs, capa_hp, capa_tes):
     res_heatHP = np.array([[heat_hp[d,t].X for t in timesteps]for d in days])
     res_heatEH = np.array([[heat_eh[d,t].X for t in timesteps]for d in days])
     res_SOC = np.array([[soc[d,t].X for t in timesteps]for d in days])
+    res_SOC_init = np.array([soc[d].X for d in days])
     res_ch = np.array([[ch[d,t].X for t in timesteps]for d in days])
     res_dch = np.array([[dch[d,t].X for t in timesteps]for d in days])
 
-    return (res_actHP, res_powerHP, res_powerEH, res_SOC, res_ch, res_dch, res_heatHP, res_heatEH)
+    return (res_actHP, res_powerHP, res_powerEH, res_SOC, res_SOC_init, res_ch, res_dch, res_heatHP, res_heatEH)
