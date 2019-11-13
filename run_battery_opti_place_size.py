@@ -40,7 +40,16 @@ options =   {"static_emissions": True,  # True: calculation with static emission
                                         # False: no emissions revenues for feed-in
             "dhw_electric": True,       # define if dhw is provided decentrally by electricity
             "P_pv": 10.0,               # installed peak PV power
+#<<<<<<< HEAD
             "show_grid_plots": True,    # show gridplots before and after optimization
+#=======
+            "with_hp": True,            # usage of heat pumps
+            "hp_mode": "energy_opt",    # choose between "energy_opt" and "grid_opt"
+            "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
+            "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
+            "beta_th": 0.2,             # relative size of thermal energy storage (between 0 and 1)
+            "show_grid_plots": True,    # show gridplots before and after optimization
+#>>>>>>> 73723d734974ef8cb390914b1835da4305268237
             
             "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl"
@@ -147,8 +156,9 @@ extreme kerber grids:   landnetz_freileitung(),
 '''
 #net = nw.create_kerber_vorstadtnetz_kabel_2()
 #net = nw.create_kerber_dorfnetz()
-net = nw.create_kerber_landnetz_freileitung_2()
+#net = nw.create_kerber_landnetz_freileitung_2()
 #net = nw.create_kerber_landnetz_kabel_2()
+net = nw.create_kerber_landnetz_kabel_1()
 
 #net = nw.kb_extrem_dorfnetz_trafo()
 
