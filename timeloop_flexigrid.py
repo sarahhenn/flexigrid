@@ -120,6 +120,8 @@ def run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
             solution_found[d] = True
 
         critical_flag_array = np.array(critical_flag)
+        pp.diagnostic()
+        pp.diagnostic_report()
         print("stop")
 
 

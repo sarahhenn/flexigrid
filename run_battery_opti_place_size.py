@@ -25,7 +25,7 @@ import python.parse_inputs as pik
 import python.grid_optimization as opti
 import python.read_basic as reader
 import timeloop_flexigrid as loop
-import python.flexigrid_plotting_results as plot
+import python.flexigrid_plotting_results as plot_res
 
 # set parameters 
 building_type = "EFH"       # EFH, ZFH, MFH_6WE, MFH_10WE, MFH_15WE
@@ -40,18 +40,18 @@ emission_year = "2017"      # 2017, 2030, 2050
 #useable_roofarea  = 0.30    #Default value: 0.25
 
 # set options
-options =   {"static_emissions": True,  # True: calculation with static emissions, 
+options =   {"static_emissions": True,  # True: calculation with static emissions,
                                         # False: calculation with timevariant emissions
             "rev_emissions": True,      # True: emissions revenues for feed-in
                                         # False: no emissions revenues for feed-in
             "dhw_electric": True,       # define if dhw is provided decentrally by electricity
             "P_pv": 10.00,              # installed peak PV power
             "with_hp": True,            # usage of heat pumps
-            "hp_mode": "energy_opt",    # choose between "energy_opt" and "grid_opt"
+            "hp_mode": "grid_opt",    # choose between "energy_opt" and "grid_opt"
             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
             "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
             "beta_th": 0.2,             # relative size of thermal energy storage (between 0 and 1)
-            "show_grid_plots": False,   # show gridplots before and after optimization
+            "show_grid_plots": True,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl",
@@ -63,6 +63,8 @@ options =   {"static_emissions": True,  # True: calculation with static emission
              #select your cost function calculation through objective function in grid_optimization
             "heatpump_seperated_costs": True,       #True: Heatpumps power costs: 18.56 ct/kWh (apart from other power users)
                                                     #False: Heatpump power costs: 27.8 ct/kWh (equal to other power users)
+             "allow_apc_opti": True                #True: Curtailment allowed to be set in optimization
+                                                    #False: Curtailment only through additional constraint
             }
                      
 #%% data import
@@ -144,7 +146,8 @@ extreme kerber grids:   landnetz_freileitung(), landnetz_kabel(), landnetz_freil
             
 '''
 #net = nw.create_kerber_landnetz_freileitung_2()
-net = nw.create_kerber_landnetz_freileitung_1()
+net = nw.create_kerber_vorstadtnetz_kabel_2()
+#net = nw.create_kerber_landnetz_freileitung_1()
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
@@ -280,4 +283,4 @@ while ((solution_found[d] != True) for d in days):
             print("Solution was successfully found for day" +str(d))
             break
 
-plot.plot_results(output_dir)
+plot_res.plot_results(output_dir)
