@@ -18,6 +18,7 @@ from pandapower.plotting.simple_plot_bat import simple_plot_bat
 import python.clustering_medoid as clustering
 import python.parse_inputs as pik
 import python.grid_optimization as opti
+import python.grid_optimization_master as opti2
 import python.read_basic as reader
 
 
@@ -40,29 +41,16 @@ options =   {"static_emissions": True,  # True: calculation with static emission
                                         # False: no emissions revenues for feed-in
             "dhw_electric": True,       # define if dhw is provided decentrally by electricity
             "P_pv": 10.0,               # installed peak PV power
-#<<<<<<< HEAD
-            "show_grid_plots": True,    # show gridplots before and after optimization
-#=======
-            "with_hp": True,            # usage of heat pumps
-            "hp_mode": "energy_opt",    # choose between "energy_opt" and "grid_opt"
+            "hp_mode": "energy_opt",    # choose between "off" (no hp) and "energy_opt" and "grid_opt"
             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
             "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
-            "beta_th": 0.2,             # relative size of thermal energy storage (between 0 and 1)
-            "show_grid_plots": True,    # show gridplots before and after optimization
-#>>>>>>> 73723d734974ef8cb390914b1835da4305268237
+            "beta_th": 1.,             # relative size of thermal energy storage (between 0 and 1)
+            "show_grid_plots": True,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl"
             }
 
-# TODO: load this data from list of devices 
-# -> only possible if there's a binary variable for Bat -> TODO!
-# build dictionary with technical data
-
-batData =   {"pc_ratio": 1.0,
-             "c_inv": 800.0, # price for battery [€/kW]
-             "c_om_rel": 0.05 # percentual share for operation and maintenance costs
-             }
                     
 #%% data import
 
@@ -174,7 +162,7 @@ with open(filename, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
          
-(costs, emission) = opti.compute(net, eco, devs, clustered, params, options, batData)
+(costs, emission) = opti.compute(net, eco, devs, clustered, params, options)
 
 outputs = reader.read_results(building_type + "_" + building_age)
 

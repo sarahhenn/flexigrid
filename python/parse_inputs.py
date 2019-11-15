@@ -89,13 +89,13 @@ def read_economics(devices, filename="input/economics.xlsx"):
     eco["prChange"] = {}
     eco["prChange"]["el"]     = sheet_eco.cell_value(4,1)
     eco["prChange"]["gas"]    = sheet_eco.cell_value(5,1)
-    eco["prChange"]["pel"]    = sheet_eco.cell_value(6,1)
+    eco["prChange"]["pel"] = sheet_eco.cell_value(6,1)
     eco["prChange"]["eex"]    = sheet_eco.cell_value(7,1)
     eco["prChange"]["infl"]   = sheet_eco.cell_value(8,1)
     
-    eco["price_sell_el"]      = sheet_eco.cell_value(9,1)
-    eco["price_sell_eeg"]     = sheet_eco.cell_value(10,1)
-    eco["energy_tax"]         = sheet_eco.cell_value(11,1)  # in €/kWh
+    eco["price_sell_el"] = sheet_eco.cell_value(9,1)
+    eco["price_sell_eeg"] = sheet_eco.cell_value(10,1)
+    eco["energy_tax"]    = sheet_eco.cell_value(11,1)  # in €/kWh
         
     pC = eco["prChange"]
     eco["b"] = {key: ((1 - (pC[key] / eco["q"]) ** eco["t_calc"]) / 
@@ -187,7 +187,7 @@ def read_economics(devices, filename="input/economics.xlsx"):
     eco["inst_costs"]["EFH"]["pv"]     = sheet_dev.cell_value(7,1)
     eco["inst_costs"]["EFH"]["tes"]    = sheet_dev.cell_value(8,1)
     eco["inst_costs"]["EFH"]["bat"]    = sheet_dev.cell_value(9,1)
-    eco["inst_costs"]["EFH"]["eh"]     = sheet_dev.cell_value(10,1)
+    eco["inst_costs"]["EFH"]["eh"]    = sheet_dev.cell_value(10,1)
     
     eco["inst_costs"]["MFH"] = {}
     eco["inst_costs"]["MFH"]["boiler"] = sheet_dev.cell_value(1,2)
@@ -285,9 +285,9 @@ def _handle_sheet(sheet, dev, timesteps, days,
         Read device characteristics
     dev : string
         - `"boiler"`    : Boiler
-        - `"chp"`       : CHP unit (BHKW)
+        - `"chp"`       : CHP unit
         - `"hp_air"`    : Air heat pump
-        - `"hp_geo"`    : Geothermal heat pump
+        - `"hp_geo"` : Geothermal heat pump
         - `"eh"`        : Electrical heater
         - `"pv"`        : Photovoltaic modules
         - `"stc"`       : Solar thermal collectors
