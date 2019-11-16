@@ -153,7 +153,7 @@ def compute(net, eco, devs, clustered, params, options):
             powerElec = clustered["electricity"]
   
 #%% extract node and line information from pandas-network
-
+    
     # specify grid nodes for whole grid and trafo; choose and allocate load, injection and battery nodes
     nodes = {}
 
@@ -162,17 +162,18 @@ def compute(net, eco, devs, clustered, params, options):
     nodes["load"] = net.load['bus'].to_numpy()
     #nodeInj = net.load['bus'].to_numpy()
     nodes["branch"] = nodes["grid"]  
-    nodes["branch"] = np.delete(nodes["branch"],nodes["load"])   #Reihenfolge wichtig
-    nodes["branch"] = np.delete(nodes["branch"],[0,1])
-      #  nodes["trafo"] # auslesen, subtrahieren, einlesen
+    nodes["branch"] = np.delete(nodes["branch"],nodes["load"])   #Reihenfolge wichtig !
+    nodes["branch"] = np.delete(nodes["branch"],[0,1])           #Reihenfolge wichtig !
    
-    nodes["bat"] = net.load['bus'].to_numpy()   #Batterien an Loads zugelassen
-    
+    nodes["bat"] = net.load['bus'].to_numpy()   #Batterien an Loads zugelassen    
   #  nodes["bat"] = nodes["branch"]   #Batterien an Verzweigungen zugelassen
 
     
     gridnodes = list(nodes["grid"])
-
+    
+    # set nominal Voltage for grid
+    U_nominal = net.trafo.vn_lv_kv*1000
+    
     # extract existing lines 
     nodeLines = []
     for i in range(len(net.line['from_bus'])):
@@ -183,22 +184,27 @@ def compute(net, eco, devs, clustered, params, options):
     # multiply with 400 V to get maximal power in kW      
     powerLine_max = {}
     for [n,m] in nodeLines:
-        powerLine_max[n,m] = (net.line['max_i_ka'][nodeLines.index((n,m))])*400
+        powerLine_max[n,m] = (net.line['max_i_ka'][nodeLines.index((n,m))])*U_nominal
     
     # maximal and minimal voltage in kV as difference from rated voltage
-    voltNode_max = {}
-    voltNode_min = {}
+    #voltNode_max = {}  #
+    #voltNode_min = {}
     lineLength = {}
-    specRes = {}
-    currentLine_max = {}
+    specRes_r = {}
+    specRes_x = {}
+    specRes_ap = {}
     
     for [n,m] in nodeLines:
-        voltNode_max[n,m]   = net.trafo.vn_lv_kv*1.04
-        voltNode_min[n,m]   = net.trafo.vn_lv_kv*0.96
-        lineLength[n,m]     = net.line['length_km'][nodeLines.index((n,m))]
-        specRes[n,m]        = net.line['r_ohm_per_km'][nodeLines.index((n,m))]
-        currentLine_max [n,m]   = net.line['max_i_ka'][nodeLines.index((n,m))]
+        lineLength[n,m]         = net.line['length_km'][nodeLines.index((n,m))]
+        specRes_r[n,m]            = net.line['r_ohm_per_km'][nodeLines.index((n,m))]
+        specRes_x[n,m]            = net.line['x_ohm_per_km'][nodeLines.index((n,m))]
+        specRes_ap[n,m]            = (specRes_r[n,m] * specRes_x[n,m])
    
+    
+    #for n in gridnodes:
+        voltNode_max         = U_nominal*1.04
+        voltNode_min         = U_nominal*0.96
+        
     # extract battery nodes and define technical data for them
     capBat_max = {}
     capBat_min = {}
@@ -274,10 +280,12 @@ def compute(net, eco, devs, clustered, params, options):
     
     # set line bounds due to technical limits                             
     powerLine = model.addVars(nodeLines,days,timesteps, vtype="C", lb=-10000, name="powerLine_")
-    # voltLine = model.addVars(nodeLines,days,timesteps, vtype="C", lb=voltNode_min, ub=voltNode_max, name="voltLine_")   #nach vorbild von powerline
-    voltLine = model.addVars(nodeLines,days,timesteps, vtype="C", name="voltLine_")
-    
-    currentLine =model.addVars(nodeLines,days,timesteps, vtype="C",lb=0, ub=currentLine_max, name="currentLine_") 
+    voltLine = model.addVars(nodeLines,days,timesteps, vtype="C", lb=-10000, name="voltLine_")
+    #voltNode = model.addVars(gridnodes, days, timesteps, vtype="C", lb=voltNode_min, ub=voltNode_max, name="voltNode_"+str(n)+str(t))
+    #voltNode = model.addVars(gridnodes, days, timesteps, vtype="C", name="voltNode_"+str(n)+str(t))
+    #voltLoad = model.addVars(gridnodes, days, timesteps, vtype="C", name="voltLoad_"+str(n)+str(t))
+    voltNode = model.addVars(gridnodes, days, timesteps, vtype="C", name="voltNode_")
+    voltLoad = model.addVars(gridnodes, days, timesteps, vtype="C", name="voltLoad_")
     
     # add bat variables to model
     x_bat = model.addVars(gridnodes, vtype="B", name="bat_existance_"+str(n))      
@@ -491,13 +499,48 @@ def compute(net, eco, devs, clustered, params, options):
                     model.addConstr(powerLine[n,m,d,t] <= powerLine_max[n,m], name="line power max_"+str(n)+str(m)+str(t))
                     model.addConstr(powerLine[n,m,d,t] >= (-1)*powerLine_max[n,m], name="line power min_"+str(n)+str(m)+str(t))
                     
-                    #model.addConstr(voltLine[n,m,d,t] == (powerLine[n,m,d,t] * lineLength[n,m] * specRes[n,m] / 400))
-                    #voltLine[n,m,d,t] = (powerLine[n,m,d,t] * lineLength[n,m] * specRes[n,m] / 400)
-                                         
-                    #voltNode definieren und füllen!
-                    #model.addConstr(voltNode[n,m,d,t] <= voltNode_max[n,m], name="node volt max_"+str(n)+str(m)+str(t))
-                    #model.addConstr(voltNode[n,m,d,t] >= voltNode_min[n,m], name="node volt min_"+str(n)+str(m)+str(t))
-                      
+                    model.addConstr(voltLine[n,m,d,t] == (powerLine[n,m,d,t] * lineLength[n,m] * specRes_ap[n,m] / U_nominal))
+                    
+    
+    #voltLoad[1,d,t] = voltNode_min
+    #voltLoad[1,d,t] = U_nominal
+    for [n,m] in nodeLines:
+        for d in days:
+            for t in timesteps:
+                    voltNode[1,d,t] = U_nominal
+                    #voltLoad[1,d,t] = voltNode_min
+                    #
+                    # ## voltNode ohne Constraint ist tupledict!
+                    #
+                    model.addConstr(voltLine[n,m,d,t] == voltNode[n,d,t] - voltNode[m,d,t], name="node voltage_")
+                    #voltLine[n,m,d,t] = voltNode[n,d,t] - voltNode[m,d,t]
+                    
+                    #voltNode[m,d,t] = (voltNode[n,d,t] - voltLine[n,m,d,t])
+                    #model.addConstr(voltLine[n,m,d,t] == (voltNode[n,d,t] - voltNode[m,d,t]))
+                    #model.addConstr(voltLoad[n,d,t] - voltNode[m,d,t] == (voltLine[n,m,d,t]))
+                    #model.addConstr(0 == (voltNode[n,d,t] - voltLoad[m,d,t] - voltLine[n,m,d,t]))
+                    #model.addConstr(voltLoad[m,d,t] == (voltNode[m,d,t]))
+                    #
+                    #model.addConstr(voltNode[m,d,t] == (voltLoad[n,d,t] - voltLine[n,m,d,t]))
+                    #model.addConstr(voltLoad[m,d,t] == (voltNode[n,d,t] - voltLine[n,m,d,t]))
+                    #
+                    #model.addConstr(0 == (voltLoad[n,d,t] - voltNode[m,d,t] - voltLine[n,m,d,t]))
+                    #model.addConstr(voltLoad[m,d,t] == (voltNode[n,d,t] - voltLine[n,m,d,t]))
+                    #
+                    #voltNode[m,d,t] = (voltLoad[n,d,t] - voltLine[n,m,d,t])
+                    #voltLoad[m,d,t] = (voltNode[n,d,t] - voltLine[n,m,d,t])
+                    #
+#                    #voltNode definieren und füllen!
+#                    #model.addConstr(voltNode[m,d,t] <= voltNode_max, name="node volt max_"+str(n)+str(m)+str(t))
+#                    #model.addConstr(voltNode[m,d,t] >= voltNode_min, name="node volt min_"+str(n)+str(m)+str(t))
+
+#   for n in gridnodes:
+#           for d in days:
+#               for t in timesteps:
+#                       model.addConstr(voltLine.sum(n,'*',d,t) - voltLine.sum('*',n,d,t) == 
+#                                       powerInj[n,d,t] - powerLoad[n,d,t], name="node balance_"+str(n))
+
+
    #%% battery constraints
     
     # Battery can be switched on only if it has been purchased       
@@ -652,7 +695,7 @@ def compute(net, eco, devs, clustered, params, options):
 #    powerInj[n,d,t] - powerLoad[n,d,t]
     
     # adgust gurobi settings
-    model.Params.TimeLimit = 300
+    model.Params.TimeLimit = 100
     
     model.Params.MIPGap = 0.05
     model.Params.NumericFocus = 3
@@ -675,10 +718,14 @@ def compute(net, eco, devs, clustered, params, options):
                 f.write('\n')
         f.close()
         
-#    print("nodeLines")
-#    print(nodeLines)
-#    print("powerLine")
-#    print(powerLine)
+
+    #print(voltNode[5,11,16])
+    print(powerLine[4,5,11,16])
+    #for [n,m] in nodeLines:
+    print(voltNode[1,5,17])
+    print(voltNode[2,5,17])
+    print(voltNode[3,5,17])
+      #  print(voltLoad[m,5,17])
     #%% retrieve results
     
     # grid results    
@@ -692,8 +739,16 @@ def compute(net, eco, devs, clustered, params, options):
     res_voltLine = {}
     for [n,m] in nodeLines:
         res_voltLine[n,m] = np.array([[voltLine[n,m,d,t].X for t in timesteps] for d in days])
+                
+    res_voltNode = {}
+    for m in gridnodes:
+        res_voltNode[m] = np.array([[voltNode[m,d,t].X for t in timesteps] for d in days])
+    res_voltLoad = {}
+    for m in gridnodes:
+        res_voltLoad[m] = np.array([[voltLoad[m,d,t].X for t in timesteps] for d in days])
+    
         
- #   res_voltNode = np.array([voltNode[n,m,d,t].X for n in gridnodes])
+ #   res_voltNode = np.array([voltNode[m,d,t].X for m in gridnodes])
     
     # battery operation results
     res_capacity = {}
@@ -777,8 +832,7 @@ def compute(net, eco, devs, clustered, params, options):
     res_exBat = {}
     res_actBat = {}
     
-    for n in gridnodes:
-            
+    for n in gridnodes:           
         res_exBat[n] = x_bat[n].X
         res_actBat[n] = np.array([[y_bat[n,d,t].X for t in timesteps] for d in days])
         
@@ -827,7 +881,8 @@ def compute(net, eco, devs, clustered, params, options):
         pickle.dump(res_heatHP, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_heatEH, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_voltLine, fout, pickle.HIGHEST_PROTOCOL)
-  #      pickle.dump(res_voltNode, fout, pickle.HIGHEST_PROTOCOL)##
+        pickle.dump(res_voltNode, fout, pickle.HIGHEST_PROTOCOL)##
+        pickle.dump(res_voltLoad, fout, pickle.HIGHEST_PROTOCOL)##        
         pickle.dump(res_powerHPGrid, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerHPPV, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerHPBat, fout, pickle.HIGHEST_PROTOCOL)

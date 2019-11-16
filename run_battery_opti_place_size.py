@@ -13,12 +13,12 @@ import pandapower as pp
 import pandapower.networks as nw
 import pandapower.plotting as plot
 from pandapower.plotting.simple_plot_bat import simple_plot_bat
-
+ 
 # import own function
 import python.clustering_medoid as clustering
 import python.parse_inputs as pik
 import python.grid_optimization as opti
-import python.grid_optimization_master as opti2
+#import python.grid_optimization_master as opti2
 import python.read_basic as reader
 
 
@@ -142,13 +142,26 @@ extreme kerber grids:   landnetz_freileitung(),
     -> create network with nw.kb_extrem_name   
             
 '''
-#net = nw.create_kerber_vorstadtnetz_kabel_2()
-#net = nw.create_kerber_dorfnetz()
+#net = nw.create_kerber_landnetz_freileitung_1()
 #net = nw.create_kerber_landnetz_freileitung_2()
-#net = nw.create_kerber_landnetz_kabel_2()
 net = nw.create_kerber_landnetz_kabel_1()
+#net = nw.create_kerber_landnetz_kabel_2()
+#net = nw.create_kerber_dorfnetz()
+#net = nw.create_kerber_vorstadtnetz_kabel_1()
+#net = nw.create_kerber_vorstadtnetz_kabel_2()
 
+
+#net = nw.kb_extrem_landnetz_freileitung()
+#net = nw.kb_extrem_landnetz_kabel()
+#net = nw.kb_extrem_landnetz_freileitung_trafo()
+#net = nw.kb_extrem_landnetz_kabel_trafo()
+#net = nw.kb_extrem_dorfnetz()
 #net = nw.kb_extrem_dorfnetz_trafo()
+#net = nw.kb_extrem_vorstadtnetz_1()
+#net = nw.kb_extrem_vorstadtnetz_2()
+#net = nw.kb_extrem_vorstadtnetz_trafo_1()
+#net = nw.kb_extrem_vorstadtnetz_trafo_2()
+
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
