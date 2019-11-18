@@ -4,7 +4,7 @@
 """
 import pickle 
 
-def read_results(name):
+def read_results(name, options):
     results = {}
     
     with open("results/inputs_" + name + ".pkl", "rb") as f_in:
@@ -16,20 +16,32 @@ def read_results(name):
         results["3_MIPGap"] = pickle.load(fin)
         results["res_powerTrafoLoad"] = pickle.load(fin)
         results["res_powerTrafoInj"] = pickle.load(fin)
+        results["res_yTrafo"] = pickle.load(fin)
         results["res_powerLine"] = pickle.load(fin)
         results["res_capacity"] = pickle.load(fin)
         results["res_powerCh"] = pickle.load(fin)
         results["res_powerDis"] = pickle.load(fin)
         results["res_SOC"] = pickle.load(fin)
         results["res_SOC_init"] = pickle.load(fin)
-        results["res_powerLoad"] = pickle.load(fin)
+        results["res_constraint_batCh"] = pickle.load(fin)
+        results["res_constraint_batDis"] = pickle.load(fin)
+        results["res_exBat"] = pickle.load(fin)
+        results["res_actBat"] = pickle.load(fin)
         results["res_powerInj"] = pickle.load(fin)
+        results["res_powerSubtr"] = pickle.load(fin)
         results["res_powerInjPV"] = pickle.load(fin)
-        results["res_powerInjBat"] = pickle.load(fin)
         results["res_powerUsePV"] = pickle.load(fin)
+        results["res_powerPVChBat"] = pickle.load(fin)
+        results["res_powerNetLoad"] = pickle.load(fin)
         results["res_powerUseBat"] = pickle.load(fin)
-        results["res_powerPV"] = pickle.load(fin)
-        results["res_powerPlug"] = pickle.load(fin)
+        results["res_powerNetChBat"] = pickle.load(fin)
+        results["res_powerNetDisBat"] = pickle.load(fin)
+        if options["allow_apc_opti"]:
+            results["res_apc_var"] = pickle.load(fin)
+            results["res_apc_total"] = pickle.load(fin)
+        results["res_constraint_apc"] = pickle.load(fin)
+        results["res_powerGenRealMax"] = pickle.load(fin)
+        results["res_powerGenReal"] = pickle.load(fin)
         results["res_c_inv"] = pickle.load(fin)
         results["res_c_om"] = pickle.load(fin)
         results["res_c_dem"] = pickle.load(fin)
@@ -51,6 +63,12 @@ def read_results(name):
         results["res_dch_tes"] = pickle.load(fin)
         results["res_heatHP"] = pickle.load(fin)
         results["res_heatEH"] = pickle.load(fin)
+        results["res_powerHPNet"] = pickle.load(fin)
+        results["res_powerHPPV"] = pickle.load(fin)
+        results["res_powerHPBat"] = pickle.load(fin)
+        results["res_powerEHNet"] = pickle.load(fin)
+        results["res_powerEHPV"] = pickle.load(fin)
+        results["res_powerEHBat"] = pickle.load(fin)
 
     return results
 

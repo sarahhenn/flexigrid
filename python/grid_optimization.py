@@ -16,7 +16,7 @@ import python.hpopt_energy as hpopt
 
 #%% Start:
 
-def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params, options, constraint_apc, constraint_bat, critical_flag):
+def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params, options, constraint_apc, constraint_batCh, constraint_batDis, critical_flag):
     """
     Compute the optimal building energy system consisting of pre-defined 
     devices (devs) for a given building. Furthermore the program can choose
@@ -589,9 +589,10 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
                     # added constraint bat, which gets changed for every iteration (+1kW per iteration) and critical flag to indicate whether voltage violations were struck
                     # prevent batteries from simultaneously charging and discharging (yBat integrated)
-                    model.addConstr(powerCh[n,d,t]  >= y_bat[n,d,t] * critical_flag[n,d,t] * constraint_bat[n,d,t] , name="min_power_"+str(n)+str(t))
+                    model.addConstr(powerCh[n,d,t]  >= y_bat[n,d,t] * critical_flag[n,d,t] * constraint_batCh[n,d,t] , name="min_power_"+str(n)+str(t))
                     model.addConstr(powerCh[n,d,t]  <= (devs["bat"]["P_ch_fix"] + capacity[n]*devs["bat"]["P_ch_var"]), name="max_power_"+str(n)+str(t))
                     model.addConstr(powerCh[n,d,t] <= y_bat[n,d,t] * capBat_max[n], name= "bigM_power_"+str(n) +str(d)+str(t))
+                    model.addConstr(powerDis[n, d, t] >= (1 - y_bat[n, d, t]) * critical_flag[n, d, t] * constraint_batDis[n, d, t],name="min_power_" + str(n) + str(t))
                     model.addConstr(powerDis[n,d,t] <= (devs["bat"]["P_dch_fix"] + capacity[n]*devs["bat"]["P_dch_var"]), name="max_power_"+str(n)+str(t))
                     model.addConstr(powerDis[n, d, t] <= (1 - y_bat[n, d, t]) * capBat_max[n], name="bigM_power_" + str(n) + str(d) + str(t))
     
@@ -756,9 +757,9 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     
     #model.setObjective(sum((emission_nodes[n])for n in gridnodes), gp.GRB.MINIMIZE)
 
-    model.setObjective(sum(sum(sum((powerSubtr[n, d, t] - powerInj[n, d, t])for n in gridnodes) * clustered["co2_stat"][d,t]
-                               for t in timesteps) for d in days), gp.GRB.MINIMIZE)
-    #model.setObjective(c_total_nodes, gp.GRB.MINIMIZE)
+    """model.setObjective(sum(sum(sum((powerSubtr[n, d, t] - powerInj[n, d, t])for n in gridnodes) * clustered["co2_stat"][d,t]
+                               for t in timesteps) for d in days), gp.GRB.MINIMIZE)"""
+    model.setObjective(c_total_nodes, gp.GRB.MINIMIZE)
 
     # adgust gurobi settings
     #model.Params.TimeLimit = 60
@@ -792,9 +793,10 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     res_powerTrafoInj = np.array([[powerTrafoInj[d,t].X for t in timesteps]for d in days])
     res_yTrafo = np.array([[yTrafo[d,t].X for t in timesteps]for d in days])
         
-    res_powerLine = {}
+    """res_powerLine = {}
     for [n,m] in nodeLines:
-        res_powerLine[n,m] = np.array([[powerLine[n,m,d,t].X for t in timesteps] for d in days])
+        res_powerLine[n,m] = np.array([[powerLine[n,m,d,t].X for t in timesteps] for d in days])"""
+    res_powerLine = np.array([[[powerLine[n, m, d, t].X for t in timesteps] for d in days] for [n,m] in nodeLines])
     
     # battery operation results
     res_capacity = {}
@@ -803,16 +805,24 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     res_SOC = {}
     res_SOC_init = {}
 
-    for n in gridnodes:
+    """for n in gridnodes:
         res_capacity = np.array([capacity[n].X for n in gridnodes])
         res_powerCh[n] = np.array([[powerCh[n,d,t].X for t in timesteps] for d in days])
         res_powerDis[n] = np.array([[powerDis[n,d,t].X for t in timesteps] for d in days])
         res_SOC[n] = np.array([[SOC[n,d,t].X for t in timesteps] for d in days])
-        res_SOC_init[n] = np.array([SOC_init[n,d].X for d in days])
+        res_SOC_init[n] = np.array([SOC_init[n,d].X for d in days])"""
+
+    res_capacity = np.array([capacity[n].X for n in gridnodes])
+    res_powerCh = np.array([[[powerCh[n, d, t].X for t in timesteps] for d in days] for n in gridnodes])
+    res_powerDis = np.array([[[powerDis[n, d, t].X for t in timesteps] for d in days] for n in gridnodes])
+    res_SOC = np.array([[[SOC[n, d, t].X for t in timesteps] for d in days] for n in gridnodes])
+    res_SOC_init = np.array([[SOC_init[n, d].X for d in days] for n in gridnodes])
+    res_constraint_batCh = np.array([[[constraint_batCh[n, d, t] for t in timesteps] for d in days] for n in gridnodes])
+    res_constraint_batDis = np.array([[[constraint_batDis[n, d, t] for t in timesteps] for d in days] for n in gridnodes])
 
     # retrieve apc results
     if options["allow_apc_opti"]:
-        res_apc_var = {}
+        """res_apc_var = {}
         res_apc_total = {}
         res_constraint_apc = {}
         res_powerGenRealMax = {}
@@ -821,22 +831,40 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
         for n in gridnodes:
             res_apc_var = np.array([apc_var[n,d].X for d in days])
             res_apc_total = np.array([apc_total[n,d].X for d in days])
-            res_constraint_apc = np.array([[constraint_apc[n,d,t] for d in days] for t in timesteps])
+            res_constraint_apc = np.array([constraint_apc[n,d] for d in days])
             res_powerGenRealMax = np.array([[powerGenRealMax[n,d,t].X for d in days] for t in timesteps])
-            res_powerGenReal = np.array([[powerGenReal[n,d,t].X for d in days] for t in timesteps])
+            res_powerGenReal = np.array([[powerGenReal[n,d,t].X for d in days] for t in timesteps])"""
+        res_apc_var = np.array([[apc_var[n, d].X for d in days] for n in gridnodes])
+        res_apc_total = np.array([[apc_total[n, d].X for d in days]for n in gridnodes])
+        res_constraint_apc = np.array([[constraint_apc[n, d] for d in days]for n in gridnodes])
+        res_powerGenRealMax = np.array([[[powerGenRealMax[n, d, t].X for d in days] for t in timesteps]for n in gridnodes])
+        res_powerGenReal = np.array([[[powerGenReal[n, d, t].X for d in days] for t in timesteps]for n in gridnodes])
 
     else:
-        res_powerGenReal = {}
+        res_powerGenRealMax = np.array([[[powerGenRealMax[n, d, t] for d in days] for t in timesteps] for n in gridnodes])
+        res_powerGenReal = np.array([[[powerGenReal[n, d, t] for d in days] for t in timesteps] for n in gridnodes])
+
+        """res_powerGenReal = {}
         res_powerGenRealMax = {}
 
         for n in gridnodes:
             res_powerGenReal[n] = np.array([[powerGenReal[n,d,t] for d in days] for t in timesteps])
-            res_powerGenRealMax[n] = np.array([powerGenRealMax[n,d] for d in days])
+            res_powerGenRealMax[n] = np.array([powerGenRealMax[n,d] for d in days])"""
 
 
     # node energy management results
-    res_powerGenReal = {}
-    res_powerInj = {}
+
+    res_powerInj = np.array([[[powerInj[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+    res_powerSubtr = np.array([[[powerSubtr[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+    res_powerInjPV = np.array([[[powerInjPV[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+    res_powerUsePV = np.array([[[powerUsePV[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+    res_powerPVChBat = np.array([[[powerPVChBat[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+    res_powerNetLoad = np.array([[[powerNetLoad[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+    res_powerUseBat = np.array([[[powerUseBat[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+    res_powerNetChBat = np.array([[[powerNetChBat[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+    res_powerNetDisBat = np.array([[[powerNetDisBat[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+
+    """res_powerInj = {}
     res_powerSubtr = {}
 
     res_powerInjPV = {}
@@ -846,7 +874,6 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     res_powerUseBat = {}
     res_powerNetChBat = {}
     res_powerNetDisBat = {}
-
     
     for n in gridnodes:
 
@@ -858,29 +885,28 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
         res_powerNetLoad[n] = np.array([[powerNetLoad[n,d,t].X for t in timesteps] for d in days])
         res_powerUseBat[n] = np.array([[powerUseBat[n,d,t].X for t in timesteps] for d in days])
         res_powerNetChBat[n] = np.array([[powerNetChBat[n,d,t].X for t in timesteps] for d in days])
-        res_powerNetDisBat[n] = np.array([[powerNetDisBat[n,d,t].X for t in timesteps] for d in days])
+        res_powerNetDisBat[n] = np.array([[powerNetDisBat[n,d,t].X for t in timesteps] for d in days])"""
 
     # retrieve results for energy hp and eh
     if options["hp_mode"] == "grid_opt":
 
-        for n in gridnodes:
-            res_actHP[n] = np.array([[y_hp[n, d, t].X for t in timesteps] for d in days])
-            res_powerHP[n] = np.array([[power_hp[n, d, t].X for t in timesteps] for d in days])
-            res_powerEH[n] = np.array([[power_eh[n, d, t].X for t in timesteps] for d in days])
-            res_heatHP[n] = np.array([[heat_hp[n, d, t].X for t in timesteps] for d in days])
-            res_heatEH[n] = np.array([[heat_eh[n, d, t].X for t in timesteps] for d in days])
+        res_actHP = np.array([[[y_hp[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+        res_powerHP = np.array([[[power_hp[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+        res_powerEH = np.array([[[power_eh[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+        res_heatHP = np.array([[[heat_hp[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+        res_heatEH = np.array([[[heat_eh[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
 
-            res_SOC_tes[n] = np.array([[soc_tes[n, d, t].X for t in timesteps] for d in days])
-            res_SOC_init_tes[n] = np.array([soc_init_tes[n, d].X for d in days])
-            res_ch_tes[n] = np.array([[ch_tes[n, d, t].X for t in timesteps] for d in days])
-            res_dch_tes[n] = np.array([[dch_tes[n, d, t].X for t in timesteps] for d in days])
+        res_SOC_tes = np.array([[[soc_tes[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+        res_SOC_init_tes = np.array([[soc_init_tes[n, d].X for d in days]for n in gridnodes])
+        res_ch_tes = np.array([[[ch_tes[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+        res_dch_tes = np.array([[[dch_tes[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
 
-            res_powerHPNet[n] = np.array([[powerHPNet[n, d, t].X for t in timesteps] for d in days])
-            res_powerHPPV[n] = np.array([[powerHPPV[n, d, t].X for t in timesteps] for d in days])
-            res_powerHPBat[n] = np.array([[powerHPBat[n, d, t].X for t in timesteps] for d in days])
-            res_powerEHNet[n] = np.array([[powerEHNet[n, d, t].X for t in timesteps] for d in days])
-            res_powerEHPV[n] = np.array([[powerEHPV[n, d, t].X for t in timesteps] for d in days])
-            res_powerEHBat[n] = np.array([[powerEHBat[n, d, t].X for t in timesteps] for d in days])
+        res_powerHPNet = np.array([[[powerHPNet[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+        res_powerHPPV = np.array([[[powerHPPV[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+        res_powerHPBat = np.array([[[powerHPBat[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+        res_powerEHNet = np.array([[[powerEHNet[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+        res_powerEHPV = np.array([[[powerEHPV[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+        res_powerEHBat = np.array([[[powerEHBat[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
 
     else:
         pass
@@ -888,9 +914,9 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     res_exBat = {}
     res_actBat = {}
 
-    for n in gridnodes:
-        res_exBat[n] = x_bat[n].X
-        res_actBat[n] = np.array([[y_bat[n, d, t].X for t in timesteps] for d in days])
+
+    res_exBat = np.array([x_bat[n].X for n in gridnodes])
+    res_actBat = np.array([[[y_bat[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
 
     # economical and ecological results
     res_c_inv = np.array([c_inv[n].X for n in gridnodes])
@@ -926,10 +952,11 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
         pickle.dump(res_powerDis, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_SOC, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_SOC_init, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_constraint_batCh, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_constraint_batDis, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_exBat, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_actBat, fout, pickle.HIGHEST_PROTOCOL)
 
-        pickle.dump(res_powerGenReal, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerInj, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerSubtr, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerInjPV, fout, pickle.HIGHEST_PROTOCOL)
@@ -1018,9 +1045,11 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
 
 
+
+
     print("optimization successfull")
 
-    return (res_c_total_grid, res_emission_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes)
+    return (res_c_total_grid, res_emission_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, res_powerCh, res_powerDis)
 
 
 

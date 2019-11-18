@@ -16,19 +16,18 @@ def timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, g
     time_steps = timesteps
 
     #retrieve data source
-    profilesSubtr, profilesInj, dsInj, dsSubtr = retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes)
+    profilesSubtr, profilesInj, dsInj, dsSubtr, dsTotal = retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes)
 
     #create controllers (to control P values of the load and the gen, which are now combined as positive and negative values in one dataframe)
     #create one controller for every node.
     for n in gridnodes:
-        create_controllers(net, dsInj, dsSubtr,n)
+        create_controllers(net, dsInj, dsSubtr, dsTotal, n)
 
     #the output writer with the desired results to be stored to files
     ow = create_output_writer(net, timesteps, output_dir=output_dir)
 
     #the main time series function
     run_timeseries(net, time_steps, output_writer=ow, continue_on_divergence=True)
-    #pp.diagnostic(net)
 
 def retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes):
 
@@ -42,24 +41,28 @@ def retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes):
             powInjDay[n,t] = powInjRet[d,n,t]
             powSubtrDay[n,t] = powSubtrRet[d,n,t]
 
+    powTotalDay = powSubtrDay - powInjDay
 
     profilesPreInj = pd.DataFrame(powInjDay)
     profilesPreSubtr = pd.DataFrame(powSubtrDay)
+    profilesPreTotal = pd.DataFrame(powTotalDay)
 
     #transpose DataFrame to fit the standard layout of given DataFrame. Afterwards columns are nodes, rows are timesteps
     profilesInj = profilesPreInj.transpose()
     profilesSubtr = profilesPreSubtr.transpose()
+    profilesTotal = profilesPreTotal.transpose()
 
     #split up profiles in gen(injection) and load(subtraction) profiles, to properly insert them in 2 const_controllers
     dsInj = DFData(profilesInj)
     dsSubtr = DFData(profilesSubtr)
+    dsTotal = DFData(profilesTotal)
 
-    return profilesInj, profilesSubtr, dsInj, dsSubtr
+    return profilesInj, profilesSubtr, dsInj, dsSubtr, dsTotal
 
-def create_controllers(net, dsInj, dsSubtr, n):
+def create_controllers(net, dsInj, dsSubtr, dsTotal, n):
 
-    ConstControl(net, element='sgen',variable='p_mw',element_index=net.sgen.index,data_source=dsInj, profile_name=[n])
-    ConstControl(net, element='load', variable='p_mw', element_index=net.load.index,data_source=dsSubtr, profile_name=[n])
+    #ConstControl(net, element='sgen',variable='p_mw',element_index=net.load.index,data_source=dsInj, profile_name=[n])
+    ConstControl(net, element='load', variable='p_mw', element_index=net.load.index,data_source=dsTotal, profile_name=[n])
 
     """create the output writer. Instead of saving the whole net (which would take a lot of time), we extract only pre defined outputs.
         In this case we:
@@ -89,6 +92,11 @@ def run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
     nodes["trafo"] = net.trafo['lv_bus'].to_numpy()
     nodes["load"] = net.load['bus'].to_numpy()
     nodes["bat"] = net.load['bus'].to_numpy()
+    vm_pu_total = {}
+    for n in gridnodes:
+        for d in days:
+            for t in timesteps:
+                vm_pu_total[n,d,t] = 0
 
     for d in days:
         output_dir = os.path.join(tempfile.gettempdir(), "time_series_example" + str(d))
@@ -118,11 +126,13 @@ def run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
 
         if(all((vm_pu_final[t,n] >= 0.96 and vm_pu_final[t,n] <= 1.04) for n in gridnodes for t in timesteps)) == True:
             solution_found[d] = True
+            print("solution was found for day" +str(d))
 
-        critical_flag_array = np.array(critical_flag)
-        pp.diagnostic()
-        pp.diagnostic_report()
-        print("stop")
+        for n in gridnodes:
+            for t in timesteps:
+                vm_pu_total[n,d,t] = vm_pu_final[t,n]
+        vm_pu_total = np.array([[[vm_pu_total[n,d,t] for t in timesteps] for d in days] for n in gridnodes])
+        #pp.diagnostic(net)
 
 
-    return output_dir,critical_flag,solution_found
+    return output_dir,critical_flag,solution_found, vm_pu_total

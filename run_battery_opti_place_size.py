@@ -40,18 +40,18 @@ emission_year = "2017"      # 2017, 2030, 2050
 #useable_roofarea  = 0.30    #Default value: 0.25
 
 # set options
-options =   {"static_emissions": True,  # True: calculation with static emissions,
+options =   {"static_emissions": False,  # True: calculation with static emissions,
                                         # False: calculation with timevariant emissions
-            "rev_emissions": True,      # True: emissions revenues for feed-in
+            "rev_emissions": False,      # True: emissions revenues for feed-in
                                         # False: no emissions revenues for feed-in
             "dhw_electric": True,       # define if dhw is provided decentrally by electricity
-            "P_pv": 10.00,              # installed peak PV power
+            "P_pv": 20.00,              # installed peak PV power
             "with_hp": True,            # usage of heat pumps
             "hp_mode": "grid_opt",    # choose between "energy_opt" and "grid_opt"
             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
             "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
             "beta_th": 0.2,             # relative size of thermal energy storage (between 0 and 1)
-            "show_grid_plots": True,   # show gridplots before and after optimization
+            "show_grid_plots": False,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl",
@@ -97,12 +97,12 @@ inputs_clustering = np.array([raw_inputs["heat"],
                               raw_inputs["temperature"],
                               raw_inputs["co2_dyn"]])
 
-number_clusters = 12
+number_clusters = 3
 (inputs, nc, z) = clustering.cluster(inputs_clustering, 
                                      number_clusters=number_clusters,
                                      norm=2,
                                      mip_gap=0.0,
-                                     weights=[1,1,1,1,0,1,1])
+                                     weights=[1,2,2,2,1,2])
 
 
 # Determine time steps per day
@@ -146,8 +146,8 @@ extreme kerber grids:   landnetz_freileitung(), landnetz_kabel(), landnetz_freil
             
 '''
 #net = nw.create_kerber_landnetz_freileitung_2()
-net = nw.create_kerber_vorstadtnetz_kabel_2()
-#net = nw.create_kerber_landnetz_freileitung_1()
+#net = nw.create_kerber_vorstadtnetz_kabel_2()
+net = nw.create_kerber_landnetz_freileitung_1()
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
@@ -158,30 +158,6 @@ if options["show_grid_plots"]:
 filename = "results/inputs_" + building_type + "_" + building_age + ".pkl"
 with open(filename, "wb") as f_in:
     pickle.dump(clustered, f_in, pickle.HIGHEST_PROTOCOL)
-
-"""#%% Define dummy parameters, options and start optimization
-         
-(costs, emission, timesteps, days, powInjRet, powSubtrRet, gridnodes) = opti.compute(net, eco, devs, clustered, params, options, batData)"""
-
-"""#%% plot grid with batteries highlighted
-
-if options["show_grid_plots"]:
-    
-    bat_ex = np.zeros(len(outputs["nodes"]["grid"]))
-    for n in outputs["nodes"]["grid"]:
-        if outputs["res_capacity"][n] >0:
-            bat_ex[n] = 1
-    
-    netx=net
-    netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
-    simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')"""
-
-"""#run timeloop_flexigrid_now
-
-loop.run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes)"""
-
-#TODO: Insert this properly into run file
-
 
 # specify grid nodes for whole grid and trafo; choose and allocate load, injection and battery nodes
 # draw parameters from pandapower network
@@ -202,25 +178,32 @@ timesteps   = [i for i in range(params["time_steps"])]
 solution_found = []
 for d in days:
     solution_found.append(False)
+boolean_loop = True
 # constraint_apc models APC, gets reduced from 1 to 0 in iteration steps with range 0.1
 constraint_apc = {}
-# constraint_bat models forced battery charging. Gets raised by 1kW in case of voltage violation
-constraint_bat = {}
+# constraint_bat models forced battery charging and discharging. Gets raised and reduced in case of voltage violation
+constraint_batCh = {}
+constraint_batDis = {}
 # create array to flag whether values are critical for powerflow. If not critical: 0, if critical: 1
 critical_flag = {}
+iteration_counter = 0
 for n in gridnodes:
     for d in days:
         for t in timesteps:
             critical_flag[n, d, t] = 0
             constraint_apc[n, d] = 0
-            constraint_bat[n, d, t] = 0
+            constraint_batCh[n, d, t] = 0
+            constraint_batDis[n, d, t] = 0
 
-while ((solution_found[d] != True) for d in days):
+while boolean_loop:
 
+    print("")
+    print("!!! Iteration counter is currently at " +str(iteration_counter) + "!!!")
+    print("")
     #run DC-optimization
-    (costs, emission, timesteps, days, powInjRet, powSubtrRet, gridnodes) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered,params, options, constraint_apc, constraint_bat,critical_flag)
+    (costs, emission, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powChPrev, powDisPrev) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered,params, options, constraint_apc, constraint_batCh, constraint_batDis,critical_flag)
 
-    outputs = reader.read_results(building_type + "_" + building_age)
+    outputs = reader.read_results(building_type + "_" + building_age, options)
     # %% plot grid with batteries highlighted
     if options["show_grid_plots"]:
 
@@ -234,8 +217,8 @@ while ((solution_found[d] != True) for d in days):
         simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
 
     # run AC-Powerflow-Solver
-    (output_dir, critical_flag, solution_found) = loop.run_timeloop(net, timesteps, days, powInjRet, powSubtrRet,gridnodes, critical_flag, solution_found)
-
+    (output_dir, critical_flag, solution_found,vm_pu_total) = loop.run_timeloop(net, timesteps, days, powInjRet, powSubtrRet,gridnodes, critical_flag, solution_found)
+    #vm_pu_total_array = np.array([[[vm_pu_total[n, d, t] for t in timesteps] for d in days] for n in gridnodes])
     for d in days:
         if (solution_found[d] == False):
 
@@ -244,43 +227,74 @@ while ((solution_found[d] != True) for d in days):
                 if options["bat_ch_while_voltage_violation"]:
                     print("You selected both apc and additional battery charge in case of voltage violations.")
                     for n in gridnodes:
-                        for d in days:
-                            if ((critical_flag[n, d, t] == 0 for t in timesteps) == False):
+                        if (any(critical_flag[n, d, t] == 1 for t in timesteps)):
+                            if(any(vm_pu_total[n,d,t] < 0.96 for t in timesteps)):
+                                pass
+                            elif(any(vm_pu_total[n,d,t] > 1.04 for t in timesteps)):
                                 constraint_apc[n,d] += 0.1
                                 if(constraint_apc[n,d] >= 1):
                                     print("You have reached the maximal amount of curtailment!")
                                     print("Will set curtailment to 100 Percent automatically.")
                                     constraint_apc[n,d] = 1
-                                for t in timesteps:
-                                    if(critical_flag[n,d,t] == 1):
-                                        constraint_bat += 1
+                            else:
+                                pass
+                            for t in timesteps:
+                                if(critical_flag[n,d,t] == 1):
+                                    if (vm_pu_total[n,d,t] < 0.96):
+                                        constraint_batCh[n,d,t] = 0.1 * powChPrev[n,d,t]
+                                        if(constraint_batCh[n,d,t] <= 0):
+                                            # if battery didnt get charged anyway, battery discharge is forced to be bigger than 0
+                                            constraint_batCh[n,d,t] = 0
+                                            constraint_batDis[n,d,t] = 1.1 * powDisPrev[n,d,t]
+                                            if(powDisPrev == 0):
+                                                constraint_batDis[n,d,t] = 2
+                                    elif (vm_pu_total[n,d,t] > 1.04):
+                                        constraint_batCh[n, d, t] = 1.1 * powChPrev[n,d,t]
+
 
 
                 else:
                     print("You selected only apc in case of voltage violations.")
                     for n in gridnodes:
-                        for d in days:
-                            if ((critical_flag[n, d, t] == 0 for t in timesteps) == False):
-                                constraint_apc[n,d] += 0.1
+                        if (any(critical_flag[n, d, t] == 1 for t in timesteps)):
+                            if (any(vm_pu_total[n,d,t] < 0.96 for t in timesteps)):
+                                print("Only apc will not fix any voltage issues, because the load is too high on day" +str(d))
+                            elif (any(vm_pu_total[n,d,t] > 1.04 for t in timesteps)):
+                                constraint_apc[n, d] += 0.1
                                 if (constraint_apc[n, d] >= 1):
                                     print("You have reached the maximal amount of curtailment!")
                                     print("Will set curtailment to 100 Percent automatically.")
                                     constraint_apc[n, d] = 1
 
-            elif options["bat_ch_while_voltage_violation"]:
+            elif (options["bat_ch_while_voltage_violation"] == True and options["apc_while_voltage_violation"] == False):
                 print("You selected only additional battery charge in case of voltage violations.")
                 for n in gridnodes:
-                    for d in days:
-                        for t in timesteps:
-                            if (critical_flag[n, d, t] == 1):
-                                constraint_bat += 1
+                    for t in timesteps:
+                        if (critical_flag[n, d, t] == 1):
+                            if (vm_pu_total[n,d,t] < 0.96):
+                                constraint_batCh[n, d, t] = 0.1 * powChPrev[n,d,t]
+                                if (constraint_batCh[n, d, t] <= 0):
+                                    # if battery didnt get charged anyway, battery discharge is forced to be bigger than 0
+                                    constraint_batCh[n, d, t] = 0
+                                    constraint_batDis[n, d, t] = 1.1 * powDisPrev[n,d,t]
+                                    if (powDisPrev == 0):
+                                        constraint_batDis[n, d, t] = 2
+                            elif (vm_pu_total[n,d,t] > 1.04):
+                                constraint_batCh[n, d, t] = 1.1 * powChPrev[n,d,t]
 
             elif (options["bat_ch_while_voltage_violation"] == False and options["apc_while_voltage_violation"] == False):
                 print("Error: You did not select any measure in case of voltage violations!")
 
 
-        if (solution_found[d] == True):
-            print("Solution was successfully found for day" +str(d))
-            break
+        if(solution_found[d] == True):
+                print("Solution was successfully found for day" + str(d))
 
-plot_res.plot_results(output_dir)
+    iteration_counter += 1
+
+
+    if all(solution_found[d] == True for d in days):
+        print("Congratulations! Your optimization and loadflow calculation has been successfully finished after " + str(iteration_counter) + "iteration steps!")
+        break
+
+print("this is the end")
+#plot_res.plot_results(outputs, days, gridnodes, timesteps)
