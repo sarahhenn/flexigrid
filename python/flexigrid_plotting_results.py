@@ -59,10 +59,12 @@ def plot_results(outputs, days, gridnodes, timesteps):
         plt.grid()
         if plotting_options["plot_live"] == True:
             plt.show()
+            fig = plt.figure()
+            plt.savefig("soc_bat.png", dpi = fig.dpi )
         else:
             pass
         if plotting_options["safe plots as tex"] == True:
-            tikz.save("firsttry.tex")
+            tikz.save(tex_folder + "soc_bat.tex")
         else:
             pass
 
@@ -81,10 +83,12 @@ def plot_results(outputs, days, gridnodes, timesteps):
         plt.grid()
         if plotting_options["plot_live"] == True:
             plt.show()
+            fig = plt.figure()
+            plt.savefig("pow_Inj.png", dpi=fig.dpi)
         else:
             pass
         if plotting_options["safe plots as tex"] == True:
-            tikz.save("firsttry.tex")
+            tikz.save(tex_folder + "pow_Inj.tex")
         else:
             pass
 
@@ -101,10 +105,10 @@ def plot_results(outputs, days, gridnodes, timesteps):
         plt.title("Subtraction from load-node into grid")
         if plotting_options["plot_live"] == True:
             plt.show()
+            fig = plt.figure()
+            plt.savefig("pow_Subtr.png", dpi=fig.dpi)
         else:
             pass
         if plotting_options["safe plots as tex"] == True:
-            tikz.save("firstry.tex")
-        else:
-            pass
+            tikz.save(tex_folder + "pow_Subtr.tex")
 

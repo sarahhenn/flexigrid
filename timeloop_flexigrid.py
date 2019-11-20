@@ -112,6 +112,7 @@ def run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
         vm_pu = vm_pu.sort_index(axis=0)
         # vm_pu was creating keyerror, so changed into array
         vm_pu_final = vm_pu.values
+        print("")
 
         for n in gridnodes:
             for t in timesteps:
