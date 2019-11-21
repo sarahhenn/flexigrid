@@ -8365,3 +8365,21 @@
 #=#=#=# Syncrun started 2019-11-21T13:04:26Z
 #=#=#=#=# Propagation starts 2019-11-21T13:04:27Z (last step: 229 msec, total: 229 msec)
 #=#=#=# Syncrun finished 2019-11-21T13:04:27Z (last step: 98 msec, total: 327 msec)
+#=#=#=# Syncrun started 2019-11-21T13:07:27Z
+#=#=#=#=# Propagation starts 2019-11-21T13:07:27Z (last step: 153 msec, total: 153 msec)
+13:07:24||Neuer Ordner|INST_NEW|Up|1574341645||0|2090313415oc8d6fac567d|4||201|0|0|7458754c-e2c2-458f-856d-c20569b1d77c|
+#=#=#=# Syncrun finished 2019-11-21T13:07:27Z (last step: 170 msec, total: 324 msec)
+#=#=#=# Syncrun started 2019-11-21T13:07:37Z
+#=#=#=#=# Propagation starts 2019-11-21T13:07:37Z (last step: 355 msec, total: 355 msec)
+13:07:34||Neuer Ordner -> Voltage_validation|INST_RENAME|Up|1574341645|5dd68c0cd599e|0|2090313415oc8d6fac567d|4||201|0|0|cc99a22e-dc8d-4710-9d9f-d2827888a177|
+#=#=#=# Syncrun finished 2019-11-21T13:07:37Z (last step: 161 msec, total: 516 msec)
+#=#=#=# Syncrun started 2019-11-21T13:07:55Z
+#=#=#=#=# Propagation starts 2019-11-21T13:07:56Z (last step: 132 msec, total: 132 msec)
+13:07:53||Spannungsvergleich_auswertung.xlsx -> Voltage_validation/Spannungsvergleich_auswertung.xlsx|INST_RENAME|Up|1573908310|2709d5632f03e3e0fcbe9f578c10f2e7|57123|2081408083oc8d6fac567d|4||201|0|0|2d2b6fda-717c-495e-b6d2-39e1f30fed31|
+13:07:53||spannung.xlsx -> Voltage_validation/spannung.xlsx|INST_RENAME|Up|1573809271|51a692919a7c9aa11f130335a30166dc|4916|2080736615oc8d6fac567d|4||201|0|0|2865da2d-861c-4253-a681-d05bac6c3223|
+13:07:53||Spannungsvergleich.xlsx -> Voltage_validation/Spannungsvergleich.xlsx|INST_RENAME|Up|1574148847|ce8ac31879fc5bb5ce4947d4cb8f0d5c|12418|2080561871oc8d6fac567d|4||201|0|0|e7458044-c9e1-40f3-a3da-10561bec9886|
+13:07:53||voltage_comparism.py -> Voltage_validation/voltage_comparism.py|INST_RENAME|Up|1574339655|36cbc9356ab73deadb3436504f3871bc|3575|2082420899oc8d6fac567d|4||201|0|0|6ffd0537-6ac4-4d62-a0a1-ba1de1f14f75|
+#=#=#=# Syncrun finished 2019-11-21T13:08:00Z (last step: 4579 msec, total: 4711 msec)
+#=#=#=# Syncrun started 2019-11-21T13:08:55Z
+#=#=#=#=# Propagation starts 2019-11-21T13:08:55Z (last step: 207 msec, total: 207 msec)
+#=#=#=# Syncrun finished 2019-11-21T13:08:55Z (last step: 51 msec, total: 259 msec)
