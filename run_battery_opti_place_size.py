@@ -44,6 +44,7 @@ options =   {"static_emissions": True,  # True: calculation with static emission
             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
             "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
             "beta_th": 1.,             # relative size of thermal energy storage (between 0 and 1)
+            "EV_mode":"on_demand",      # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi-directional"
             "show_grid_plots": True,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \

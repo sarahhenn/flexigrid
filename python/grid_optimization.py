@@ -10,6 +10,7 @@ from __future__ import division
 import gurobipy as gp
 import numpy as np
 import pickle
+import random
 
 # import own function
 import python.hpopt_energy as hpopt
@@ -150,8 +151,8 @@ def compute(net, eco, devs, clustered, params, options):
         if options ["dhw_electric"]:
             powerElec = clustered["electricity"] + clustered["dhw"]
         else:
-            powerElec = clustered["electricity"]
-    
+            powerElec = clustered["electricity"]         
+            
 #%% extract node and line information from pandas-network
 
     # specify grid nodes for whole grid and trafo; choose and allocate load, injection and battery nodes
@@ -176,6 +177,35 @@ def compute(net, eco, devs, clustered, params, options):
     powerLine_max = {}
     for [n,m] in nodeLines:
         powerLine_max[n,m] = (net.line['max_i_ka'][nodeLines.index((n,m))])*400
+
+#%% insert EVs
+            
+    # build realistic random daily demands in kWh
+    demEV = {}
+    for n in gridnodes:
+        for d in days:
+            if n in nodes["load"]:
+                demEV[n,d] = random.uniform(2.5,4.7)
+            else: 
+                demEV[n,d] = 0
+    
+    # build random availability matrix
+    availEVday = {}
+    availEV = {}
+    for n in gridnodes:
+        for d in days:
+            if n in nodes["load"]:
+                availEVday[n,d] = random.randrange(15,20)
+            else: 
+                availEVday[n,d] = 0
+            for t in timesteps:
+                if t >= availEVday[n,d]:
+                    availEV[n,d,t] = 1
+                else:
+                   availEV[n,d,t] = 0 
+                
+    
+#%% define battery settings, final gens and loads
         
     # extract battery nodes and define technical data for them
     capBat_max = {}
