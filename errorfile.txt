@@ -1,0 +1,7888 @@
+
+The following constraint(s) cannot be satisfied:
+investment_costs17[2]
+investment_costs17[13]
+investment_costs17[17]
+maintenance_costs17[4]
+maintenance_costs17[6]
+maintenance_costs17[14]
+maintenance_costs17[16]
+demand_costs17[0]
+revenues17[8]
+revenues17[9]
+revenues17[16]
+emissions_stat_rev_node17[0]
+emissions_stat_rev_node17[13]
+emissions_stat_rev_node17[17]
+trafoLoad_activation[0,2]
+trafoLoad_activation[0,3]
+trafoLoad_activation[0,4]
+trafoLoad_activation[0,10]
+trafoLoad_activation[0,22]
+trafoLoad_activation[1,8]
+trafoLoad_activation[1,15]
+trafoLoad_activation[1,16]
+trafoLoad_activation[1,21]
+trafoLoad_activation[2,20]
+trafoLoad_activation[2,23]
+trafoLoad_activation[3,13]
+trafoLoad_activation[3,15]
+trafoLoad_activation[3,17]
+trafoLoad_activation[4,1]
+trafoLoad_activation[4,8]
+trafoLoad_activation[4,20]
+trafoLoad_activation[5,7]
+trafoLoad_activation[5,21]
+trafoLoad_activation[5,22]
+trafoLoad_activation[6,2]
+trafoLoad_activation[6,4]
+trafoLoad_activation[6,7]
+trafoLoad_activation[6,8]
+trafoLoad_activation[6,11]
+trafoLoad_activation[6,15]
+trafoLoad_activation[6,16]
+trafoLoad_activation[6,21]
+trafoLoad_activation[7,4]
+trafoLoad_activation[7,19]
+trafoLoad_activation[7,23]
+trafoLoad_activation[8,1]
+trafoLoad_activation[8,2]
+trafoLoad_activation[8,3]
+trafoLoad_activation[8,18]
+trafoLoad_activation[8,23]
+trafoLoad_activation[9,11]
+trafoLoad_activation[10,2]
+trafoLoad_activation[10,3]
+trafoLoad_activation[10,6]
+trafoLoad_activation[10,11]
+trafoLoad_activation[11,8]
+trafoLoad_activation[11,9]
+trafoLoad_activation[11,10]
+trafoLoad_activation[11,11]
+trafoLoad_activation[11,18]
+trafoLoad_activation[11,21]
+trafoInj_activation[0,12]
+trafoInj_activation[0,15]
+trafoInj_activation[1,14]
+trafoInj_activation[2,0]
+trafoInj_activation[2,4]
+trafoInj_activation[2,6]
+trafoInj_activation[2,7]
+trafoInj_activation[2,14]
+trafoInj_activation[2,15]
+trafoInj_activation[3,8]
+trafoInj_activation[3,10]
+trafoInj_activation[3,15]
+trafoInj_activation[3,16]
+trafoInj_activation[4,1]
+trafoInj_activation[4,6]
+trafoInj_activation[4,10]
+trafoInj_activation[5,4]
+trafoInj_activation[5,8]
+trafoInj_activation[5,17]
+trafoInj_activation[5,19]
+trafoInj_activation[5,20]
+trafoInj_activation[6,13]
+trafoInj_activation[7,3]
+trafoInj_activation[7,10]
+trafoInj_activation[7,11]
+trafoInj_activation[7,20]
+trafoInj_activation[8,0]
+trafoInj_activation[8,17]
+trafoInj_activation[8,18]
+trafoInj_activation[9,22]
+trafoInj_activation[10,8]
+trafoInj_activation[10,13]
+trafoInj_activation[10,17]
+trafoInj_activation[11,9]
+trafoInj_activation[11,13]
+trafoInj_activation[11,17]
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+node balance_0
+R983
+node balance_1
+R1017
+R1022
+R1023
+R1047
+R1050
+node balance_1
+R1052
+R1071
+R1077
+R1088
+node balance_1
+R1097
+node balance_1
+R1118
+R1121
+R1130
+R1136
+node balance_1
+R1149
+R1170
+node balance_1
+R1173
+node balance_1
+R1196
+node balance_1
+R1205
+node balance_1
+node balance_1
+node balance_1
+node balance_1
+R1236
+node balance_1
+node balance_1
+R1254
+node balance_1
+node balance_1
+R1274
+R1290
+R1292
+node balance_1
+node balance_1
+R1350
+node balance_1
+R1352
+node balance_1
+R1358
+R1359
+node balance_1
+node balance_1
+R1371
+R1373
+R1385
+R1394
+node balance_1
+R1403
+node balance_1
+R1421
+R1433
+R1442
+node balance_1
+node balance_1
+R1463
+R1470
+node balance_1
+R1484
+R1496
+R1502
+R1508
+node balance_1
+R1533
+R1539
+R1557
+node balance_1
+R1565
+R1589
+R1593
+node balance_1
+R1605
+node balance_1
+R1608
+node balance_1
+R1623
+node balance_1
+R1643
+R1647
+node balance_1
+R1656
+node balance_1
+R1674
+node balance_1
+node balance_1
+node balance_1
+node balance_1
+R1700
+node balance_1
+R1719
+node balance_1
+node balance_1
+R1739
+R1742
+node balance_1
+node balance_1
+R1752
+R1755
+node balance_1
+node balance_1
+R1778
+R1791
+R1821
+R1826
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_2
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_3
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_4
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_5
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_6
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_7
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_8
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_9
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_10
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_11
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_12
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_13
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_14
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_15
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_16
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+node balance_17
+line power max_124
+line power max_127
+line power max_1212
+R6477
+line power min_1214
+R6486
+R6492
+R6498
+line power max_1220
+line power min_1220
+line power max_1221
+line power min_1222
+line power min_127
+line power max_1210
+line power max_1211
+line power max_1212
+line power min_1215
+R6567
+R6570
+line power min_1220
+R6573
+line power max_1222
+line power min_1223
+R6588
+line power max_122
+R6597
+R6600
+line power max_126
+R6603
+line power min_127
+line power max_1210
+R6618
+line power min_1212
+R6630
+line power min_1217
+R6636
+line power max_1218
+line power max_1223
+R6675
+R6687
+R6705
+line power max_1217
+line power max_1218
+line power min_1221
+line power min_126
+R6747
+line power max_127
+line power max_128
+line power min_129
+R6765
+R6789
+line power min_1222
+line power min_1223
+line power max_121
+R6813
+line power max_125
+line power max_127
+line power max_1212
+R6837
+line power max_1215
+line power max_1216
+R6849
+line power max_1217
+line power max_1220
+R6870
+line power max_121
+R6879
+line power max_123
+R6882
+line power min_124
+line power max_126
+line power max_128
+line power min_1210
+R6903
+line power min_1214
+line power max_1218
+line power min_1219
+line power max_1220
+line power max_1222
+line power min_120
+line power min_126
+R6972
+R6975
+line power min_1211
+line power max_1212
+R6981
+R6987
+line power max_1215
+line power min_1217
+line power max_1222
+line power min_121
+line power min_123
+R7038
+line power max_1211
+R7062
+line power min_1217
+R7086
+line power min_126
+line power max_127
+line power max_129
+line power max_1211
+line power min_1213
+line power max_1220
+line power max_120
+R7164
+line power max_122
+R7167
+line power min_127
+line power min_129
+line power min_1210
+line power max_1211
+line power max_1212
+line power min_1220
+line power max_1222
+R7236
+line power min_126
+line power min_128
+R7257
+R7260
+line power max_1211
+R7275
+line power max_1219
+R7293
+R7305
+R7311
+line power min_233
+line power min_235
+line power max_236
+R7329
+R7338
+line power max_2312
+R7356
+line power max_2319
+line power max_232
+line power min_232
+line power max_234
+line power min_237
+R7404
+line power min_2313
+line power min_2314
+R7428
+line power min_2319
+R7434
+line power min_2321
+R7440
+line power max_231
+line power max_236
+line power min_239
+line power max_2310
+line power max_2312
+R7485
+line power min_2314
+R7497
+line power min_2319
+R7530
+line power max_235
+line power max_2311
+line power min_2316
+R7590
+line power max_230
+line power min_231
+line power max_235
+R7611
+line power max_238
+line power max_239
+line power min_2313
+line power max_2314
+R7635
+line power min_2315
+line power min_2318
+line power max_2320
+line power max_2323
+R7665
+R7668
+line power min_233
+R7674
+line power max_239
+line power min_2310
+R7710
+line power max_2316
+line power max_2317
+R7719
+R7722
+line power max_2320
+line power max_236
+R7758
+line power max_239
+line power min_2315
+line power max_2317
+R7791
+R7794
+line power min_2320
+line power min_2321
+line power min_2323
+line power max_235
+R7830
+line power min_238
+R7833
+R7836
+R7842
+R7845
+line power min_2316
+R7878
+line power min_231
+line power max_235
+R7896
+R7905
+line power max_2311
+R7920
+R7923
+line power max_2315
+line power min_2321
+line power min_2323
+line power max_239
+line power max_2312
+R7995
+line power max_2315
+line power min_2320
+line power min_2321
+line power max_234
+line power max_236
+line power max_237
+R8046
+R8055
+R8067
+line power max_2315
+line power min_2318
+R8082
+R8088
+R8091
+R8094
+line power min_238
+R8121
+line power min_2314
+line power max_2319
+R8163
+line power max_240
+R8169
+line power max_247
+line power min_2410
+R8199
+R8208
+R8211
+line power max_2415
+line power min_2415
+line power min_2417
+line power min_2422
+R8235
+line power max_241
+R8250
+line power max_246
+R8271
+line power max_2411
+line power max_2419
+R8298
+line power max_244
+line power max_245
+line power max_246
+line power min_247
+R8346
+line power min_2413
+R8355
+line power min_2421
+line power max_2422
+line power max_244
+R8403
+line power min_2413
+R8433
+line power min_2417
+line power max_2418
+line power min_245
+R8472
+R8475
+line power max_2410
+line power max_2411
+line power max_2413
+line power max_2417
+line power min_2419
+line power min_2421
+line power min_241
+R8535
+line power max_244
+line power min_247
+line power min_248
+line power min_2411
+line power max_2416
+line power min_2418
+R8592
+R8601
+R8610
+line power max_244
+line power max_245
+line power max_246
+line power max_247
+R8622
+line power min_248
+line power max_249
+line power max_2415
+line power min_2415
+line power max_2417
+line power max_2418
+R8655
+line power max_2419
+line power min_2422
+line power max_241
+line power max_244
+line power min_245
+line power max_247
+R8709
+R8715
+line power min_2416
+line power max_2418
+R8742
+line power max_240
+line power min_243
+R8754
+line power max_245
+R8763
+line power min_249
+line power min_2410
+line power max_2411
+R8787
+line power max_2417
+line power min_2418
+line power max_2420
+R8808
+line power max_2423
+line power min_242
+line power max_244
+line power min_245
+line power min_246
+line power min_2410
+R8847
+line power max_2412
+line power min_2413
+R8856
+R8862
+line power min_2416
+line power max_2417
+line power min_2417
+line power min_240
+line power min_241
+R8892
+line power max_246
+line power min_246
+R8907
+line power min_248
+line power min_249
+line power max_2412
+R8925
+line power max_2419
+line power min_2419
+line power max_2420
+line power min_2420
+line power min_2423
+R8958
+R8967
+line power min_2412
+R8997
+line power max_2415
+line power min_2415
+line power max_2417
+R9012
+line power min_2420
+line power max_2421
+line power max_452
+line power min_452
+R9042
+line power max_4512
+line power min_4519
+line power min_4523
+R9108
+line power max_453
+line power max_456
+line power max_457
+line power min_458
+R9132
+line power min_4510
+R9138
+line power min_4513
+line power min_4514
+line power max_4518
+R9162
+R9171
+line power max_451
+R9183
+line power max_454
+line power min_455
+R9198
+line power max_4512
+R9240
+R9255
+line power min_455
+R9267
+line power min_459
+line power max_4514
+line power min_4515
+line power min_4516
+R9306
+line power max_4521
+line power min_4522
+line power min_452
+line power min_454
+R9333
+R9336
+line power max_456
+line power max_457
+R9348
+R9357
+line power max_4514
+R9384
+line power min_451
+line power min_452
+R9402
+line power max_454
+R9426
+R9441
+line power max_4519
+line power max_4521
+line power max_450
+R9471
+line power min_454
+line power min_457
+line power max_459
+line power min_4512
+line power max_4513
+R9513
+R9531
+line power max_4523
+line power max_451
+line power max_452
+line power min_453
+line power max_454
+R9558
+line power max_458
+line power min_4512
+line power min_4514
+R9591
+line power min_4520
+line power max_450
+line power min_451
+R9615
+line power max_454
+line power min_456
+R9642
+line power max_4517
+line power min_4520
+R9669
+line power max_4521
+R9687
+R9699
+R9708
+line power min_4510
+line power min_4511
+R9714
+line power max_4512
+line power min_4518
+line power max_4519
+line power max_4522
+R9756
+R9768
+line power min_4511
+line power min_4516
+line power max_4517
+R9804
+line power min_4519
+R9810
+line power max_458
+line power max_4511
+line power min_4512
+line power max_4513
+line power max_4515
+line power min_4515
+R9870
+R9885
+R9888
+line power max_460
+R9897
+line power min_461
+R9900
+line power min_467
+R9918
+line power max_468
+R9924
+line power max_4610
+R9930
+line power max_4616
+line power min_4616
+line power max_4618
+line power min_4619
+line power max_4621
+line power min_4623
+R9981
+R9990
+R9993
+line power min_4610
+R10005
+R10014
+line power min_4617
+line power min_4619
+R10029
+line power max_4621
+R10041
+line power min_461
+R10044
+line power min_4610
+R10077
+line power min_4613
+line power min_4616
+R10095
+line power max_4619
+line power max_4620
+R10104
+line power min_4622
+line power max_460
+R10119
+line power min_466
+line power max_4610
+line power min_4613
+line power max_4614
+line power min_4618
+R10167
+R10173
+R10191
+line power max_4611
+line power max_4613
+R10227
+R10230
+line power min_4618
+line power min_4620
+line power max_463
+line power max_4611
+line power min_4612
+R10293
+R10296
+line power min_4615
+line power min_4616
+line power max_4617
+line power min_463
+R10350
+line power min_468
+line power min_469
+line power max_4612
+R10368
+line power max_4614
+line power max_4621
+R10395
+line power max_4623
+line power max_463
+line power min_464
+line power max_465
+R10422
+line power min_4613
+line power max_4614
+line power max_4617
+line power min_4623
+line power min_460
+R10482
+line power max_466
+R10494
+line power max_468
+R10497
+line power max_469
+line power max_4612
+line power max_4617
+R10524
+R10536
+line power max_461
+line power max_463
+line power min_464
+line power min_467
+line power min_468
+R10572
+line power min_4611
+line power min_4616
+R10593
+R10596
+line power min_4618
+R10605
+R10611
+R10620
+line power max_462
+R10623
+line power max_465
+line power min_4611
+R10653
+R10659
+line power min_4617
+line power max_4618
+R10680
+line power max_4622
+R10686
+line power min_466
+R10707
+R10713
+line power min_4610
+R10722
+line power max_4616
+line power min_4616
+line power min_4618
+R10743
+R10746
+line power min_4622
+line power max_670
+R10770
+line power max_676
+line power min_677
+R10791
+line power max_6713
+line power min_6713
+line power min_6714
+R10818
+line power max_6722
+line power min_6722
+line power min_6723
+line power min_670
+line power max_671
+line power min_671
+R10839
+R10845
+R10848
+line power min_678
+R10857
+line power min_6710
+line power min_6714
+R10881
+line power max_6717
+R10896
+line power min_6722
+R10929
+line power max_6710
+line power min_6711
+R10968
+line power min_6722
+line power min_679
+R11004
+line power max_6710
+line power min_6713
+line power max_6722
+line power min_6723
+line power min_670
+line power max_671
+line power min_677
+R11073
+line power max_679
+line power max_6710
+line power min_6710
+R11082
+line power max_6719
+line power max_6720
+R11112
+line power min_670
+line power max_672
+line power max_674
+R11148
+R11163
+line power min_6717
+line power min_6719
+R11184
+R11187
+line power max_670
+line power min_676
+R11226
+R11235
+line power min_6717
+line power max_6720
+R11256
+R11259
+R11262
+R11274
+R11277
+line power min_678
+R11310
+line power min_6718
+R11322
+R11328
+line power min_6723
+R11346
+line power max_675
+line power min_675
+line power min_678
+line power max_679
+R11364
+line power max_6710
+line power max_6713
+line power max_6719
+line power max_6721
+line power min_6722
+R11403
+line power min_670
+line power max_671
+R11415
+line power min_673
+line power max_674
+R11424
+R11427
+R11454
+R11466
+line power min_6720
+line power min_6722
+line power min_673
+line power max_674
+R11493
+line power min_675
+line power min_6710
+line power min_6713
+line power max_6715
+line power min_6716
+R11529
+line power min_6718
+line power max_6719
+line power min_6719
+line power min_670
+R11562
+line power min_675
+line power max_6718
+line power min_6720
+R11619
+line power max_682
+R11634
+line power min_689
+R11652
+line power min_6812
+line power max_6815
+line power max_6817
+R11688
+line power min_6822
+R11694
+line power min_680
+R11703
+line power max_683
+line power min_683
+R11709
+R11715
+line power max_689
+line power max_6811
+line power max_6813
+line power max_6817
+line power min_6821
+line power max_6822
+R11772
+R11781
+line power max_687
+R11817
+line power min_6819
+line power min_6822
+line power min_6823
+line power min_680
+line power max_685
+line power max_6812
+R11877
+line power max_6816
+R11895
+R11898
+R11901
+R11907
+line power max_6823
+line power min_680
+R11919
+line power min_683
+R11925
+R11928
+R11934
+line power min_6811
+line power min_6819
+R11973
+R11982
+line power max_683
+line power min_6811
+line power max_6815
+line power min_6818
+R12051
+line power min_681
+line power max_688
+line power min_688
+line power max_689
+line power max_6810
+line power min_6810
+line power min_6811
+line power max_6812
+line power max_6813
+line power min_6813
+R12099
+line power min_6818
+line power min_6821
+line power max_6822
+line power min_6822
+R12126
+R12129
+line power max_682
+R12141
+line power max_686
+R12153
+line power min_6811
+R12162
+line power min_6813
+R12171
+line power min_6815
+line power min_6818
+line power min_6821
+line power max_681
+line power max_682
+R12210
+R12213
+R12216
+R12225
+R12240
+line power max_6815
+R12267
+line power max_680
+line power max_683
+line power min_684
+R12294
+line power min_6814
+line power max_6818
+R12327
+line power max_6823
+line power min_680
+R12351
+line power min_685
+R12366
+R12372
+line power max_6813
+line power max_6814
+line power max_6815
+R12396
+line power max_680
+line power max_682
+line power min_682
+R12432
+R12435
+line power max_6810
+line power max_6812
+R12453
+line power max_6814
+line power min_6815
+R12468
+R12471
+R12477
+R12507
+line power min_8910
+line power max_8915
+line power min_8915
+R12537
+line power max_8918
+line power min_8918
+R12546
+line power min_891
+line power min_898
+line power min_8911
+line power max_8913
+line power min_8913
+R12600
+line power max_8917
+R12612
+line power max_8921
+R12636
+R12639
+line power min_893
+line power max_899
+line power min_8912
+line power min_8916
+R12687
+line power min_8921
+R12702
+line power max_892
+line power min_8912
+line power min_8914
+line power max_8916
+R12756
+line power min_8919
+line power min_8920
+R12765
+line power min_8922
+line power min_8923
+R12774
+R12777
+R12780
+R12783
+line power max_893
+line power min_895
+R12807
+line power max_8912
+line power min_8916
+R12828
+line power min_8921
+line power min_8922
+line power min_8923
+R12852
+line power max_893
+line power min_895
+line power max_896
+line power min_8910
+line power max_8913
+R12894
+line power max_8918
+line power min_8918
+line power max_8920
+line power min_8922
+line power max_896
+line power min_897
+line power min_899
+R12990
+line power max_892
+R12999
+line power max_894
+R13023
+line power max_8911
+line power max_8912
+line power max_8914
+R13050
+R13053
+line power max_8923
+line power max_891
+line power max_892
+line power max_894
+line power min_895
+line power min_896
+line power max_897
+R13095
+R13101
+line power max_8918
+R13179
+line power min_8916
+line power min_8917
+R13200
+R13218
+line power max_896
+R13230
+line power min_8911
+line power min_8912
+line power max_8918
+line power max_8920
+line power max_890
+line power min_894
+line power min_898
+line power max_899
+line power max_8910
+R13317
+line power min_8913
+R13320
+line power min_8917
+line power max_8918
+line power min_8918
+line power min_8919
+line power min_81010
+R13389
+line power max_81013
+line power min_81013
+line power max_81017
+line power min_81018
+line power max_81019
+R13422
+line power min_8103
+R13434
+line power max_8104
+R13437
+line power min_81012
+line power max_81014
+line power max_81018
+line power min_81019
+line power min_81020
+R13491
+line power min_8101
+R13518
+line power min_81012
+line power min_81013
+R13554
+line power max_8100
+R13569
+R13575
+line power max_8105
+R13584
+R13590
+R13602
+line power min_81013
+line power min_81015
+line power max_81017
+line power min_81018
+line power max_81022
+line power max_81023
+line power max_8100
+line power max_8101
+line power min_8101
+R13647
+line power max_8106
+R13689
+line power min_81017
+line power max_8105
+R13728
+line power max_81010
+R13746
+line power min_81012
+line power min_81013
+R13770
+line power max_81021
+R13779
+line power max_8101
+line power min_8106
+R13809
+line power max_81014
+line power min_81020
+R13848
+line power max_8100
+R13857
+line power max_8101
+R13860
+line power min_8102
+line power max_81012
+R13893
+R13899
+line power min_81015
+line power min_81016
+line power max_81017
+line power max_81022
+line power max_8101
+R13935
+R13938
+line power min_81010
+line power max_81017
+R13980
+line power min_81018
+line power min_81019
+line power max_8100
+line power min_8103
+line power min_81013
+line power max_81014
+R14043
+R14046
+R14049
+R14052
+R14067
+R14076
+line power max_8104
+line power min_8105
+R14094
+line power max_8109
+line power min_81010
+line power max_81011
+line power min_81011
+line power max_81012
+R14124
+line power min_81018
+R14127
+line power min_81019
+line power max_81021
+line power min_81021
+line power max_81022
+line power max_81023
+line power min_81023
+line power max_8103
+R14160
+R14163
+line power min_8109
+line power max_81012
+line power min_81013
+line power max_81015
+line power min_81015
+line power min_81018
+R14205
+line power max_81023
+line power min_10117
+line power max_101110
+line power min_101110
+line power max_101111
+line power max_101114
+line power min_101114
+R14277
+line power max_101121
+line power min_101122
+R14295
+line power max_10116
+R14313
+R14325
+R14334
+line power max_101116
+line power min_101116
+R14346
+line power max_101120
+line power max_101121
+line power max_101123
+R14358
+R14361
+line power max_10111
+line power max_10113
+R14370
+line power max_10114
+R14391
+R14397
+line power min_101113
+R14421
+line power max_101122
+R14430
+line power min_10110
+R14445
+line power max_10117
+line power min_101110
+R14463
+R14469
+line power min_101113
+R14472
+line power max_101120
+R14496
+line power min_10110
+R14517
+line power max_10115
+line power min_10116
+line power min_10118
+line power max_101115
+line power min_101117
+line power max_101119
+R14568
+R14571
+line power max_101123
+line power min_101123
+R14583
+line power max_10114
+line power min_10114
+line power min_10116
+line power max_10117
+line power max_101110
+line power min_101110
+line power max_101111
+line power max_101114
+line power min_101116
+R14625
+line power max_101117
+line power max_101119
+line power max_101121
+line power max_101122
+line power max_101123
+line power max_10111
+line power max_10112
+line power max_10113
+line power min_10113
+line power min_10114
+line power max_10117
+line power min_10118
+R14676
+line power max_101110
+R14685
+R14733
+R14748
+line power max_101115
+line power min_101115
+line power max_101118
+line power max_101119
+R14778
+line power min_101121
+R14787
+R14790
+line power min_101111
+R14832
+line power min_101114
+line power max_101117
+R14865
+R14868
+R14892
+line power min_101111
+line power max_101113
+line power min_101115
+line power max_101116
+line power max_101120
+line power min_101120
+R14925
+line power min_10112
+line power max_10113
+R14949
+line power min_10115
+line power max_10117
+line power max_10118
+R14961
+line power max_101111
+R14976
+line power max_101116
+R14997
+line power max_101121
+line power min_101122
+line power min_101123
+line power max_10112
+R15039
+line power min_101113
+line power max_101116
+line power min_101117
+line power max_101121
+line power max_101123
+line power min_101123
+line power max_10121
+line power min_10122
+R15090
+line power min_10124
+line power max_10126
+line power min_10126
+R15111
+line power max_101215
+line power min_101215
+line power max_101218
+R15141
+R15147
+line power max_10122
+R15162
+line power max_10124
+line power min_10124
+line power max_10129
+line power min_101214
+line power min_101216
+R15213
+line power max_101223
+R15222
+R15225
+line power max_10121
+R15240
+line power min_10126
+line power min_10128
+R15261
+R15270
+line power max_101217
+line power max_101221
+line power min_101221
+line power min_101222
+R15294
+line power min_10120
+R15297
+line power min_10121
+R15303
+line power max_10123
+R15315
+line power min_101211
+line power max_101212
+line power min_101213
+line power min_101214
+line power max_101215
+line power min_101216
+line power max_101218
+line power min_101219
+line power min_101221
+line power min_101223
+line power max_10123
+line power min_10123
+R15399
+R15405
+R15408
+line power min_101214
+R15420
+R15423
+R15429
+line power min_101221
+line power max_10121
+R15456
+line power max_10128
+line power max_101210
+R15471
+line power max_101212
+R15477
+line power max_101214
+R15486
+line power min_101217
+line power max_101218
+line power max_101222
+line power min_10122
+R15519
+line power min_10123
+R15522
+line power min_101210
+line power max_101211
+R15555
+line power min_101215
+line power min_101216
+line power min_101219
+R15570
+line power min_10122
+line power min_10123
+line power min_10125
+line power min_10128
+line power max_101210
+line power min_101214
+R15627
+R15630
+R15633
+line power max_101218
+R15639
+line power max_101219
+line power max_101221
+line power min_101222
+line power min_10125
+R15675
+line power max_10128
+line power min_10128
+line power min_10129
+line power min_101210
+R15687
+line power max_101214
+R15708
+line power max_101219
+line power max_101221
+line power max_101223
+R15732
+line power max_10122
+line power min_10122
+R15738
+R15741
+line power max_10126
+line power min_10129
+line power max_101211
+line power min_101211
+line power min_101212
+R15765
+R15810
+line power min_10125
+line power max_10126
+line power min_10127
+line power min_101214
+line power min_101215
+line power min_101216
+line power max_101218
+line power max_101211
+line power max_101213
+line power min_101214
+line power min_101215
+line power max_101218
+line power min_101222
+line power max_12133
+line power max_12137
+R15996
+R15999
+line power max_121321
+R16008
+line power min_12131
+line power min_12133
+line power max_12134
+R16038
+R16056
+R16062
+R16068
+line power min_121318
+line power min_121321
+line power min_121323
+R16086
+line power min_12130
+line power max_12131
+line power min_12131
+line power min_12132
+R16104
+R16113
+R16122
+R16125
+R16131
+line power max_121319
+line power max_121322
+line power max_121323
+line power min_12132
+line power max_12134
+line power min_12135
+line power max_12137
+line power max_121314
+line power max_121317
+line power min_121317
+R16218
+line power min_121320
+line power min_121322
+R16236
+line power max_12134
+line power min_12135
+R16254
+R16260
+line power min_121312
+R16269
+line power min_121313
+line power min_121314
+line power min_121319
+R16293
+R16314
+R16320
+line power max_12136
+line power min_12137
+line power max_12138
+line power min_12139
+line power min_121311
+line power max_121313
+R16344
+line power min_121314
+line power max_121315
+line power min_121318
+line power max_121319
+R16365
+line power min_121322
+R16395
+line power min_121310
+line power max_121311
+line power min_121314
+line power min_121319
+R16434
+R16443
+line power max_12130
+line power max_12132
+R16461
+R16464
+line power min_12137
+R16473
+line power min_12139
+line power max_121319
+R16515
+line power min_12130
+line power max_12138
+R16545
+line power min_12139
+R16554
+line power max_121312
+line power min_121313
+line power max_121314
+line power min_121321
+R16599
+line power max_12136
+R16611
+line power min_12139
+R16620
+line power min_121312
+line power min_121314
+R16635
+R16641
+line power min_121317
+R16665
+line power max_12132
+line power max_12137
+line power min_12138
+line power min_121310
+line power max_121313
+R16707
+line power max_121316
+line power max_121321
+line power max_121322
+R16731
+line power min_121323
+R16737
+line power min_12135
+R16755
+line power min_12138
+line power min_121313
+line power min_121314
+R16779
+R16791
+line power min_121320
+R16797
+R16803
+line power min_121323
+R16812
+line power min_1147
+line power min_1148
+line power min_1149
+R16845
+R16848
+line power max_11414
+R16857
+line power max_11418
+line power max_11419
+line power min_11421
+line power min_11422
+R16881
+line power min_1143
+R16890
+line power min_1147
+R16902
+line power min_1148
+R16917
+line power max_11414
+line power min_11415
+R16929
+line power max_11421
+R16950
+line power min_1144
+R16968
+R16980
+line power max_11410
+line power min_11410
+line power max_11411
+line power max_11416
+line power min_11418
+line power max_11420
+R17013
+R17016
+line power max_11423
+R17028
+line power min_1145
+line power max_1147
+R17049
+line power max_1149
+line power max_11410
+line power max_11413
+line power min_11414
+line power min_11416
+R17073
+line power max_11418
+line power max_11419
+line power min_11420
+line power min_11421
+line power max_1140
+line power max_1146
+line power min_1146
+line power min_1149
+R17124
+R17130
+line power min_11414
+line power min_11418
+line power max_11421
+line power max_1141
+line power min_1143
+line power max_11414
+line power max_11419
+R17229
+line power max_11421
+line power max_11422
+R17241
+R17250
+R17259
+line power max_11412
+line power min_11416
+line power min_1141
+R17316
+line power max_1142
+line power min_1142
+R17319
+R17322
+R17325
+line power min_1146
+line power max_11410
+R17349
+line power min_11417
+R17364
+line power min_11419
+line power max_11423
+line power min_1143
+line power max_1148
+R17421
+R17424
+R17427
+R17454
+R17460
+line power min_1142
+line power max_1148
+line power min_1149
+line power min_11415
+line power min_1141
+line power max_1142
+R17538
+R17559
+line power max_11413
+line power min_11414
+R17571
+line power max_11417
+line power min_11419
+R17592
+line power max_1141
+R17613
+line power min_11410
+line power max_11413
+R17640
+R17643
+line power min_11417
+line power min_11419
+R17661
+R17667
+R17673
+R17688
+line power min_14157
+line power max_141512
+line power max_141515
+R17727
+line power min_141519
+R17742
+line power max_14151
+line power min_14152
+R17760
+line power min_14156
+line power min_14157
+line power max_14158
+line power min_14158
+line power max_141510
+line power max_141512
+R17781
+line power min_141513
+R17802
+line power max_141520
+line power max_141521
+line power min_141521
+line power max_141523
+line power max_14150
+R17820
+line power min_14155
+R17835
+line power max_14158
+R17844
+line power min_141510
+line power max_141511
+line power min_141513
+line power max_141514
+R17865
+line power max_141520
+R17877
+line power min_141521
+line power min_14157
+line power min_14159
+R17916
+line power max_141510
+line power min_141518
+line power max_141519
+line power min_141520
+line power max_141522
+line power max_141523
+line power min_14150
+line power max_14152
+line power min_14152
+line power max_14153
+line power max_14155
+line power min_14157
+line power min_14158
+R17985
+line power max_141514
+line power min_141515
+R18009
+line power min_141517
+line power max_141523
+line power min_14152
+R18042
+line power min_14156
+line power min_14158
+R18057
+line power min_14159
+line power min_141510
+R18063
+R18075
+line power min_141515
+line power min_141516
+line power max_141518
+line power min_141519
+line power min_141520
+line power min_14154
+line power min_14158
+line power min_141511
+R18144
+line power min_141516
+R18153
+R18177
+line power max_14155
+line power min_14155
+R18192
+line power min_14159
+R18210
+R18228
+R18240
+R18255
+line power max_14155
+R18273
+R18285
+R18297
+line power min_141518
+R18303
+line power max_141519
+line power max_141521
+line power max_14150
+line power min_14151
+line power max_14154
+line power max_14157
+line power min_14159
+R18357
+R18360
+line power max_141514
+R18372
+line power max_141522
+line power min_141522
+line power min_14153
+line power max_14154
+line power min_14155
+line power max_14156
+line power max_14159
+R18423
+line power max_141512
+line power min_141512
+line power min_141514
+line power min_141515
+R18441
+line power min_141517
+line power min_141518
+line power max_141521
+line power min_141521
+line power min_141522
+line power min_141523
+line power min_14155
+R18480
+line power max_141515
+line power min_141515
+line power min_141516
+line power max_141520
+line power min_141521
+R18528
+R18543
+line power min_14164
+R18555
+line power max_141612
+line power min_141612
+line power min_141621
+line power min_141622
+R18603
+line power min_141623
+line power min_14161
+line power max_14162
+R18618
+line power min_14166
+line power max_141610
+R18660
+R18678
+line power min_14162
+line power min_14163
+R18693
+line power min_14167
+line power max_14169
+line power min_141610
+line power min_141615
+R18726
+line power min_141620
+R18741
+line power min_141621
+R18762
+line power min_14165
+R18774
+line power min_141623
+line power min_14160
+R18825
+R18855
+R18861
+R18888
+line power max_141622
+line power min_14160
+line power max_14162
+R18906
+line power max_14166
+line power min_141618
+line power min_141620
+line power min_141621
+R18960
+line power max_141623
+line power min_141623
+line power max_14169
+line power min_141613
+R19008
+line power min_141617
+line power min_14161
+line power max_14165
+line power min_14166
+R19062
+line power min_141611
+line power min_141613
+line power min_141616
+line power min_141617
+line power min_141620
+line power max_141616
+line power max_141617
+line power max_141623
+line power max_14163
+line power min_14169
+R19215
+R19221
+line power max_141615
+R19245
+line power max_141621
+R19257
+line power max_14161
+R19269
+R19287
+R19296
+line power min_141619
+R19320
+line power max_141623
+line power max_14160
+R19344
+line power max_14166
+line power min_141610
+line power min_141616
+line power max_141623
+line power min_16175
+line power max_16177
+R19434
+line power max_161714
+R19458
+line power max_161723
+line power min_16170
+R19476
+R19479
+line power min_16174
+R19488
+line power max_16179
+line power min_16179
+line power max_161711
+line power min_161713
+line power max_161717
+R19530
+R19542
+line power max_16170
+R19560
+line power min_16176
+line power min_161711
+line power min_161712
+line power min_161713
+line power min_161721
+R19620
+line power max_16172
+R19644
+line power max_161710
+R19662
+line power max_161716
+R19665
+R19668
+line power min_161720
+line power max_161721
+R19683
+R19686
+R19689
+line power min_16176
+R19707
+line power min_161710
+line power min_161712
+line power min_161715
+R19734
+line power max_161716
+line power max_161721
+line power min_16170
+line power min_16172
+line power max_16173
+line power max_16179
+R19788
+R19797
+line power max_161714
+line power min_161715
+R19821
+line power max_161723
+line power max_16170
+R19836
+line power max_16173
+line power max_16174
+R19845
+R19857
+line power max_161710
+R19869
+R19872
+R19878
+R19890
+line power max_161722
+R19908
+line power max_16177
+line power max_16179
+R19947
+R19956
+line power min_161721
+R19968
+line power min_161723
+R19983
+R19989
+line power max_16178
+line power max_16179
+R20004
+line power max_161712
+line power min_161717
+line power min_161719
+R20034
+line power min_16172
+line power min_16174
+line power min_16178
+line power min_161712
+line power max_161714
+line power min_161714
+R20097
+line power max_161720
+line power max_161723
+line power min_16170
+line power min_16177
+line power max_16178
+line power max_161713
+line power min_16175
+R20208
+R20217
+R20220
+line power max_161710
+line power max_161711
+R20229
+line power min_161713
+line power max_161714
+line power max_161715
+line power max_161717
+line power min_161719
+line power min_161720
+line power min_161721
+R20262
+Activation_bat
+Activation_bat
+Activation_bat
+Activation_bat
+bigM_power_31
+bigM_power_37
+bigM_power_38
+bigM_power_313
+bigM_power_314
+bigM_power_320
+max power_320
+bigM_power_32
+max power_33
+bigM_power_33
+max power_36
+max power_311
+max power_314
+max power_317
+bigM_power_321
+bigM_power_322
+max power_322
+max power_323
+max power_34
+bigM_power_37
+bigM_power_38
+max power_39
+bigM_power_39
+max power_312
+max power_318
+max power_322
+max power_323
+bigM_power_34
+bigM_power_34
+bigM_power_35
+bigM_power_36
+bigM_power_37
+max power_38
+bigM_power_38
+bigM_power_320
+bigM_power_323
+bigM_power_31
+max power_31
+max power_32
+max power_34
+max power_37
+max power_38
+bigM_power_38
+max power_312
+max power_313
+bigM_power_315
+bigM_power_315
+bigM_power_317
+bigM_power_318
+max power_319
+max power_31
+bigM_power_32
+max power_35
+max power_310
+max power_312
+max power_314
+bigM_power_315
+max power_316
+bigM_power_316
+max power_318
+bigM_power_318
+bigM_power_319
+max power_321
+max power_322
+bigM_power_34
+max power_35
+bigM_power_35
+bigM_power_38
+max power_38
+bigM_power_310
+bigM_power_312
+max power_316
+max power_317
+max power_317
+bigM_power_318
+max power_320
+max power_320
+max power_321
+bigM_power_34
+max power_35
+bigM_power_35
+bigM_power_37
+max power_312
+max power_312
+bigM_power_314
+bigM_power_316
+max power_316
+bigM_power_316
+bigM_power_318
+max power_320
+max power_321
+max power_322
+bigM_power_322
+bigM_power_323
+max power_30
+max power_31
+max power_33
+max power_34
+max power_37
+bigM_power_39
+bigM_power_39
+bigM_power_310
+max power_311
+max power_313
+max power_314
+bigM_power_319
+bigM_power_319
+bigM_power_32
+bigM_power_33
+bigM_power_34
+max power_34
+bigM_power_36
+bigM_power_310
+bigM_power_313
+bigM_power_314
+bigM_power_317
+bigM_power_319
+max power_319
+bigM_power_322
+max power_323
+bigM_power_30
+max power_31
+bigM_power_35
+max power_38
+bigM_power_39
+bigM_power_310
+bigM_power_312
+max power_312
+bigM_power_313
+bigM_power_317
+bigM_power_318
+max power_320
+bigM_power_321
+max power_322
+max power_31
+max power_35
+max power_37
+max power_38
+bigM_power_313
+max power_314
+max power_319
+bigM_power_320
+bigM_power_323
+max power_50
+bigM_power_51
+bigM_power_55
+max power_56
+bigM_power_56
+max power_59
+max power_510
+bigM_power_515
+max power_516
+max power_518
+max power_520
+max power_520
+max power_522
+bigM_power_523
+max power_59
+max power_59
+max power_511
+max power_512
+bigM_power_512
+max power_515
+max power_516
+max power_516
+max power_517
+bigM_power_517
+max power_519
+bigM_power_520
+max power_522
+bigM_power_522
+bigM_power_50
+bigM_power_510
+bigM_power_510
+max power_511
+bigM_power_512
+max power_513
+bigM_power_514
+max power_520
+bigM_power_520
+max power_50
+bigM_power_50
+max power_51
+bigM_power_52
+bigM_power_53
+max power_58
+bigM_power_510
+bigM_power_510
+max power_513
+bigM_power_514
+bigM_power_515
+bigM_power_519
+max power_520
+bigM_power_522
+max power_523
+bigM_power_50
+max power_51
+bigM_power_51
+max power_54
+max power_54
+bigM_power_57
+max power_58
+bigM_power_59
+max power_510
+max power_510
+max power_511
+max power_517
+bigM_power_520
+max power_522
+bigM_power_523
+bigM_power_51
+bigM_power_54
+max power_56
+bigM_power_510
+max power_510
+max power_511
+bigM_power_512
+bigM_power_513
+max power_514
+max power_515
+bigM_power_515
+max power_521
+max power_51
+bigM_power_53
+max power_54
+bigM_power_59
+max power_511
+max power_516
+bigM_power_518
+bigM_power_520
+bigM_power_521
+max power_523
+bigM_power_53
+max power_54
+max power_56
+bigM_power_57
+max power_58
+bigM_power_511
+max power_512
+bigM_power_513
+max power_522
+bigM_power_522
+bigM_power_53
+bigM_power_54
+max power_55
+bigM_power_58
+max power_58
+bigM_power_510
+max power_510
+max power_516
+bigM_power_516
+max power_517
+bigM_power_517
+max power_520
+max power_521
+max power_521
+max power_522
+max power_522
+max power_55
+bigM_power_56
+bigM_power_511
+bigM_power_511
+max power_513
+max power_513
+bigM_power_514
+max power_515
+max power_515
+max power_517
+bigM_power_517
+bigM_power_517
+max power_518
+bigM_power_518
+bigM_power_520
+bigM_power_523
+max power_52
+max power_53
+bigM_power_54
+bigM_power_56
+max power_58
+bigM_power_58
+bigM_power_59
+max power_510
+max power_511
+max power_515
+bigM_power_517
+max power_517
+bigM_power_518
+max power_519
+max power_520
+bigM_power_521
+bigM_power_523
+max power_523
+max power_50
+bigM_power_51
+bigM_power_52
+bigM_power_53
+bigM_power_54
+bigM_power_55
+max power_55
+max power_56
+max power_516
+bigM_power_520
+max power_521
+bigM_power_522
+max power_522
+bigM_power_523
+bigM_power_523
+bigM_power_71
+bigM_power_72
+max power_74
+bigM_power_76
+bigM_power_76
+max power_77
+max power_78
+max power_79
+max power_710
+bigM_power_716
+max power_717
+max power_721
+bigM_power_721
+max power_74
+bigM_power_76
+bigM_power_78
+max power_710
+bigM_power_710
+max power_711
+max power_714
+bigM_power_721
+max power_722
+max power_70
+bigM_power_74
+bigM_power_75
+max power_710
+bigM_power_711
+max power_714
+max power_717
+bigM_power_717
+max power_718
+bigM_power_719
+max power_719
+max power_721
+max power_722
+max power_722
+max power_70
+bigM_power_72
+max power_73
+max power_74
+bigM_power_75
+bigM_power_75
+bigM_power_79
+max power_714
+bigM_power_715
+max power_719
+bigM_power_720
+bigM_power_721
+max power_722
+max power_722
+max power_723
+bigM_power_70
+bigM_power_72
+max power_73
+max power_73
+max power_74
+bigM_power_74
+max power_75
+max power_75
+bigM_power_77
+bigM_power_710
+max power_714
+max power_717
+max power_718
+bigM_power_718
+max power_719
+max power_721
+bigM_power_723
+max power_71
+max power_79
+bigM_power_711
+max power_712
+max power_721
+max power_70
+bigM_power_70
+max power_74
+bigM_power_74
+bigM_power_75
+max power_78
+bigM_power_78
+max power_79
+max power_713
+bigM_power_715
+bigM_power_717
+max power_719
+bigM_power_719
+max power_720
+bigM_power_722
+bigM_power_723
+bigM_power_71
+max power_72
+max power_75
+bigM_power_77
+max power_79
+bigM_power_717
+bigM_power_719
+max power_720
+max power_71
+bigM_power_71
+bigM_power_72
+bigM_power_72
+max power_75
+bigM_power_76
+bigM_power_77
+bigM_power_710
+max power_711
+bigM_power_715
+bigM_power_715
+max power_717
+bigM_power_717
+max power_718
+max power_72
+max power_73
+max power_74
+max power_76
+max power_77
+max power_77
+max power_78
+max power_710
+bigM_power_710
+bigM_power_712
+max power_713
+bigM_power_717
+max power_717
+bigM_power_720
+max power_721
+max power_721
+max power_722
+bigM_power_722
+bigM_power_70
+max power_71
+max power_72
+max power_74
+bigM_power_74
+bigM_power_76
+bigM_power_712
+max power_714
+max power_716
+bigM_power_720
+bigM_power_723
+bigM_power_70
+bigM_power_71
+max power_73
+bigM_power_74
+max power_74
+max power_76
+max power_76
+max power_79
+max power_79
+max power_710
+bigM_power_711
+bigM_power_714
+max power_717
+max power_718
+bigM_power_720
+bigM_power_721
+bigM_power_722
+bigM_power_723
+max power_723
+max power_95
+bigM_power_95
+max power_96
+bigM_power_97
+max power_98
+bigM_power_99
+bigM_power_910
+bigM_power_910
+max power_913
+max power_915
+max power_916
+max power_918
+max power_918
+bigM_power_919
+max power_919
+bigM_power_921
+bigM_power_922
+max power_923
+max power_93
+max power_94
+bigM_power_94
+max power_97
+bigM_power_99
+max power_911
+bigM_power_911
+max power_913
+bigM_power_919
+bigM_power_920
+max power_921
+max power_921
+max power_922
+bigM_power_91
+max power_94
+max power_97
+bigM_power_911
+max power_912
+max power_912
+max power_914
+max power_916
+bigM_power_916
+max power_922
+bigM_power_922
+max power_92
+bigM_power_94
+max power_96
+max power_98
+max power_910
+max power_912
+bigM_power_919
+bigM_power_922
+max power_923
+bigM_power_92
+bigM_power_95
+max power_96
+bigM_power_96
+max power_98
+max power_99
+max power_914
+max power_915
+bigM_power_915
+bigM_power_918
+bigM_power_919
+max power_920
+bigM_power_923
+bigM_power_90
+bigM_power_91
+max power_92
+max power_93
+bigM_power_94
+max power_95
+bigM_power_95
+bigM_power_915
+bigM_power_918
+bigM_power_920
+max power_90
+max power_93
+max power_94
+bigM_power_98
+max power_99
+max power_910
+bigM_power_911
+bigM_power_912
+bigM_power_915
+bigM_power_918
+bigM_power_919
+bigM_power_921
+max power_922
+max power_922
+bigM_power_922
+max power_92
+max power_93
+max power_94
+max power_95
+bigM_power_96
+bigM_power_97
+max power_910
+bigM_power_912
+bigM_power_913
+max power_915
+max power_915
+bigM_power_915
+max power_917
+max power_917
+max power_91
+bigM_power_91
+bigM_power_93
+max power_93
+max power_95
+bigM_power_98
+bigM_power_99
+bigM_power_911
+max power_913
+max power_914
+bigM_power_914
+bigM_power_916
+bigM_power_922
+max power_923
+bigM_power_90
+max power_90
+bigM_power_93
+max power_93
+bigM_power_95
+max power_95
+bigM_power_97
+max power_98
+bigM_power_915
+bigM_power_917
+max power_917
+bigM_power_918
+max power_91
+bigM_power_93
+bigM_power_911
+max power_912
+bigM_power_912
+bigM_power_913
+max power_919
+bigM_power_920
+max power_922
+max power_922
+max power_923
+max power_923
+bigM_power_91
+max power_91
+bigM_power_92
+bigM_power_92
+max power_96
+bigM_power_96
+max power_98
+bigM_power_99
+max power_910
+bigM_power_911
+bigM_power_912
+bigM_power_914
+bigM_power_914
+max power_915
+bigM_power_922
+max power_112
+bigM_power_112
+max power_113
+max power_113
+max power_115
+bigM_power_115
+bigM_power_116
+max power_1110
+bigM_power_1111
+bigM_power_1113
+bigM_power_1114
+max power_1115
+max power_1116
+max power_1119
+bigM_power_1120
+max power_1121
+bigM_power_1122
+bigM_power_113
+bigM_power_115
+max power_115
+max power_118
+bigM_power_119
+bigM_power_1110
+max power_1111
+max power_1112
+bigM_power_1120
+bigM_power_1122
+bigM_power_112
+max power_118
+max power_119
+max power_1110
+max power_1112
+max power_1113
+max power_1118
+bigM_power_1119
+bigM_power_1122
+bigM_power_1122
+bigM_power_112
+bigM_power_113
+bigM_power_115
+bigM_power_117
+bigM_power_1111
+bigM_power_1111
+bigM_power_1112
+bigM_power_1113
+max power_1114
+bigM_power_1114
+bigM_power_1115
+max power_1120
+max power_1122
+max power_117
+bigM_power_1111
+max power_1111
+bigM_power_1115
+max power_1115
+max power_1117
+bigM_power_1118
+max power_1118
+max power_1121
+max power_111
+bigM_power_115
+max power_116
+max power_118
+bigM_power_118
+bigM_power_1114
+bigM_power_1119
+bigM_power_1120
+bigM_power_1123
+max power_1123
+bigM_power_110
+bigM_power_110
+max power_113
+bigM_power_118
+max power_1112
+max power_1114
+max power_1119
+bigM_power_1119
+bigM_power_1122
+max power_114
+bigM_power_115
+max power_119
+bigM_power_1110
+bigM_power_1110
+bigM_power_1111
+bigM_power_1112
+bigM_power_1114
+bigM_power_1115
+bigM_power_1117
+bigM_power_1121
+max power_1121
+max power_1122
+bigM_power_1122
+max power_1123
+max power_111
+bigM_power_117
+bigM_power_118
+max power_118
+max power_119
+bigM_power_1110
+max power_1111
+max power_1112
+max power_1113
+max power_1116
+max power_1118
+max power_1118
+bigM_power_1120
+bigM_power_1121
+max power_1123
+bigM_power_1123
+max power_1123
+max power_110
+bigM_power_112
+bigM_power_113
+bigM_power_119
+max power_1118
+max power_1120
+max power_1121
+max power_1121
+bigM_power_1122
+max power_110
+max power_117
+bigM_power_117
+max power_1111
+max power_1111
+bigM_power_1114
+bigM_power_1117
+max power_1120
+bigM_power_1120
+max power_110
+bigM_power_110
+max power_111
+bigM_power_112
+max power_113
+max power_114
+bigM_power_115
+bigM_power_116
+bigM_power_117
+bigM_power_1110
+max power_1116
+bigM_power_1119
+bigM_power_1119
+bigM_power_1120
+max power_1123
+max power_131
+max power_134
+max power_138
+bigM_power_138
+bigM_power_1310
+bigM_power_1310
+max power_1312
+bigM_power_1312
+bigM_power_1313
+max power_1315
+max power_1320
+bigM_power_1322
+bigM_power_1323
+max power_130
+max power_131
+bigM_power_131
+max power_132
+bigM_power_134
+max power_137
+max power_1310
+bigM_power_1311
+bigM_power_1316
+max power_1318
+bigM_power_1321
+bigM_power_131
+max power_137
+bigM_power_1311
+bigM_power_1311
+bigM_power_1312
+max power_1314
+max power_1316
+bigM_power_1317
+bigM_power_1321
+max power_1322
+max power_136
+bigM_power_1312
+max power_1313
+max power_1313
+max power_1317
+max power_1317
+bigM_power_1320
+max power_1320
+max power_1323
+max power_131
+bigM_power_132
+max power_133
+bigM_power_134
+bigM_power_136
+bigM_power_136
+max power_137
+bigM_power_138
+max power_1310
+bigM_power_1311
+max power_1313
+bigM_power_1313
+max power_1314
+bigM_power_1315
+bigM_power_1315
+bigM_power_1316
+max power_1317
+max power_1319
+bigM_power_131
+bigM_power_134
+bigM_power_137
+max power_137
+bigM_power_137
+max power_138
+bigM_power_1311
+bigM_power_1312
+bigM_power_1314
+bigM_power_1314
+bigM_power_1318
+bigM_power_1319
+bigM_power_1322
+max power_131
+bigM_power_131
+bigM_power_132
+bigM_power_132
+bigM_power_134
+bigM_power_136
+max power_139
+bigM_power_1310
+max power_1310
+bigM_power_1312
+max power_1313
+max power_1317
+max power_1319
+bigM_power_1320
+bigM_power_1320
+max power_131
+bigM_power_134
+bigM_power_135
+bigM_power_137
+bigM_power_139
+bigM_power_1312
+max power_1312
+bigM_power_1314
+max power_1322
+max power_132
+max power_134
+max power_134
+max power_135
+max power_136
+bigM_power_137
+max power_138
+max power_139
+max power_1310
+max power_1311
+bigM_power_1311
+max power_1313
+max power_1315
+bigM_power_1315
+bigM_power_1317
+max power_134
+max power_135
+bigM_power_139
+bigM_power_1310
+bigM_power_1311
+max power_1312
+max power_1312
+max power_1313
+bigM_power_1318
+max power_1321
+bigM_power_1321
+bigM_power_130
+bigM_power_137
+bigM_power_139
+max power_139
+bigM_power_1313
+max power_1314
+max power_1319
+bigM_power_1323
+max power_131
+max power_133
+max power_133
+max power_134
+max power_135
+max power_139
+max power_1311
+max power_1311
+bigM_power_1314
+bigM_power_1320
+bigM_power_1323
+max power_151
+max power_155
+bigM_power_155
+max power_156
+bigM_power_156
+max power_1513
+max power_1514
+bigM_power_1516
+bigM_power_1520
+max power_1522
+bigM_power_1523
+bigM_power_153
+max power_154
+bigM_power_157
+max power_157
+max power_159
+bigM_power_159
+bigM_power_1513
+max power_1515
+bigM_power_1515
+bigM_power_1518
+max power_1523
+bigM_power_153
+max power_155
+max power_1511
+max power_1512
+max power_1513
+bigM_power_1514
+max power_1515
+max power_1518
+max power_1519
+bigM_power_1522
+max power_151
+bigM_power_154
+bigM_power_155
+max power_156
+max power_158
+bigM_power_159
+max power_1510
+bigM_power_1510
+bigM_power_1513
+bigM_power_1514
+max power_1515
+bigM_power_1515
+bigM_power_1516
+max power_1517
+bigM_power_1520
+max power_1521
+max power_1522
+bigM_power_150
+max power_152
+max power_153
+max power_154
+max power_154
+max power_155
+bigM_power_155
+bigM_power_157
+max power_158
+bigM_power_159
+max power_1511
+bigM_power_1516
+max power_1518
+bigM_power_1520
+max power_1521
+bigM_power_1521
+bigM_power_158
+bigM_power_1510
+max power_1514
+max power_1516
+bigM_power_1520
+max power_152
+max power_154
+max power_159
+bigM_power_159
+max power_1511
+max power_1514
+bigM_power_1514
+bigM_power_1515
+max power_1518
+max power_1518
+bigM_power_1519
+bigM_power_1523
+bigM_power_151
+bigM_power_153
+bigM_power_153
+bigM_power_157
+max power_158
+bigM_power_1512
+bigM_power_1513
+bigM_power_1515
+bigM_power_1518
+bigM_power_1518
+bigM_power_1519
+max power_1521
+bigM_power_1523
+max power_152
+bigM_power_153
+bigM_power_158
+bigM_power_1511
+bigM_power_1513
+max power_1515
+max power_1517
+bigM_power_1517
+max power_154
+max power_154
+bigM_power_155
+max power_156
+bigM_power_156
+bigM_power_157
+max power_1511
+max power_1513
+max power_1516
+bigM_power_1517
+bigM_power_1517
+max power_1518
+bigM_power_1519
+bigM_power_1520
+max power_1520
+max power_1522
+bigM_power_1522
+bigM_power_151
+max power_151
+max power_154
+bigM_power_1510
+bigM_power_1512
+bigM_power_1514
+max power_1514
+max power_1515
+max power_1517
+max power_1517
+max power_1520
+bigM_power_1523
+max power_1523
+bigM_power_151
+max power_152
+max power_152
+max power_156
+bigM_power_157
+max power_158
+bigM_power_1513
+max power_1519
+max power_1521
+bigM_power_170
+max power_171
+bigM_power_172
+bigM_power_177
+max power_178
+bigM_power_1710
+max power_1715
+bigM_power_1715
+bigM_power_1716
+max power_1718
+bigM_power_1718
+bigM_power_1719
+max power_1719
+max power_1722
+max power_1722
+bigM_power_170
+max power_172
+bigM_power_172
+max power_173
+max power_176
+bigM_power_179
+bigM_power_179
+max power_1712
+bigM_power_1714
+bigM_power_1714
+max power_1718
+bigM_power_1718
+max power_1721
+max power_1722
+bigM_power_1723
+bigM_power_170
+max power_177
+max power_1710
+bigM_power_1711
+max power_1713
+bigM_power_1714
+bigM_power_1716
+max power_1720
+max power_1722
+max power_1723
+bigM_power_171
+max power_172
+max power_177
+max power_1713
+max power_1714
+max power_1715
+max power_1716
+max power_1716
+bigM_power_1716
+bigM_power_1717
+max power_1718
+bigM_power_1718
+max power_1721
+bigM_power_1721
+max power_1723
+max power_170
+bigM_power_172
+bigM_power_172
+bigM_power_176
+max power_178
+max power_1710
+max power_1712
+max power_1718
+bigM_power_1720
+bigM_power_1721
+max power_171
+max power_172
+max power_172
+max power_173
+bigM_power_173
+bigM_power_1710
+max power_1714
+bigM_power_1715
+max power_1719
+bigM_power_1719
+bigM_power_1720
+max power_1722
+bigM_power_1723
+bigM_power_1723
+max power_170
+bigM_power_173
+bigM_power_174
+bigM_power_175
+max power_176
+max power_176
+bigM_power_178
+bigM_power_179
+bigM_power_1711
+max power_1713
+bigM_power_1713
+bigM_power_1714
+max power_1718
+bigM_power_1718
+max power_1719
+bigM_power_1720
+max power_1723
+bigM_power_1723
+max power_174
+bigM_power_179
+max power_179
+max power_1711
+bigM_power_1713
+max power_1713
+max power_1714
+bigM_power_1715
+bigM_power_1716
+max power_1717
+bigM_power_1719
+bigM_power_1720
+bigM_power_1721
+max power_171
+max power_172
+max power_175
+bigM_power_177
+max power_178
+bigM_power_178
+bigM_power_179
+bigM_power_1716
+bigM_power_1717
+bigM_power_1719
+bigM_power_1720
+max power_1721
+bigM_power_1721
+bigM_power_170
+max power_172
+max power_173
+max power_175
+bigM_power_176
+bigM_power_179
+bigM_power_1712
+max power_1715
+max power_1716
+bigM_power_1717
+max power_1719
+bigM_power_170
+max power_171
+bigM_power_172
+bigM_power_174
+max power_175
+bigM_power_176
+max power_178
+bigM_power_178
+bigM_power_1711
+bigM_power_1713
+bigM_power_1715
+bigM_power_1715
+max power_1719
+bigM_power_1720
+max power_1720
+bigM_power_1720
+bigM_power_1721
+bigM_power_170
+max power_171
+bigM_power_177
+max power_1710
+bigM_power_1712
+max power_1719
+max power_1721
+bigM_power_1721
+bigM_power_1722
+max power_1723
+Battery_capacity_min
+Battery_capacity_SOC_init[3]
+Battery_capacity_SOC_init[4]
+Battery_capacity_SOC_init[5]
+Battery_capacity_SOC[0,3]
+Battery_capacity_SOC[0,13]
+Battery_capacity_SOC[0,22]
+Battery_capacity_SOC[1,6]
+Battery_capacity_SOC[2,1]
+Battery_capacity_SOC[2,2]
+Battery_capacity_SOC[2,11]
+Battery_capacity_SOC[2,12]
+Battery_capacity_SOC[2,18]
+Battery_capacity_SOC[3,1]
+Battery_capacity_SOC[3,6]
+Battery_capacity_SOC[3,12]
+Battery_capacity_SOC[3,23]
+Battery_capacity_SOC[4,6]
+Battery_capacity_SOC[4,10]
+Battery_capacity_SOC[4,14]
+Battery_capacity_SOC[4,21]
+Battery_capacity_SOC[4,23]
+Battery_capacity_SOC[5,12]
+Battery_capacity_SOC[5,17]
+Battery_capacity_SOC[5,20]
+Battery_capacity_SOC[6,3]
+Battery_capacity_SOC[6,10]
+Battery_capacity_SOC[6,22]
+Battery_capacity_SOC[7,1]
+Battery_capacity_SOC[7,2]
+Battery_capacity_SOC[7,7]
+Battery_capacity_SOC[7,13]
+Battery_capacity_SOC[7,19]
+Battery_capacity_SOC[8,1]
+Battery_capacity_SOC[9,8]
+Battery_capacity_SOC[9,17]
+Battery_capacity_SOC[10,2]
+Battery_capacity_SOC[10,8]
+Battery_capacity_SOC[10,10]
+Battery_capacity_SOC[10,17]
+Battery_capacity_SOC[10,21]
+Battery_capacity_SOC[11,12]
+Battery_capacity_SOC_init[7]
+Battery_capacity_SOC[0,5]
+Battery_capacity_SOC[0,15]
+Battery_capacity_SOC[1,5]
+Battery_capacity_SOC[1,22]
+Battery_capacity_SOC[2,2]
+Battery_capacity_SOC[2,3]
+Battery_capacity_SOC[2,18]
+Battery_capacity_SOC[2,21]
+Battery_capacity_SOC[3,0]
+Battery_capacity_SOC[3,2]
+Battery_capacity_SOC[3,7]
+Battery_capacity_SOC[3,12]
+Battery_capacity_SOC[3,17]
+Battery_capacity_SOC[3,20]
+Battery_capacity_SOC[3,22]
+Battery_capacity_SOC[4,0]
+Battery_capacity_SOC[4,6]
+Battery_capacity_SOC[4,14]
+Battery_capacity_SOC[4,22]
+Battery_capacity_SOC[5,3]
+Battery_capacity_SOC[5,4]
+Battery_capacity_SOC[5,6]
+Battery_capacity_SOC[5,14]
+Battery_capacity_SOC[5,15]
+Battery_capacity_SOC[6,5]
+Battery_capacity_SOC[6,9]
+Battery_capacity_SOC[6,10]
+Battery_capacity_SOC[6,11]
+Battery_capacity_SOC[6,23]
+Battery_capacity_SOC[7,2]
+Battery_capacity_SOC[7,5]
+Battery_capacity_SOC[7,10]
+Battery_capacity_SOC[7,11]
+Battery_capacity_SOC[7,15]
+Battery_capacity_SOC[7,18]
+Battery_capacity_SOC[7,22]
+Battery_capacity_SOC[7,23]
+Battery_capacity_SOC[8,5]
+Battery_capacity_SOC[8,23]
+Battery_capacity_SOC[9,2]
+Battery_capacity_SOC[9,5]
+Battery_capacity_SOC[9,9]
+Battery_capacity_SOC[9,20]
+Battery_capacity_SOC[10,3]
+Battery_capacity_SOC[10,4]
+Battery_capacity_SOC[10,6]
+Battery_capacity_SOC[10,18]
+Battery_capacity_SOC[11,7]
+Battery_capacity_SOC[11,9]
+Battery_capacity_SOC[11,10]
+Battery_capacity_SOC[11,14]
+Battery_capacity_SOC[11,15]
+Battery_capacity_SOC[11,22]
+Battery_capacity_SOC[0,2]
+Battery_capacity_SOC[0,3]
+Battery_capacity_SOC[0,10]
+Battery_capacity_SOC[0,20]
+Battery_capacity_SOC[0,22]
+Battery_capacity_SOC[2,17]
+Battery_capacity_SOC[3,9]
+Battery_capacity_SOC[3,12]
+Battery_capacity_SOC[3,22]
+Battery_capacity_SOC[3,23]
+Battery_capacity_SOC[4,11]
+Battery_capacity_SOC[4,18]
+Battery_capacity_SOC[4,23]
+Battery_capacity_SOC[5,4]
+Battery_capacity_SOC[5,6]
+Battery_capacity_SOC[5,7]
+Battery_capacity_SOC[6,5]
+Battery_capacity_SOC[6,16]
+Battery_capacity_SOC[6,17]
+Battery_capacity_SOC[6,21]
+Battery_capacity_SOC[7,9]
+Battery_capacity_SOC[7,18]
+Battery_capacity_SOC[9,4]
+Battery_capacity_SOC[9,5]
+Battery_capacity_SOC[9,14]
+Battery_capacity_SOC[9,15]
+Battery_capacity_SOC[10,0]
+Battery_capacity_SOC[10,2]
+Battery_capacity_SOC[10,11]
+Battery_capacity_SOC[10,22]
+Battery_capacity_SOC[11,0]
+Battery_capacity_SOC[11,3]
+Battery_capacity_SOC[11,4]
+Battery_capacity_SOC[11,7]
+Battery_capacity_SOC[11,10]
+Battery_capacity_SOC[11,20]
+Battery_capacity_SOC[11,23]
+Battery_capacity_SOC_init[7]
+Battery_capacity_SOC[0,6]
+Battery_capacity_SOC[0,19]
+Battery_capacity_SOC[0,20]
+Battery_capacity_SOC[1,5]
+Battery_capacity_SOC[1,13]
+Battery_capacity_SOC[2,3]
+Battery_capacity_SOC[2,10]
+Battery_capacity_SOC[2,16]
+Battery_capacity_SOC[2,17]
+Battery_capacity_SOC[2,18]
+Battery_capacity_SOC[3,10]
+Battery_capacity_SOC[3,11]
+Battery_capacity_SOC[3,15]
+Battery_capacity_SOC[4,3]
+Battery_capacity_SOC[4,4]
+Battery_capacity_SOC[4,9]
+Battery_capacity_SOC[4,17]
+Battery_capacity_SOC[4,18]
+Battery_capacity_SOC[5,1]
+Battery_capacity_SOC[5,7]
+Battery_capacity_SOC[5,11]
+Battery_capacity_SOC[5,17]
+Battery_capacity_SOC[5,21]
+Battery_capacity_SOC[5,22]
+Battery_capacity_SOC[6,7]
+Battery_capacity_SOC[6,9]
+Battery_capacity_SOC[6,18]
+Battery_capacity_SOC[7,6]
+Battery_capacity_SOC[7,10]
+Battery_capacity_SOC[7,21]
+Battery_capacity_SOC[7,22]
+Battery_capacity_SOC[8,4]
+Battery_capacity_SOC[8,7]
+Battery_capacity_SOC[8,18]
+Battery_capacity_SOC[9,7]
+Battery_capacity_SOC[9,17]
+Battery_capacity_SOC[9,21]
+Battery_capacity_SOC[10,1]
+Battery_capacity_SOC[10,10]
+Battery_capacity_SOC[10,14]
+Battery_capacity_SOC[10,22]
+Battery_capacity_SOC[11,1]
+Battery_capacity_SOC[11,4]
+Battery_capacity_SOC[11,12]
+Battery_capacity_SOC_init[10]
+Battery_capacity_SOC[0,2]
+Battery_capacity_SOC[0,7]
+Battery_capacity_SOC[0,17]
+Battery_capacity_SOC[0,20]
+Battery_capacity_SOC[1,21]
+Battery_capacity_SOC[2,18]
+Battery_capacity_SOC[3,11]
+Battery_capacity_SOC[3,14]
+Battery_capacity_SOC[3,16]
+Battery_capacity_SOC[4,8]
+Battery_capacity_SOC[5,1]
+Battery_capacity_SOC[5,7]
+Battery_capacity_SOC[5,10]
+Battery_capacity_SOC[5,13]
+Battery_capacity_SOC[5,16]
+Battery_capacity_SOC[5,17]
+Battery_capacity_SOC[5,19]
+Battery_capacity_SOC[6,2]
+Battery_capacity_SOC[6,5]
+Battery_capacity_SOC[6,11]
+Battery_capacity_SOC[6,16]
+Battery_capacity_SOC[6,18]
+Battery_capacity_SOC[6,19]
+Battery_capacity_SOC[7,8]
+Battery_capacity_SOC[7,12]
+Battery_capacity_SOC[7,14]
+Battery_capacity_SOC[7,20]
+Battery_capacity_SOC[8,8]
+Battery_capacity_SOC[8,13]
+Battery_capacity_SOC[8,22]
+Battery_capacity_SOC[9,6]
+Battery_capacity_SOC[9,7]
+Battery_capacity_SOC[9,9]
+Battery_capacity_SOC[9,15]
+Battery_capacity_SOC[9,16]
+Battery_capacity_SOC[10,1]
+Battery_capacity_SOC[10,7]
+Battery_capacity_SOC[11,13]
+Battery_capacity_SOC[11,14]
+Battery_capacity_max
+Battery_capacity_SOC_init[9]
+Battery_capacity_SOC[0,3]
+Battery_capacity_SOC[0,10]
+Battery_capacity_SOC[0,18]
+Battery_capacity_SOC[0,20]
+Battery_capacity_SOC[1,3]
+Battery_capacity_SOC[1,23]
+Battery_capacity_SOC[2,10]
+Battery_capacity_SOC[2,11]
+Battery_capacity_SOC[2,18]
+Battery_capacity_SOC[4,13]
+Battery_capacity_SOC[4,14]
+Battery_capacity_SOC[4,17]
+Battery_capacity_SOC[4,20]
+Battery_capacity_SOC[5,2]
+Battery_capacity_SOC[5,5]
+Battery_capacity_SOC[6,5]
+Battery_capacity_SOC[6,6]
+Battery_capacity_SOC[6,10]
+Battery_capacity_SOC[7,9]
+Battery_capacity_SOC[7,11]
+Battery_capacity_SOC[8,6]
+Battery_capacity_SOC[8,7]
+Battery_capacity_SOC[8,11]
+Battery_capacity_SOC[8,13]
+Battery_capacity_SOC[8,21]
+Battery_capacity_SOC[9,5]
+Battery_capacity_SOC[9,14]
+Battery_capacity_SOC[10,0]
+Battery_capacity_SOC[10,7]
+Battery_capacity_SOC[10,18]
+Battery_capacity_SOC[10,19]
+Battery_capacity_SOC[10,21]
+Battery_capacity_SOC[11,1]
+Battery_capacity_SOC[11,10]
+Battery_capacity_SOC_init[8]
+Battery_capacity_SOC_init[9]
+Battery_capacity_SOC_init[10]
+Battery_capacity_SOC[0,18]
+Battery_capacity_SOC[1,20]
+Battery_capacity_SOC[1,21]
+Battery_capacity_SOC[2,8]
+Battery_capacity_SOC[2,16]
+Battery_capacity_SOC[3,5]
+Battery_capacity_SOC[3,18]
+Battery_capacity_SOC[4,2]
+Battery_capacity_SOC[4,5]
+Battery_capacity_SOC[4,10]
+Battery_capacity_SOC[5,12]
+Battery_capacity_SOC[5,17]
+Battery_capacity_SOC[5,18]
+Battery_capacity_SOC[5,22]
+Battery_capacity_SOC[6,5]
+Battery_capacity_SOC[6,16]
+Battery_capacity_SOC[6,18]
+Battery_capacity_SOC[7,10]
+Battery_capacity_SOC[7,12]
+Battery_capacity_SOC[7,18]
+Battery_capacity_SOC[7,19]
+Battery_capacity_SOC[8,1]
+Battery_capacity_SOC[8,10]
+Battery_capacity_SOC[8,12]
+Battery_capacity_SOC[8,14]
+Battery_capacity_SOC[8,20]
+Battery_capacity_SOC[9,17]
+Battery_capacity_SOC[10,7]
+Battery_capacity_SOC[10,9]
+Battery_capacity_SOC[10,17]
+Battery_capacity_SOC[10,19]
+Battery_capacity_SOC[11,5]
+Battery_capacity_SOC_init[6]
+Battery_capacity_SOC_init[9]
+Battery_capacity_SOC[0,8]
+Battery_capacity_SOC[0,15]
+Battery_capacity_SOC[0,20]
+Battery_capacity_SOC[1,0]
+Battery_capacity_SOC[1,1]
+Battery_capacity_SOC[1,23]
+Battery_capacity_SOC[2,5]
+Battery_capacity_SOC[2,13]
+Battery_capacity_SOC[2,15]
+Battery_capacity_SOC[2,17]
+Battery_capacity_SOC[3,8]
+Battery_capacity_SOC[3,16]
+Battery_capacity_SOC[3,18]
+Battery_capacity_SOC[4,2]
+Battery_capacity_SOC[4,3]
+Battery_capacity_SOC[4,5]
+Battery_capacity_SOC[4,6]
+Battery_capacity_SOC[4,8]
+Battery_capacity_SOC[4,18]
+Battery_capacity_SOC[4,20]
+Battery_capacity_SOC[4,22]
+Battery_capacity_SOC[5,2]
+Battery_capacity_SOC[5,4]
+Battery_capacity_SOC[5,7]
+Battery_capacity_SOC[5,20]
+Battery_capacity_SOC[6,11]
+Battery_capacity_SOC[6,16]
+Battery_capacity_SOC[6,17]
+Battery_capacity_SOC[6,20]
+Battery_capacity_SOC[6,21]
+Battery_capacity_SOC[7,10]
+Battery_capacity_SOC[7,15]
+Battery_capacity_SOC[7,17]
+Battery_capacity_SOC[7,18]
+Battery_capacity_SOC[7,22]
+Battery_capacity_SOC[8,1]
+Battery_capacity_SOC[8,4]
+Battery_capacity_SOC[8,20]
+Battery_capacity_SOC[9,17]
+Battery_capacity_SOC[9,19]
+Battery_capacity_SOC[10,2]
+Battery_capacity_SOC[10,5]
+Battery_capacity_SOC[10,10]
+Battery_capacity_SOC[10,15]
+Battery_capacity_SOC[10,17]
+Battery_capacity_SOC[11,3]
+Battery_capacity_SOC[11,4]
+Battery_capacity_SOC[11,11]
+repetitions_5
+repetitions_1
+repetitions_6
+repetitions_8
+repetitions_10
+repetitions_5
+repetitions_10
+repetitions_2
+repetitions_8
+repetitions_0
+repetitions_4
+repetitions_4
+repetitions_8
+repetitions_1
+repetitions_10
+repetitions_2
+repetitions_7
+repetitions_9
+repetitions_10
+repetitions_0
+repetitions_6
+repetitions_10
+repetitions_4
+repetitions_9
+repetitions_8
+repetitions_9
+repetitions_10
+repetitions_4
+repetitions_7
+repetitions_10
+storage balance_02
+storage balance_03
+storage balance_08
+storage balance_013
+storage balance_014
+storage balance_016
+storage balance_010
+storage balance_016
+storage balance_012
+storage balance_017
+storage balance_021
+storage balance_022
+storage balance_06
+storage balance_013
+storage balance_017
+storage balance_020
+storage balance_021
+storage balance_013
+storage balance_017
+storage balance_023
+storage balance_01
+storage balance_022
+storage balance_011
+storage balance_012
+storage balance_017
+storage balance_00
+storage balance_03
+storage balance_09
+storage balance_023
+storage balance_02
+storage balance_04
+storage balance_06
+storage balance_09
+storage balance_010
+storage balance_02
+storage balance_019
+storage balance_021
+storage balance_00
+storage balance_02
+storage balance_05
+storage balance_09
+storage balance_014
+storage balance_12
+storage balance_121
+storage balance_10
+storage balance_12
+storage balance_114
+storage balance_119
+storage balance_10
+storage balance_15
+storage balance_111
+storage balance_113
+storage balance_17
+storage balance_19
+storage balance_111
+storage balance_122
+storage balance_16
+storage balance_17
+storage balance_111
+storage balance_116
+storage balance_15
+storage balance_113
+storage balance_114
+storage balance_121
+storage balance_10
+storage balance_19
+storage balance_110
+storage balance_111
+storage balance_10
+storage balance_111
+storage balance_113
+storage balance_121
+storage balance_15
+storage balance_12
+storage balance_17
+storage balance_110
+storage balance_117
+storage balance_122
+storage balance_112
+storage balance_115
+storage balance_24
+storage balance_28
+storage balance_222
+storage balance_23
+storage balance_24
+storage balance_28
+storage balance_29
+storage balance_219
+storage balance_221
+storage balance_20
+storage balance_222
+storage balance_23
+storage balance_25
+storage balance_210
+storage balance_221
+storage balance_22
+storage balance_28
+storage balance_219
+storage balance_27
+storage balance_214
+storage balance_216
+storage balance_217
+storage balance_223
+storage balance_20
+storage balance_23
+storage balance_25
+storage balance_212
+storage balance_217
+storage balance_219
+storage balance_222
+storage balance_29
+storage balance_214
+storage balance_219
+storage balance_22
+storage balance_23
+storage balance_216
+storage balance_221
+storage balance_20
+storage balance_23
+storage balance_29
+storage balance_216
+storage balance_20
+storage balance_23
+storage balance_213
+storage balance_219
+storage balance_28
+storage balance_213
+storage balance_215
+storage balance_33
+storage balance_313
+storage balance_33
+storage balance_35
+storage balance_314
+storage balance_322
+storage balance_313
+storage balance_320
+storage balance_33
+storage balance_318
+storage balance_320
+storage balance_30
+storage balance_37
+storage balance_318
+storage balance_316
+storage balance_318
+storage balance_322
+storage balance_35
+storage balance_37
+storage balance_38
+storage balance_30
+storage balance_38
+storage balance_311
+storage balance_314
+storage balance_318
+storage balance_39
+storage balance_311
+storage balance_314
+storage balance_317
+storage balance_311
+storage balance_319
+storage balance_320
+storage balance_32
+storage balance_321
+storage balance_322
+storage balance_42
+storage balance_45
+storage balance_46
+storage balance_421
+storage balance_49
+storage balance_411
+storage balance_49
+storage balance_42
+storage balance_45
+storage balance_46
+storage balance_44
+storage balance_411
+storage balance_421
+storage balance_42
+storage balance_44
+storage balance_42
+storage balance_43
+storage balance_411
+storage balance_412
+storage balance_420
+storage balance_423
+storage balance_42
+storage balance_48
+storage balance_49
+storage balance_412
+storage balance_48
+storage balance_42
+storage balance_45
+storage balance_46
+storage balance_48
+storage balance_416
+storage balance_520
+storage balance_52
+storage balance_54
+storage balance_56
+storage balance_513
+storage balance_515
+storage balance_519
+storage balance_522
+storage balance_523
+storage balance_52
+storage balance_53
+storage balance_55
+storage balance_56
+storage balance_520
+storage balance_523
+storage balance_513
+storage balance_514
+storage balance_523
+storage balance_512
+storage balance_57
+storage balance_519
+storage balance_54
+storage balance_514
+storage balance_520
+storage balance_52
+storage balance_59
+storage balance_512
+storage balance_50
+storage balance_51
+storage balance_52
+storage balance_56
+storage balance_514
+storage balance_518
+storage balance_519
+storage balance_513
+storage balance_523
+storage balance_50
+storage balance_53
+storage balance_58
+storage balance_518
+storage balance_56
+storage balance_510
+storage balance_64
+storage balance_613
+storage balance_614
+storage balance_620
+storage balance_64
+storage balance_67
+storage balance_611
+storage balance_614
+storage balance_621
+storage balance_64
+storage balance_66
+storage balance_618
+storage balance_620
+storage balance_61
+storage balance_68
+storage balance_611
+storage balance_615
+storage balance_616
+storage balance_622
+storage balance_62
+storage balance_68
+storage balance_621
+storage balance_64
+storage balance_610
+storage balance_611
+storage balance_614
+storage balance_68
+storage balance_612
+storage balance_622
+storage balance_66
+storage balance_610
+storage balance_60
+storage balance_67
+storage balance_69
+storage balance_616
+storage balance_612
+storage balance_618
+storage balance_622
+storage balance_623
+storage balance_617
+storage balance_618
+storage balance_620
+storage balance_71
+storage balance_76
+storage balance_77
+storage balance_79
+storage balance_722
+storage balance_70
+storage balance_73
+storage balance_75
+storage balance_718
+storage balance_719
+storage balance_720
+storage balance_79
+storage balance_712
+storage balance_716
+storage balance_718
+storage balance_71
+storage balance_716
+storage balance_75
+storage balance_711
+storage balance_72
+storage balance_76
+storage balance_70
+storage balance_78
+storage balance_713
+storage balance_714
+storage balance_715
+storage balance_716
+storage balance_719
+storage balance_74
+storage balance_710
+storage balance_722
+storage balance_77
+storage balance_716
+storage balance_718
+storage balance_721
+storage balance_83
+storage balance_813
+storage balance_820
+storage balance_821
+storage balance_82
+storage balance_820
+storage balance_82
+storage balance_87
+storage balance_88
+storage balance_812
+storage balance_810
+storage balance_812
+storage balance_814
+storage balance_819
+storage balance_823
+storage balance_81
+storage balance_814
+storage balance_821
+storage balance_88
+storage balance_814
+storage balance_817
+storage balance_819
+storage balance_821
+storage balance_814
+storage balance_819
+storage balance_81
+storage balance_82
+storage balance_87
+storage balance_814
+storage balance_822
+storage balance_811
+storage balance_87
+storage balance_811
+storage balance_818
+storage balance_821
+storage balance_96
+storage balance_99
+storage balance_922
+storage balance_98
+storage balance_918
+storage balance_93
+storage balance_914
+storage balance_918
+storage balance_96
+storage balance_920
+storage balance_97
+storage balance_918
+storage balance_920
+storage balance_916
+storage balance_923
+storage balance_96
+storage balance_97
+storage balance_95
+storage balance_914
+storage balance_916
+storage balance_917
+storage balance_99
+storage balance_918
+storage balance_919
+storage balance_102
+storage balance_1015
+storage balance_1018
+storage balance_100
+storage balance_107
+storage balance_109
+storage balance_1016
+storage balance_1020
+storage balance_1021
+storage balance_105
+storage balance_1016
+storage balance_1022
+storage balance_100
+storage balance_102
+storage balance_1014
+storage balance_103
+storage balance_1015
+storage balance_1018
+storage balance_1019
+storage balance_105
+storage balance_1014
+storage balance_101
+storage balance_1011
+storage balance_1012
+storage balance_100
+storage balance_105
+storage balance_1016
+storage balance_1022
+storage balance_109
+storage balance_1016
+storage balance_1022
+storage balance_1021
+storage balance_107
+storage balance_109
+storage balance_112
+storage balance_1113
+storage balance_111
+storage balance_115
+storage balance_1119
+storage balance_110
+storage balance_1121
+storage balance_1123
+storage balance_110
+storage balance_111
+storage balance_1111
+storage balance_1115
+storage balance_1116
+storage balance_1117
+storage balance_116
+storage balance_1111
+storage balance_1119
+storage balance_116
+storage balance_1110
+storage balance_1111
+storage balance_1114
+storage balance_1115
+storage balance_119
+storage balance_110
+storage balance_113
+storage balance_115
+storage balance_1119
+storage balance_115
+storage balance_1110
+storage balance_1114
+storage balance_1120
+storage balance_1121
+storage balance_118
+storage balance_1111
+storage balance_1120
+storage balance_1122
+storage balance_119
+storage balance_1110
+storage balance_1115
+storage balance_1118
+storage balance_110
+storage balance_1122
+storage balance_1123
+storage balance_124
+storage balance_129
+storage balance_1212
+storage balance_1213
+storage balance_1217
+storage balance_1213
+storage balance_1217
+storage balance_1220
+storage balance_1222
+storage balance_121
+storage balance_128
+storage balance_127
+storage balance_1215
+storage balance_1218
+storage balance_1221
+storage balance_1222
+storage balance_125
+storage balance_1222
+storage balance_1223
+storage balance_122
+storage balance_1211
+storage balance_122
+storage balance_127
+storage balance_1223
+storage balance_126
+storage balance_1212
+storage balance_1215
+storage balance_1216
+storage balance_1217
+storage balance_121
+storage balance_124
+storage balance_126
+storage balance_1219
+storage balance_1220
+storage balance_121
+storage balance_125
+storage balance_1214
+storage balance_126
+storage balance_1215
+storage balance_126
+storage balance_127
+storage balance_1211
+storage balance_137
+storage balance_139
+storage balance_1320
+storage balance_130
+storage balance_139
+storage balance_1312
+storage balance_131
+storage balance_136
+storage balance_137
+storage balance_139
+storage balance_1314
+storage balance_1317
+storage balance_1315
+storage balance_1322
+storage balance_1323
+storage balance_130
+storage balance_1314
+storage balance_1316
+storage balance_1321
+storage balance_136
+storage balance_1323
+storage balance_133
+storage balance_134
+storage balance_135
+storage balance_136
+storage balance_139
+storage balance_1323
+storage balance_130
+storage balance_135
+storage balance_137
+storage balance_138
+storage balance_1315
+storage balance_1317
+storage balance_138
+storage balance_1317
+storage balance_131
+storage balance_133
+storage balance_138
+storage balance_1317
+storage balance_1319
+storage balance_137
+storage balance_1314
+storage balance_1321
+storage balance_143
+storage balance_149
+storage balance_1416
+storage balance_1421
+storage balance_142
+storage balance_145
+storage balance_149
+storage balance_1416
+storage balance_1423
+storage balance_140
+storage balance_141
+storage balance_147
+storage balance_1419
+storage balance_1414
+storage balance_1415
+storage balance_1419
+storage balance_1421
+storage balance_1423
+storage balance_141
+storage balance_144
+storage balance_145
+storage balance_1411
+storage balance_1415
+storage balance_142
+storage balance_145
+storage balance_146
+storage balance_1412
+storage balance_1415
+storage balance_1421
+storage balance_145
+storage balance_1411
+storage balance_141
+storage balance_1412
+storage balance_1414
+storage balance_1415
+storage balance_1416
+storage balance_1420
+storage balance_1421
+storage balance_142
+storage balance_145
+storage balance_1416
+storage balance_140
+storage balance_148
+storage balance_1417
+storage balance_1419
+storage balance_1510
+storage balance_1512
+storage balance_1518
+storage balance_152
+storage balance_158
+storage balance_1510
+storage balance_1516
+storage balance_1517
+storage balance_1521
+storage balance_1511
+storage balance_158
+storage balance_1510
+storage balance_1516
+storage balance_1520
+storage balance_152
+storage balance_158
+storage balance_1515
+storage balance_1521
+storage balance_150
+storage balance_1519
+storage balance_158
+storage balance_1517
+storage balance_150
+storage balance_155
+storage balance_156
+storage balance_157
+storage balance_1519
+storage balance_150
+storage balance_155
+storage balance_157
+storage balance_1516
+storage balance_1519
+storage balance_163
+storage balance_166
+storage balance_1612
+storage balance_163
+storage balance_164
+storage balance_1611
+storage balance_1622
+storage balance_160
+storage balance_162
+storage balance_168
+storage balance_1611
+storage balance_169
+storage balance_1613
+storage balance_1617
+storage balance_161
+storage balance_163
+storage balance_1617
+storage balance_1618
+storage balance_1620
+storage balance_169
+storage balance_1617
+storage balance_1619
+storage balance_1617
+storage balance_168
+storage balance_162
+storage balance_164
+storage balance_1611
+storage balance_163
+storage balance_1623
+storage balance_164
+storage balance_169
+storage balance_1621
+storage balance_162
+storage balance_1619
+storage balance_1621
+storage balance_173
+storage balance_1711
+storage balance_1720
+storage balance_1723
+storage balance_177
+storage balance_1710
+storage balance_1713
+storage balance_1714
+storage balance_1723
+storage balance_1711
+storage balance_1712
+storage balance_1717
+storage balance_173
+storage balance_177
+storage balance_1711
+storage balance_173
+storage balance_175
+storage balance_177
+storage balance_1715
+storage balance_1720
+storage balance_1710
+storage balance_1714
+storage balance_1720
+storage balance_1721
+storage balance_170
+storage balance_174
+storage balance_177
+storage balance_1721
+storage balance_1723
+storage balance_175
+storage balance_179
+storage balance_1722
+storage balance_170
+storage balance_176
+storage balance_1710
+storage balance_1723
+storage balance_173
+storage balance_178
+storage balance_1723
+powerInj171123[0,0,14]
+powerInj171123[0,1,7]
+powerInj171123[0,2,2]
+powerInj171123[0,2,4]
+powerInj171123[0,2,7]
+powerInj171123[0,2,8]
+powerInj171123[0,2,10]
+powerInj171123[0,2,17]
+powerInj171123[0,3,3]
+powerInj171123[0,3,4]
+powerInj171123[0,3,6]
+powerInj171123[0,3,23]
+powerInj171123[0,4,21]
+powerInj171123[0,5,2]
+powerInj171123[0,5,7]
+powerInj171123[0,5,16]
+powerInj171123[0,5,20]
+powerInj171123[0,6,0]
+powerInj171123[0,6,3]
+powerInj171123[0,6,6]
+powerInj171123[0,6,10]
+powerInj171123[0,6,12]
+powerInj171123[0,6,23]
+powerInj171123[0,7,1]
+powerInj171123[0,7,6]
+powerInj171123[0,7,23]
+powerInj171123[0,8,7]
+powerInj171123[0,8,9]
+powerInj171123[0,9,3]
+powerInj171123[0,9,16]
+powerInj171123[0,10,0]
+powerInj171123[0,10,20]
+powerInj171123[0,11,9]
+powerInj171123[0,11,12]
+powerInj171123[0,11,20]
+powerInj171123[1,0,6]
+powerInj171123[1,0,16]
+powerInj171123[1,0,17]
+powerInj171123[1,1,6]
+powerInj171123[1,1,15]
+powerInj171123[1,3,0]
+powerInj171123[1,3,3]
+powerInj171123[1,3,9]
+powerInj171123[1,3,22]
+powerInj171123[1,4,12]
+powerInj171123[1,4,23]
+powerInj171123[1,5,4]
+powerInj171123[1,5,14]
+powerInj171123[1,5,15]
+powerInj171123[1,6,0]
+powerInj171123[1,6,5]
+powerInj171123[1,7,7]
+powerInj171123[1,7,20]
+powerInj171123[1,7,21]
+powerInj171123[1,9,12]
+powerInj171123[1,9,14]
+powerInj171123[1,9,21]
+powerInj171123[1,10,0]
+powerInj171123[1,10,3]
+powerInj171123[1,10,5]
+powerInj171123[1,10,13]
+powerInj171123[1,11,3]
+powerInj171123[1,11,5]
+powerInj171123[1,11,7]
+powerInj171123[1,11,8]
+powerInj171123[1,11,13]
+powerInj171123[1,11,19]
+powerInj171123[1,11,21]
+powerInj171123[2,0,0]
+powerInj171123[2,0,1]
+powerInj171123[2,0,8]
+powerInj171123[2,0,13]
+powerInj171123[2,0,14]
+powerInj171123[2,0,18]
+powerInj171123[2,0,21]
+powerInj171123[2,1,3]
+powerInj171123[2,1,10]
+powerInj171123[2,2,4]
+powerInj171123[2,2,7]
+powerInj171123[2,2,15]
+powerInj171123[2,2,23]
+powerInj171123[2,3,4]
+powerInj171123[2,3,5]
+powerInj171123[2,3,17]
+powerInj171123[2,3,20]
+powerInj171123[2,4,0]
+powerInj171123[2,5,9]
+powerInj171123[2,5,17]
+powerInj171123[2,5,18]
+powerInj171123[2,6,4]
+powerInj171123[2,7,3]
+powerInj171123[2,7,5]
+powerInj171123[2,7,10]
+powerInj171123[2,7,12]
+powerInj171123[2,7,16]
+powerInj171123[2,8,0]
+powerInj171123[2,8,1]
+powerInj171123[2,8,2]
+powerInj171123[2,8,4]
+powerInj171123[2,8,8]
+powerInj171123[2,8,9]
+powerInj171123[2,8,20]
+powerInj171123[2,9,1]
+powerInj171123[2,9,7]
+powerInj171123[2,10,7]
+powerInj171123[2,10,18]
+powerInj171123[2,10,19]
+powerInj171123[2,11,1]
+powerInj171123[2,11,10]
+powerInj171123[3,0,4]
+powerInj171123[3,0,5]
+powerInj171123[3,0,8]
+powerInj171123[3,0,14]
+powerInj171123[3,0,21]
+powerInj171123[3,0,22]
+powerInj171123[3,1,9]
+powerInj171123[3,1,21]
+powerInj171123[3,2,7]
+powerInj171123[3,3,1]
+powerInj171123[3,3,5]
+powerInj171123[3,3,11]
+powerInj171123[3,3,20]
+powerInj171123[3,4,8]
+powerInj171123[3,4,14]
+powerInj171123[3,4,20]
+powerInj171123[3,4,21]
+powerInj171123[3,5,0]
+powerInj171123[3,5,14]
+powerInj171123[3,5,18]
+powerInj171123[3,5,20]
+powerInj171123[3,5,22]
+powerInj171123[3,5,23]
+powerInj171123[3,6,3]
+powerInj171123[3,6,19]
+powerInj171123[3,6,23]
+powerInj171123[3,7,3]
+powerInj171123[3,7,7]
+powerInj171123[3,7,23]
+powerInj171123[3,8,0]
+powerInj171123[3,8,2]
+powerInj171123[3,8,3]
+powerInj171123[3,8,15]
+powerInj171123[3,8,21]
+powerInj171123[3,9,12]
+powerInj171123[3,9,17]
+powerInj171123[3,9,22]
+powerInj171123[3,10,3]
+powerInj171123[3,10,18]
+powerInj171123[3,11,13]
+powerInj171123[3,11,21]
+powerInj171123[4,0,3]
+powerInj171123[4,0,4]
+powerInj171123[4,1,6]
+powerInj171123[4,1,9]
+powerInj171123[4,1,14]
+powerInj171123[4,1,19]
+powerInj171123[4,1,21]
+powerInj171123[4,2,11]
+powerInj171123[4,2,15]
+powerInj171123[4,2,16]
+powerInj171123[4,2,22]
+powerInj171123[4,3,10]
+powerInj171123[4,4,2]
+powerInj171123[4,4,12]
+powerInj171123[4,4,18]
+powerInj171123[4,5,3]
+powerInj171123[4,5,15]
+powerInj171123[4,5,16]
+powerInj171123[4,6,1]
+powerInj171123[4,6,2]
+powerInj171123[4,6,16]
+powerInj171123[4,7,1]
+powerInj171123[4,7,5]
+powerInj171123[4,7,15]
+powerInj171123[4,7,21]
+powerInj171123[4,7,23]
+powerInj171123[4,8,4]
+powerInj171123[4,8,5]
+powerInj171123[4,8,7]
+powerInj171123[4,8,13]
+powerInj171123[4,9,7]
+powerInj171123[4,9,9]
+powerInj171123[4,9,14]
+powerInj171123[4,9,17]
+powerInj171123[4,11,5]
+powerInj171123[4,11,9]
+powerInj171123[5,0,1]
+powerInj171123[5,0,13]
+powerInj171123[5,0,19]
+powerInj171123[5,1,3]
+powerInj171123[5,1,19]
+powerInj171123[5,2,2]
+powerInj171123[5,2,3]
+powerInj171123[5,2,4]
+powerInj171123[5,2,14]
+powerInj171123[5,2,21]
+powerInj171123[5,2,22]
+powerInj171123[5,3,10]
+powerInj171123[5,4,1]
+powerInj171123[5,4,2]
+powerInj171123[5,4,4]
+powerInj171123[5,4,7]
+powerInj171123[5,5,3]
+powerInj171123[5,5,7]
+powerInj171123[5,5,8]
+powerInj171123[5,5,16]
+powerInj171123[5,6,5]
+powerInj171123[5,6,15]
+powerInj171123[5,7,6]
+powerInj171123[5,7,13]
+powerInj171123[5,7,16]
+powerInj171123[5,7,17]
+powerInj171123[5,7,19]
+powerInj171123[5,8,5]
+powerInj171123[5,9,4]
+powerInj171123[5,9,9]
+powerInj171123[5,9,10]
+powerInj171123[5,9,12]
+powerInj171123[5,10,20]
+powerInj171123[5,11,0]
+powerInj171123[5,11,13]
+powerInj171123[5,11,21]
+powerInj171123[6,0,3]
+powerInj171123[6,0,6]
+powerInj171123[6,0,21]
+powerInj171123[6,1,9]
+powerInj171123[6,2,10]
+powerInj171123[6,2,22]
+powerInj171123[6,3,16]
+powerInj171123[6,3,19]
+powerInj171123[6,4,1]
+powerInj171123[6,4,4]
+powerInj171123[6,4,9]
+powerInj171123[6,4,12]
+powerInj171123[6,4,17]
+powerInj171123[6,5,1]
+powerInj171123[6,5,12]
+powerInj171123[6,5,21]
+powerInj171123[6,6,1]
+powerInj171123[6,6,7]
+powerInj171123[6,6,10]
+powerInj171123[6,6,14]
+powerInj171123[6,6,22]
+powerInj171123[6,7,1]
+powerInj171123[6,7,6]
+powerInj171123[6,7,10]
+powerInj171123[6,7,12]
+powerInj171123[6,7,15]
+powerInj171123[6,8,4]
+powerInj171123[6,8,8]
+powerInj171123[6,8,15]
+powerInj171123[6,8,22]
+powerInj171123[6,9,1]
+powerInj171123[6,9,7]
+powerInj171123[6,9,14]
+powerInj171123[6,9,15]
+powerInj171123[6,9,19]
+powerInj171123[6,10,5]
+powerInj171123[6,10,8]
+powerInj171123[6,10,13]
+powerInj171123[6,10,14]
+powerInj171123[6,11,0]
+powerInj171123[6,11,3]
+powerInj171123[6,11,13]
+powerInj171123[7,0,8]
+powerInj171123[7,0,12]
+powerInj171123[7,0,15]
+powerInj171123[7,0,20]
+powerInj171123[7,0,22]
+powerInj171123[7,1,0]
+powerInj171123[7,1,1]
+powerInj171123[7,1,3]
+powerInj171123[7,1,11]
+powerInj171123[7,1,16]
+powerInj171123[7,2,3]
+powerInj171123[7,2,7]
+powerInj171123[7,2,8]
+powerInj171123[7,2,15]
+powerInj171123[7,2,17]
+powerInj171123[7,3,9]
+powerInj171123[7,3,12]
+powerInj171123[7,3,21]
+powerInj171123[7,3,23]
+powerInj171123[7,4,17]
+powerInj171123[7,4,18]
+powerInj171123[7,4,19]
+powerInj171123[7,4,22]
+powerInj171123[7,5,14]
+powerInj171123[7,5,18]
+powerInj171123[7,7,2]
+powerInj171123[7,8,7]
+powerInj171123[7,8,10]
+powerInj171123[7,8,13]
+powerInj171123[7,9,0]
+powerInj171123[7,9,18]
+powerInj171123[7,9,19]
+powerInj171123[7,9,22]
+powerInj171123[7,10,0]
+powerInj171123[7,10,7]
+powerInj171123[7,10,12]
+powerInj171123[7,10,16]
+powerInj171123[7,11,1]
+powerInj171123[7,11,4]
+powerInj171123[7,11,7]
+powerInj171123[7,11,10]
+powerInj171123[7,11,11]
+powerInj171123[8,0,7]
+powerInj171123[8,0,17]
+powerInj171123[8,1,3]
+powerInj171123[8,1,12]
+powerInj171123[8,1,13]
+powerInj171123[8,2,1]
+powerInj171123[8,2,2]
+powerInj171123[8,2,12]
+powerInj171123[8,2,15]
+powerInj171123[8,3,4]
+powerInj171123[8,3,6]
+powerInj171123[8,4,3]
+powerInj171123[8,4,6]
+powerInj171123[8,4,12]
+powerInj171123[8,4,13]
+powerInj171123[8,4,16]
+powerInj171123[8,4,18]
+powerInj171123[8,4,19]
+powerInj171123[8,4,23]
+powerInj171123[8,5,9]
+powerInj171123[8,5,12]
+powerInj171123[8,5,17]
+powerInj171123[8,6,1]
+powerInj171123[8,6,3]
+powerInj171123[8,6,9]
+powerInj171123[8,7,1]
+powerInj171123[8,7,17]
+powerInj171123[8,7,21]
+powerInj171123[8,7,23]
+powerInj171123[8,8,8]
+powerInj171123[8,8,17]
+powerInj171123[8,8,18]
+powerInj171123[8,8,20]
+powerInj171123[8,9,8]
+powerInj171123[8,9,9]
+powerInj171123[8,9,20]
+powerInj171123[8,9,23]
+powerInj171123[8,10,2]
+powerInj171123[8,10,8]
+powerInj171123[8,10,17]
+powerInj171123[8,11,8]
+powerInj171123[8,11,13]
+powerInj171123[8,11,20]
+powerInj171123[8,11,22]
+powerInj171123[9,0,14]
+powerInj171123[9,0,23]
+powerInj171123[9,1,7]
+powerInj171123[9,1,12]
+powerInj171123[9,1,14]
+powerInj171123[9,1,18]
+powerInj171123[9,1,21]
+powerInj171123[9,1,22]
+powerInj171123[9,2,11]
+powerInj171123[9,2,16]
+powerInj171123[9,3,1]
+powerInj171123[9,3,14]
+powerInj171123[9,3,20]
+powerInj171123[9,4,14]
+powerInj171123[9,4,20]
+powerInj171123[9,5,4]
+powerInj171123[9,5,12]
+powerInj171123[9,5,16]
+powerInj171123[9,6,0]
+powerInj171123[9,6,8]
+powerInj171123[9,6,9]
+powerInj171123[9,6,10]
+powerInj171123[9,6,12]
+powerInj171123[9,6,17]
+powerInj171123[9,6,20]
+powerInj171123[9,8,6]
+powerInj171123[9,8,10]
+powerInj171123[9,8,23]
+powerInj171123[9,9,1]
+powerInj171123[9,9,4]
+powerInj171123[9,9,11]
+powerInj171123[9,9,20]
+powerInj171123[9,9,21]
+powerInj171123[9,9,22]
+powerInj171123[9,10,2]
+powerInj171123[9,10,4]
+powerInj171123[9,10,5]
+powerInj171123[9,11,7]
+powerInj171123[9,11,18]
+powerInj171123[9,11,19]
+powerInj171123[10,0,1]
+powerInj171123[10,0,21]
+powerInj171123[10,1,5]
+powerInj171123[10,1,8]
+powerInj171123[10,1,13]
+powerInj171123[10,2,9]
+powerInj171123[10,2,17]
+powerInj171123[10,5,8]
+powerInj171123[10,5,11]
+powerInj171123[10,5,22]
+powerInj171123[10,6,2]
+powerInj171123[10,6,4]
+powerInj171123[10,6,16]
+powerInj171123[10,7,0]
+powerInj171123[10,7,2]
+powerInj171123[10,7,15]
+powerInj171123[10,8,16]
+powerInj171123[10,8,18]
+powerInj171123[10,9,3]
+powerInj171123[10,9,6]
+powerInj171123[10,9,7]
+powerInj171123[10,9,13]
+powerInj171123[10,9,19]
+powerInj171123[10,9,21]
+powerInj171123[10,10,0]
+powerInj171123[10,10,5]
+powerInj171123[10,10,6]
+powerInj171123[10,10,13]
+powerInj171123[10,10,15]
+powerInj171123[10,10,17]
+powerInj171123[10,10,19]
+powerInj171123[10,10,20]
+powerInj171123[10,11,14]
+powerInj171123[11,0,2]
+powerInj171123[11,0,8]
+powerInj171123[11,0,13]
+powerInj171123[11,1,14]
+powerInj171123[11,2,13]
+powerInj171123[11,2,19]
+powerInj171123[11,3,6]
+powerInj171123[11,3,13]
+powerInj171123[11,3,15]
+powerInj171123[11,3,16]
+powerInj171123[11,4,1]
+powerInj171123[11,4,3]
+powerInj171123[11,4,8]
+powerInj171123[11,4,16]
+powerInj171123[11,4,18]
+powerInj171123[11,4,21]
+powerInj171123[11,4,23]
+powerInj171123[11,5,8]
+powerInj171123[11,5,19]
+powerInj171123[11,6,16]
+powerInj171123[11,7,2]
+powerInj171123[11,7,16]
+powerInj171123[11,7,22]
+powerInj171123[11,8,4]
+powerInj171123[11,8,8]
+powerInj171123[11,8,9]
+powerInj171123[11,8,13]
+powerInj171123[11,9,17]
+powerInj171123[11,9,21]
+powerInj171123[11,10,2]
+powerInj171123[11,10,6]
+powerInj171123[11,10,7]
+powerInj171123[11,10,21]
+powerInj171123[11,11,3]
+powerInj171123[11,11,11]
+powerInj171123[11,11,14]
+powerInj171123[11,11,22]
+powerInj171123[12,0,20]
+powerInj171123[12,1,6]
+powerInj171123[12,1,22]
+powerInj171123[12,2,3]
+powerInj171123[12,2,4]
+powerInj171123[12,2,11]
+powerInj171123[12,2,15]
+powerInj171123[12,2,21]
+powerInj171123[12,3,2]
+powerInj171123[12,3,5]
+powerInj171123[12,3,6]
+powerInj171123[12,3,7]
+powerInj171123[12,4,2]
+powerInj171123[12,4,8]
+powerInj171123[12,4,10]
+powerInj171123[12,5,5]
+powerInj171123[12,5,8]
+powerInj171123[12,5,11]
+powerInj171123[12,5,12]
+powerInj171123[12,6,0]
+powerInj171123[12,6,13]
+powerInj171123[12,7,5]
+powerInj171123[12,7,15]
+powerInj171123[12,7,19]
+powerInj171123[12,8,1]
+powerInj171123[12,8,8]
+powerInj171123[12,8,14]
+powerInj171123[12,8,19]
+powerInj171123[12,9,21]
+powerInj171123[12,9,22]
+powerInj171123[12,11,2]
+powerInj171123[12,11,4]
+powerInj171123[12,11,10]
+powerInj171123[12,11,11]
+powerInj171123[12,11,18]
+powerInj171123[12,11,23]
+powerInj171123[13,0,5]
+powerInj171123[13,0,6]
+powerInj171123[13,0,8]
+powerInj171123[13,1,1]
+powerInj171123[13,1,8]
+powerInj171123[13,1,19]
+powerInj171123[13,2,1]
+powerInj171123[13,2,2]
+powerInj171123[13,2,4]
+powerInj171123[13,2,8]
+powerInj171123[13,2,13]
+powerInj171123[13,2,14]
+powerInj171123[13,2,19]
+powerInj171123[13,3,2]
+powerInj171123[13,3,14]
+powerInj171123[13,4,3]
+powerInj171123[13,4,6]
+powerInj171123[13,4,9]
+powerInj171123[13,4,14]
+powerInj171123[13,4,15]
+powerInj171123[13,5,1]
+powerInj171123[13,5,2]
+powerInj171123[13,5,16]
+powerInj171123[13,6,0]
+powerInj171123[13,6,9]
+powerInj171123[13,6,18]
+powerInj171123[13,7,1]
+powerInj171123[13,7,4]
+powerInj171123[13,7,7]
+powerInj171123[13,7,15]
+powerInj171123[13,7,23]
+powerInj171123[13,8,1]
+powerInj171123[13,8,7]
+powerInj171123[13,8,8]
+powerInj171123[13,8,11]
+powerInj171123[13,8,18]
+powerInj171123[13,9,5]
+powerInj171123[13,9,6]
+powerInj171123[13,9,13]
+powerInj171123[13,9,16]
+powerInj171123[13,10,5]
+powerInj171123[13,10,7]
+powerInj171123[13,10,12]
+powerInj171123[13,10,20]
+powerInj171123[13,11,0]
+powerInj171123[13,11,18]
+powerInj171123[14,0,1]
+powerInj171123[14,1,12]
+powerInj171123[14,1,19]
+powerInj171123[14,1,20]
+powerInj171123[14,2,6]
+powerInj171123[14,2,10]
+powerInj171123[14,2,12]
+powerInj171123[14,2,17]
+powerInj171123[14,2,19]
+powerInj171123[14,2,21]
+powerInj171123[14,3,23]
+powerInj171123[14,4,3]
+powerInj171123[14,4,9]
+powerInj171123[14,4,23]
+powerInj171123[14,5,0]
+powerInj171123[14,5,1]
+powerInj171123[14,5,4]
+powerInj171123[14,5,7]
+powerInj171123[14,5,18]
+powerInj171123[14,5,21]
+powerInj171123[14,6,12]
+powerInj171123[14,6,15]
+powerInj171123[14,6,19]
+powerInj171123[14,6,20]
+powerInj171123[14,7,3]
+powerInj171123[14,7,6]
+powerInj171123[14,7,8]
+powerInj171123[14,7,10]
+powerInj171123[14,7,23]
+powerInj171123[14,8,0]
+powerInj171123[14,8,18]
+powerInj171123[14,8,19]
+powerInj171123[14,9,11]
+powerInj171123[14,10,3]
+powerInj171123[14,10,11]
+powerInj171123[14,10,19]
+powerInj171123[14,11,4]
+powerInj171123[14,11,7]
+powerInj171123[14,11,15]
+powerInj171123[14,11,18]
+powerInj171123[14,11,19]
+powerInj171123[15,0,1]
+powerInj171123[15,1,8]
+powerInj171123[15,1,11]
+powerInj171123[15,1,12]
+powerInj171123[15,3,11]
+powerInj171123[15,4,20]
+powerInj171123[15,4,23]
+powerInj171123[15,5,23]
+powerInj171123[15,6,1]
+powerInj171123[15,6,11]
+powerInj171123[15,6,15]
+powerInj171123[15,6,18]
+powerInj171123[15,6,21]
+powerInj171123[15,6,22]
+powerInj171123[15,7,3]
+powerInj171123[15,7,4]
+powerInj171123[15,7,8]
+powerInj171123[15,7,12]
+powerInj171123[15,7,14]
+powerInj171123[15,7,23]
+powerInj171123[15,8,0]
+powerInj171123[15,8,14]
+powerInj171123[15,9,19]
+powerInj171123[15,10,8]
+powerInj171123[15,10,15]
+powerInj171123[15,10,20]
+powerInj171123[15,11,21]
+powerInj171123[16,0,1]
+powerInj171123[16,0,9]
+powerInj171123[16,1,1]
+powerInj171123[16,1,11]
+powerInj171123[16,1,13]
+powerInj171123[16,2,0]
+powerInj171123[16,2,2]
+powerInj171123[16,2,4]
+powerInj171123[16,2,7]
+powerInj171123[16,2,15]
+powerInj171123[16,2,18]
+powerInj171123[16,3,7]
+powerInj171123[16,3,23]
+powerInj171123[16,4,8]
+powerInj171123[16,4,9]
+powerInj171123[16,4,14]
+powerInj171123[16,4,23]
+powerInj171123[16,5,2]
+powerInj171123[16,5,13]
+powerInj171123[16,5,22]
+powerInj171123[16,6,7]
+powerInj171123[16,6,10]
+powerInj171123[16,6,16]
+powerInj171123[16,6,21]
+powerInj171123[16,7,2]
+powerInj171123[16,7,8]
+powerInj171123[16,8,14]
+powerInj171123[16,9,0]
+powerInj171123[16,9,3]
+powerInj171123[16,9,12]
+powerInj171123[16,9,23]
+powerInj171123[16,10,2]
+powerInj171123[16,10,10]
+powerInj171123[16,10,16]
+powerInj171123[16,10,18]
+powerInj171123[16,10,23]
+powerInj171123[16,11,1]
+powerInj171123[16,11,8]
+powerInj171123[16,11,11]
+powerInj171123[16,11,13]
+powerInj171123[16,11,20]
+powerInj171123[17,0,0]
+powerInj171123[17,0,3]
+powerInj171123[17,0,6]
+powerInj171123[17,0,19]
+powerInj171123[17,1,7]
+powerInj171123[17,1,10]
+powerInj171123[17,1,18]
+powerInj171123[17,1,22]
+powerInj171123[17,2,13]
+powerInj171123[17,2,18]
+powerInj171123[17,2,21]
+powerInj171123[17,3,3]
+powerInj171123[17,3,6]
+powerInj171123[17,3,13]
+powerInj171123[17,3,14]
+powerInj171123[17,3,18]
+powerInj171123[17,3,22]
+powerInj171123[17,4,1]
+powerInj171123[17,4,2]
+powerInj171123[17,4,4]
+powerInj171123[17,4,5]
+powerInj171123[17,4,7]
+powerInj171123[17,4,12]
+powerInj171123[17,4,17]
+powerInj171123[17,4,18]
+powerInj171123[17,6,1]
+powerInj171123[17,6,2]
+powerInj171123[17,6,5]
+powerInj171123[17,6,14]
+powerInj171123[17,6,20]
+powerInj171123[17,7,4]
+powerInj171123[17,7,10]
+powerInj171123[17,7,13]
+powerInj171123[17,7,19]
+powerInj171123[17,8,7]
+powerInj171123[17,8,14]
+powerInj171123[17,9,5]
+powerInj171123[17,9,21]
+powerInj171123[17,10,11]
+powerInj171123[17,11,0]
+powerInj171123[17,11,5]
+powerInj171123[17,11,21]
+powerInjPV171123[0,0,5]
+powerInjPV171123[0,0,8]
+powerInjPV171123[0,0,10]
+powerInjPV171123[0,0,17]
+powerInjPV171123[0,0,21]
+powerInjPV171123[0,1,0]
+powerInjPV171123[0,1,14]
+powerInjPV171123[0,1,21]
+powerInjPV171123[0,1,23]
+powerInjPV171123[0,2,7]
+powerInjPV171123[0,2,15]
+powerInjPV171123[0,3,7]
+powerInjPV171123[0,3,17]
+powerInjPV171123[0,4,3]
+powerInjPV171123[0,5,11]
+powerInjPV171123[0,5,17]
+powerInjPV171123[0,5,23]
+powerInjPV171123[0,6,23]
+powerInjPV171123[0,7,14]
+powerInjPV171123[0,7,17]
+powerInjPV171123[0,7,22]
+powerInjPV171123[0,8,2]
+powerInjPV171123[0,8,3]
+powerInjPV171123[0,8,6]
+powerInjPV171123[0,8,9]
+powerInjPV171123[0,9,3]
+powerInjPV171123[0,9,4]
+powerInjPV171123[0,9,7]
+powerInjPV171123[0,9,14]
+powerInjPV171123[0,9,20]
+powerInjPV171123[0,10,10]
+powerInjPV171123[0,10,18]
+powerInjPV171123[0,11,4]
+powerInjPV171123[0,11,8]
+powerInjPV171123[0,11,11]
+powerInjPV171123[0,11,13]
+powerInjPV171123[0,11,16]
+powerInjPV171123[1,0,11]
+powerInjPV171123[1,0,19]
+powerInjPV171123[1,0,22]
+powerInjPV171123[1,1,13]
+powerInjPV171123[1,2,2]
+powerInjPV171123[1,2,6]
+powerInjPV171123[1,2,15]
+powerInjPV171123[1,2,19]
+powerInjPV171123[1,3,1]
+powerInjPV171123[1,3,10]
+powerInjPV171123[1,3,11]
+powerInjPV171123[1,3,13]
+powerInjPV171123[1,3,19]
+powerInjPV171123[1,4,7]
+powerInjPV171123[1,4,13]
+powerInjPV171123[1,4,19]
+powerInjPV171123[1,4,20]
+powerInjPV171123[1,5,5]
+powerInjPV171123[1,5,13]
+powerInjPV171123[1,6,22]
+powerInjPV171123[1,7,13]
+powerInjPV171123[1,7,21]
+powerInjPV171123[1,7,23]
+powerInjPV171123[1,8,2]
+powerInjPV171123[1,8,6]
+powerInjPV171123[1,8,12]
+powerInjPV171123[1,8,21]
+powerInjPV171123[1,8,23]
+powerInjPV171123[1,9,8]
+powerInjPV171123[1,9,9]
+powerInjPV171123[1,9,11]
+powerInjPV171123[1,9,13]
+powerInjPV171123[1,9,16]
+powerInjPV171123[1,10,6]
+powerInjPV171123[1,10,13]
+powerInjPV171123[1,10,19]
+powerInjPV171123[1,11,0]
+powerInjPV171123[1,11,7]
+powerInjPV171123[1,11,12]
+powerInjPV171123[1,11,13]
+powerInjPV171123[2,0,9]
+powerInjPV171123[2,0,19]
+powerInjPV171123[2,0,21]
+powerInjPV171123[2,1,2]
+powerInjPV171123[2,1,4]
+powerInjPV171123[2,1,13]
+powerInjPV171123[2,1,17]
+powerInjPV171123[2,1,22]
+powerInjPV171123[2,2,5]
+powerInjPV171123[2,2,8]
+powerInjPV171123[2,2,12]
+powerInjPV171123[2,3,10]
+powerInjPV171123[2,3,13]
+powerInjPV171123[2,3,21]
+powerInjPV171123[2,4,1]
+powerInjPV171123[2,4,5]
+powerInjPV171123[2,4,6]
+powerInjPV171123[2,4,12]
+powerInjPV171123[2,4,15]
+powerInjPV171123[2,4,20]
+powerInjPV171123[2,5,2]
+powerInjPV171123[2,5,5]
+powerInjPV171123[2,5,21]
+powerInjPV171123[2,6,0]
+powerInjPV171123[2,6,2]
+powerInjPV171123[2,6,8]
+powerInjPV171123[2,6,11]
+powerInjPV171123[2,7,3]
+powerInjPV171123[2,7,11]
+powerInjPV171123[2,7,14]
+powerInjPV171123[2,7,21]
+powerInjPV171123[2,8,22]
+powerInjPV171123[2,9,7]
+powerInjPV171123[2,9,19]
+powerInjPV171123[2,10,14]
+powerInjPV171123[2,10,17]
+powerInjPV171123[2,11,12]
+powerInjPV171123[2,11,21]
+powerInjPV171123[3,0,1]
+powerInjPV171123[3,0,8]
+powerInjPV171123[3,0,9]
+powerInjPV171123[3,0,19]
+powerInjPV171123[3,0,20]
+powerInjPV171123[3,1,1]
+powerInjPV171123[3,1,3]
+powerInjPV171123[3,1,16]
+powerInjPV171123[3,1,18]
+powerInjPV171123[3,1,20]
+powerInjPV171123[3,1,22]
+powerInjPV171123[3,2,12]
+powerInjPV171123[3,2,21]
+powerInjPV171123[3,3,11]
+powerInjPV171123[3,3,19]
+powerInjPV171123[3,4,22]
+powerInjPV171123[3,5,7]
+powerInjPV171123[3,5,10]
+powerInjPV171123[3,5,14]
+powerInjPV171123[3,6,1]
+powerInjPV171123[3,6,6]
+powerInjPV171123[3,7,8]
+powerInjPV171123[3,7,12]
+powerInjPV171123[3,7,18]
+powerInjPV171123[3,7,21]
+powerInjPV171123[3,8,17]
+powerInjPV171123[3,9,0]
+powerInjPV171123[3,9,2]
+powerInjPV171123[3,9,6]
+powerInjPV171123[3,9,19]
+powerInjPV171123[3,9,21]
+powerInjPV171123[3,10,6]
+powerInjPV171123[3,10,13]
+powerInjPV171123[3,10,23]
+powerInjPV171123[3,11,8]
+powerInjPV171123[3,11,20]
+powerInjPV171123[4,0,0]
+powerInjPV171123[4,0,5]
+powerInjPV171123[4,0,6]
+powerInjPV171123[4,0,13]
+powerInjPV171123[4,0,21]
+powerInjPV171123[4,1,19]
+powerInjPV171123[4,2,9]
+powerInjPV171123[4,2,13]
+powerInjPV171123[4,2,21]
+powerInjPV171123[4,2,22]
+powerInjPV171123[4,3,7]
+powerInjPV171123[4,3,15]
+powerInjPV171123[4,4,1]
+powerInjPV171123[4,4,7]
+powerInjPV171123[4,4,10]
+powerInjPV171123[4,4,11]
+powerInjPV171123[4,4,16]
+powerInjPV171123[4,4,23]
+powerInjPV171123[4,5,8]
+powerInjPV171123[4,5,12]
+powerInjPV171123[4,5,19]
+powerInjPV171123[4,5,23]
+powerInjPV171123[4,6,2]
+powerInjPV171123[4,6,14]
+powerInjPV171123[4,6,18]
+powerInjPV171123[4,7,2]
+powerInjPV171123[4,7,10]
+powerInjPV171123[4,7,18]
+powerInjPV171123[4,7,20]
+powerInjPV171123[4,8,6]
+powerInjPV171123[4,8,9]
+powerInjPV171123[4,8,15]
+powerInjPV171123[4,8,16]
+powerInjPV171123[4,9,12]
+powerInjPV171123[4,9,15]
+powerInjPV171123[4,9,23]
+powerInjPV171123[4,10,15]
+powerInjPV171123[4,11,12]
+powerInjPV171123[4,11,16]
+powerInjPV171123[5,0,5]
+powerInjPV171123[5,0,7]
+powerInjPV171123[5,0,11]
+powerInjPV171123[5,0,18]
+powerInjPV171123[5,0,19]
+powerInjPV171123[5,1,3]
+powerInjPV171123[5,1,12]
+powerInjPV171123[5,1,15]
+powerInjPV171123[5,1,17]
+powerInjPV171123[5,1,19]
+powerInjPV171123[5,1,21]
+powerInjPV171123[5,2,12]
+powerInjPV171123[5,2,16]
+powerInjPV171123[5,3,10]
+powerInjPV171123[5,4,1]
+powerInjPV171123[5,4,10]
+powerInjPV171123[5,5,9]
+powerInjPV171123[5,5,14]
+powerInjPV171123[5,5,15]
+powerInjPV171123[5,5,20]
+powerInjPV171123[5,6,2]
+powerInjPV171123[5,6,8]
+powerInjPV171123[5,6,9]
+powerInjPV171123[5,6,11]
+powerInjPV171123[5,6,17]
+powerInjPV171123[5,7,8]
+powerInjPV171123[5,7,13]
+powerInjPV171123[5,7,16]
+powerInjPV171123[5,8,7]
+powerInjPV171123[5,8,11]
+powerInjPV171123[5,8,13]
+powerInjPV171123[5,8,16]
+powerInjPV171123[5,8,18]
+powerInjPV171123[5,9,12]
+powerInjPV171123[5,9,21]
+powerInjPV171123[5,10,8]
+powerInjPV171123[5,10,13]
+powerInjPV171123[5,10,16]
+powerInjPV171123[5,10,18]
+powerInjPV171123[5,10,23]
+powerInjPV171123[5,11,6]
+powerInjPV171123[5,11,7]
+powerInjPV171123[5,11,8]
+powerInjPV171123[5,11,10]
+powerInjPV171123[6,0,2]
+powerInjPV171123[6,0,20]
+powerInjPV171123[6,1,3]
+powerInjPV171123[6,1,7]
+powerInjPV171123[6,1,9]
+powerInjPV171123[6,1,14]
+powerInjPV171123[6,1,18]
+powerInjPV171123[6,1,20]
+powerInjPV171123[6,1,21]
+powerInjPV171123[6,1,22]
+powerInjPV171123[6,2,17]
+powerInjPV171123[6,3,1]
+powerInjPV171123[6,3,5]
+powerInjPV171123[6,3,16]
+powerInjPV171123[6,3,17]
+powerInjPV171123[6,3,18]
+powerInjPV171123[6,4,2]
+powerInjPV171123[6,4,6]
+powerInjPV171123[6,4,9]
+powerInjPV171123[6,4,22]
+powerInjPV171123[6,5,14]
+powerInjPV171123[6,5,15]
+powerInjPV171123[6,5,16]
+powerInjPV171123[6,5,17]
+powerInjPV171123[6,6,5]
+powerInjPV171123[6,7,13]
+powerInjPV171123[6,7,19]
+powerInjPV171123[6,8,5]
+powerInjPV171123[6,8,10]
+powerInjPV171123[6,8,14]
+powerInjPV171123[6,8,20]
+powerInjPV171123[6,9,11]
+powerInjPV171123[6,9,23]
+powerInjPV171123[6,10,1]
+powerInjPV171123[6,10,9]
+powerInjPV171123[6,10,11]
+powerInjPV171123[6,10,16]
+powerInjPV171123[6,10,21]
+powerInjPV171123[6,10,23]
+powerInjPV171123[6,11,11]
+powerInjPV171123[6,11,14]
+powerInjPV171123[7,0,3]
+powerInjPV171123[7,0,7]
+powerInjPV171123[7,0,13]
+powerInjPV171123[7,0,20]
+powerInjPV171123[7,1,8]
+powerInjPV171123[7,1,18]
+powerInjPV171123[7,2,13]
+powerInjPV171123[7,2,22]
+powerInjPV171123[7,3,7]
+powerInjPV171123[7,3,9]
+powerInjPV171123[7,3,13]
+powerInjPV171123[7,3,23]
+powerInjPV171123[7,4,2]
+powerInjPV171123[7,4,3]
+powerInjPV171123[7,4,13]
+powerInjPV171123[7,5,3]
+powerInjPV171123[7,5,14]
+powerInjPV171123[7,5,16]
+powerInjPV171123[7,5,17]
+powerInjPV171123[7,5,18]
+powerInjPV171123[7,5,20]
+powerInjPV171123[7,5,22]
+powerInjPV171123[7,6,11]
+powerInjPV171123[7,6,22]
+powerInjPV171123[7,7,5]
+powerInjPV171123[7,7,7]
+powerInjPV171123[7,7,14]
+powerInjPV171123[7,7,20]
+powerInjPV171123[7,8,10]
+powerInjPV171123[7,8,11]
+powerInjPV171123[7,8,18]
+powerInjPV171123[7,8,19]
+powerInjPV171123[7,9,1]
+powerInjPV171123[7,9,11]
+powerInjPV171123[7,10,0]
+powerInjPV171123[7,10,3]
+powerInjPV171123[7,10,5]
+powerInjPV171123[7,10,9]
+powerInjPV171123[7,10,12]
+powerInjPV171123[7,11,9]
+powerInjPV171123[8,0,6]
+powerInjPV171123[8,0,17]
+powerInjPV171123[8,1,2]
+powerInjPV171123[8,1,22]
+powerInjPV171123[8,2,0]
+powerInjPV171123[8,2,13]
+powerInjPV171123[8,3,0]
+powerInjPV171123[8,3,3]
+powerInjPV171123[8,4,1]
+powerInjPV171123[8,4,2]
+powerInjPV171123[8,4,15]
+powerInjPV171123[8,5,5]
+powerInjPV171123[8,5,8]
+powerInjPV171123[8,5,10]
+powerInjPV171123[8,5,17]
+powerInjPV171123[8,6,1]
+powerInjPV171123[8,6,4]
+powerInjPV171123[8,6,8]
+powerInjPV171123[8,6,13]
+powerInjPV171123[8,6,15]
+powerInjPV171123[8,7,11]
+powerInjPV171123[8,7,12]
+powerInjPV171123[8,7,21]
+powerInjPV171123[8,8,2]
+powerInjPV171123[8,8,5]
+powerInjPV171123[8,8,14]
+powerInjPV171123[8,8,18]
+powerInjPV171123[8,9,6]
+powerInjPV171123[8,9,11]
+powerInjPV171123[8,10,17]
+powerInjPV171123[8,10,20]
+powerInjPV171123[8,11,3]
+powerInjPV171123[8,11,6]
+powerInjPV171123[8,11,12]
+powerInjPV171123[8,11,14]
+powerInjPV171123[8,11,16]
+powerInjPV171123[8,11,17]
+powerInjPV171123[9,0,8]
+powerInjPV171123[9,1,0]
+powerInjPV171123[9,1,3]
+powerInjPV171123[9,1,15]
+powerInjPV171123[9,2,0]
+powerInjPV171123[9,3,6]
+powerInjPV171123[9,3,8]
+powerInjPV171123[9,3,13]
+powerInjPV171123[9,3,17]
+powerInjPV171123[9,3,18]
+powerInjPV171123[9,3,22]
+powerInjPV171123[9,4,0]
+powerInjPV171123[9,4,5]
+powerInjPV171123[9,4,8]
+powerInjPV171123[9,4,14]
+powerInjPV171123[9,4,18]
+powerInjPV171123[9,5,11]
+powerInjPV171123[9,5,16]
+powerInjPV171123[9,5,18]
+powerInjPV171123[9,5,19]
+powerInjPV171123[9,5,20]
+powerInjPV171123[9,6,0]
+powerInjPV171123[9,6,3]
+powerInjPV171123[9,6,6]
+powerInjPV171123[9,6,9]
+powerInjPV171123[9,7,14]
+powerInjPV171123[9,7,15]
+powerInjPV171123[9,9,0]
+powerInjPV171123[9,9,9]
+powerInjPV171123[9,9,13]
+powerInjPV171123[9,9,16]
+powerInjPV171123[9,9,22]
+powerInjPV171123[9,10,4]
+powerInjPV171123[9,10,21]
+powerInjPV171123[9,11,7]
+powerInjPV171123[9,11,20]
+powerInjPV171123[9,11,21]
+powerInjPV171123[10,0,0]
+powerInjPV171123[10,0,5]
+powerInjPV171123[10,0,14]
+powerInjPV171123[10,1,5]
+powerInjPV171123[10,1,16]
+powerInjPV171123[10,1,22]
+powerInjPV171123[10,2,4]
+powerInjPV171123[10,2,6]
+powerInjPV171123[10,2,23]
+powerInjPV171123[10,3,3]
+powerInjPV171123[10,3,9]
+powerInjPV171123[10,3,15]
+powerInjPV171123[10,3,19]
+powerInjPV171123[10,4,6]
+powerInjPV171123[10,4,7]
+powerInjPV171123[10,5,2]
+powerInjPV171123[10,5,8]
+powerInjPV171123[10,6,12]
+powerInjPV171123[10,6,13]
+powerInjPV171123[10,6,23]
+powerInjPV171123[10,7,0]
+powerInjPV171123[10,7,4]
+powerInjPV171123[10,7,9]
+powerInjPV171123[10,7,16]
+powerInjPV171123[10,7,18]
+powerInjPV171123[10,8,13]
+powerInjPV171123[10,9,0]
+powerInjPV171123[10,9,5]
+powerInjPV171123[10,9,14]
+powerInjPV171123[10,9,19]
+powerInjPV171123[10,10,4]
+powerInjPV171123[10,10,7]
+powerInjPV171123[10,11,7]
+powerInjPV171123[10,11,10]
+powerInjPV171123[10,11,22]
+powerInjPV171123[10,11,23]
+powerInjPV171123[11,0,7]
+powerInjPV171123[11,0,8]
+powerInjPV171123[11,1,7]
+powerInjPV171123[11,1,20]
+powerInjPV171123[11,2,3]
+powerInjPV171123[11,2,19]
+powerInjPV171123[11,3,3]
+powerInjPV171123[11,3,4]
+powerInjPV171123[11,3,9]
+powerInjPV171123[11,3,11]
+powerInjPV171123[11,3,15]
+powerInjPV171123[11,3,23]
+powerInjPV171123[11,4,2]
+powerInjPV171123[11,4,8]
+powerInjPV171123[11,4,12]
+powerInjPV171123[11,6,5]
+powerInjPV171123[11,6,6]
+powerInjPV171123[11,6,14]
+powerInjPV171123[11,6,16]
+powerInjPV171123[11,6,22]
+powerInjPV171123[11,6,23]
+powerInjPV171123[11,7,3]
+powerInjPV171123[11,7,12]
+powerInjPV171123[11,8,5]
+powerInjPV171123[11,8,10]
+powerInjPV171123[11,8,11]
+powerInjPV171123[11,8,14]
+powerInjPV171123[11,8,22]
+powerInjPV171123[11,9,7]
+powerInjPV171123[11,9,19]
+powerInjPV171123[11,9,23]
+powerInjPV171123[11,10,12]
+powerInjPV171123[11,10,15]
+powerInjPV171123[11,10,17]
+powerInjPV171123[11,10,18]
+powerInjPV171123[11,11,8]
+powerInjPV171123[11,11,10]
+powerInjPV171123[12,0,4]
+powerInjPV171123[12,0,20]
+powerInjPV171123[12,1,3]
+powerInjPV171123[12,1,12]
+powerInjPV171123[12,1,13]
+powerInjPV171123[12,1,17]
+powerInjPV171123[12,1,19]
+powerInjPV171123[12,2,0]
+powerInjPV171123[12,2,8]
+powerInjPV171123[12,2,12]
+powerInjPV171123[12,3,5]
+powerInjPV171123[12,3,12]
+powerInjPV171123[12,3,17]
+powerInjPV171123[12,3,22]
+powerInjPV171123[12,4,0]
+powerInjPV171123[12,4,1]
+powerInjPV171123[12,4,4]
+powerInjPV171123[12,4,8]
+powerInjPV171123[12,4,10]
+powerInjPV171123[12,4,23]
+powerInjPV171123[12,5,5]
+powerInjPV171123[12,5,20]
+powerInjPV171123[12,5,22]
+powerInjPV171123[12,6,16]
+powerInjPV171123[12,6,19]
+powerInjPV171123[12,7,6]
+powerInjPV171123[12,7,11]
+powerInjPV171123[12,7,15]
+powerInjPV171123[12,7,19]
+powerInjPV171123[12,7,20]
+powerInjPV171123[12,8,10]
+powerInjPV171123[12,8,11]
+powerInjPV171123[12,8,20]
+powerInjPV171123[12,9,5]
+powerInjPV171123[12,9,14]
+powerInjPV171123[12,10,9]
+powerInjPV171123[12,10,22]
+powerInjPV171123[12,11,3]
+powerInjPV171123[12,11,6]
+powerInjPV171123[12,11,19]
+powerInjPV171123[12,11,22]
+powerInjPV171123[13,0,7]
+powerInjPV171123[13,0,11]
+powerInjPV171123[13,0,12]
+powerInjPV171123[13,0,13]
+powerInjPV171123[13,0,22]
+powerInjPV171123[13,1,3]
+powerInjPV171123[13,1,7]
+powerInjPV171123[13,1,9]
+powerInjPV171123[13,1,15]
+powerInjPV171123[13,2,3]
+powerInjPV171123[13,2,5]
+powerInjPV171123[13,2,10]
+powerInjPV171123[13,2,13]
+powerInjPV171123[13,2,14]
+powerInjPV171123[13,2,20]
+powerInjPV171123[13,2,23]
+powerInjPV171123[13,3,3]
+powerInjPV171123[13,3,10]
+powerInjPV171123[13,3,16]
+powerInjPV171123[13,3,21]
+powerInjPV171123[13,4,11]
+powerInjPV171123[13,4,17]
+powerInjPV171123[13,4,19]
+powerInjPV171123[13,4,21]
+powerInjPV171123[13,6,16]
+powerInjPV171123[13,6,23]
+powerInjPV171123[13,7,0]
+powerInjPV171123[13,7,18]
+powerInjPV171123[13,7,23]
+powerInjPV171123[13,8,16]
+powerInjPV171123[13,9,16]
+powerInjPV171123[13,10,16]
+powerInjPV171123[13,10,23]
+powerInjPV171123[13,11,17]
+powerInjPV171123[13,11,19]
+powerInjPV171123[13,11,20]
+powerInjPV171123[14,0,3]
+powerInjPV171123[14,0,6]
+powerInjPV171123[14,0,14]
+powerInjPV171123[14,0,15]
+powerInjPV171123[14,0,22]
+powerInjPV171123[14,1,19]
+powerInjPV171123[14,1,20]
+powerInjPV171123[14,1,22]
+powerInjPV171123[14,2,4]
+powerInjPV171123[14,2,5]
+powerInjPV171123[14,2,12]
+powerInjPV171123[14,2,19]
+powerInjPV171123[14,2,22]
+powerInjPV171123[14,2,23]
+powerInjPV171123[14,3,1]
+powerInjPV171123[14,3,5]
+powerInjPV171123[14,3,7]
+powerInjPV171123[14,3,12]
+powerInjPV171123[14,3,13]
+powerInjPV171123[14,3,20]
+powerInjPV171123[14,4,14]
+powerInjPV171123[14,4,17]
+powerInjPV171123[14,5,11]
+powerInjPV171123[14,5,17]
+powerInjPV171123[14,6,2]
+powerInjPV171123[14,6,5]
+powerInjPV171123[14,6,11]
+powerInjPV171123[14,6,21]
+powerInjPV171123[14,7,1]
+powerInjPV171123[14,8,6]
+powerInjPV171123[14,8,13]
+powerInjPV171123[14,8,20]
+powerInjPV171123[14,9,11]
+powerInjPV171123[14,9,15]
+powerInjPV171123[14,10,5]
+powerInjPV171123[14,10,19]
+powerInjPV171123[14,10,22]
+powerInjPV171123[14,11,1]
+powerInjPV171123[14,11,2]
+powerInjPV171123[14,11,17]
+powerInjPV171123[14,11,22]
+powerInjPV171123[15,0,5]
+powerInjPV171123[15,0,12]
+powerInjPV171123[15,0,13]
+powerInjPV171123[15,0,16]
+powerInjPV171123[15,1,14]
+powerInjPV171123[15,1,17]
+powerInjPV171123[15,1,20]
+powerInjPV171123[15,2,0]
+powerInjPV171123[15,2,13]
+powerInjPV171123[15,2,23]
+powerInjPV171123[15,3,3]
+powerInjPV171123[15,3,7]
+powerInjPV171123[15,3,12]
+powerInjPV171123[15,3,14]
+powerInjPV171123[15,3,17]
+powerInjPV171123[15,4,0]
+powerInjPV171123[15,4,9]
+powerInjPV171123[15,4,23]
+powerInjPV171123[15,5,1]
+powerInjPV171123[15,5,2]
+powerInjPV171123[15,5,4]
+powerInjPV171123[15,5,6]
+powerInjPV171123[15,5,11]
+powerInjPV171123[15,5,13]
+powerInjPV171123[15,5,18]
+powerInjPV171123[15,7,2]
+powerInjPV171123[15,7,6]
+powerInjPV171123[15,7,11]
+powerInjPV171123[15,7,12]
+powerInjPV171123[15,7,18]
+powerInjPV171123[15,7,22]
+powerInjPV171123[15,8,4]
+powerInjPV171123[15,9,3]
+powerInjPV171123[15,9,6]
+powerInjPV171123[15,9,7]
+powerInjPV171123[15,9,8]
+powerInjPV171123[15,9,16]
+powerInjPV171123[15,10,8]
+powerInjPV171123[15,10,13]
+powerInjPV171123[15,10,22]
+powerInjPV171123[15,11,6]
+powerInjPV171123[15,11,20]
+powerInjPV171123[16,0,2]
+powerInjPV171123[16,0,9]
+powerInjPV171123[16,0,15]
+powerInjPV171123[16,1,5]
+powerInjPV171123[16,1,19]
+powerInjPV171123[16,2,4]
+powerInjPV171123[16,2,11]
+powerInjPV171123[16,2,13]
+powerInjPV171123[16,3,2]
+powerInjPV171123[16,3,4]
+powerInjPV171123[16,3,9]
+powerInjPV171123[16,3,10]
+powerInjPV171123[16,3,21]
+powerInjPV171123[16,4,16]
+powerInjPV171123[16,4,17]
+powerInjPV171123[16,4,22]
+powerInjPV171123[16,4,23]
+powerInjPV171123[16,5,4]
+powerInjPV171123[16,5,5]
+powerInjPV171123[16,5,7]
+powerInjPV171123[16,5,9]
+powerInjPV171123[16,5,15]
+powerInjPV171123[16,5,16]
+powerInjPV171123[16,6,4]
+powerInjPV171123[16,6,5]
+powerInjPV171123[16,6,6]
+powerInjPV171123[16,6,12]
+powerInjPV171123[16,6,15]
+powerInjPV171123[16,6,20]
+powerInjPV171123[16,7,14]
+powerInjPV171123[16,7,16]
+powerInjPV171123[16,7,19]
+powerInjPV171123[16,7,23]
+powerInjPV171123[16,8,4]
+powerInjPV171123[16,8,11]
+powerInjPV171123[16,8,16]
+powerInjPV171123[16,8,22]
+powerInjPV171123[16,8,23]
+powerInjPV171123[16,9,3]
+powerInjPV171123[16,9,8]
+powerInjPV171123[16,10,12]
+powerInjPV171123[16,10,13]
+powerInjPV171123[16,10,15]
+powerInjPV171123[16,10,17]
+powerInjPV171123[16,10,21]
+powerInjPV171123[16,11,14]
+powerInjPV171123[16,11,16]
+powerInjPV171123[17,1,3]
+powerInjPV171123[17,2,4]
+powerInjPV171123[17,2,11]
+powerInjPV171123[17,3,18]
+powerInjPV171123[17,3,19]
+powerInjPV171123[17,4,16]
+powerInjPV171123[17,5,0]
+powerInjPV171123[17,5,4]
+powerInjPV171123[17,5,11]
+powerInjPV171123[17,5,16]
+powerInjPV171123[17,5,18]
+powerInjPV171123[17,5,21]
+powerInjPV171123[17,6,19]
+powerInjPV171123[17,7,4]
+powerInjPV171123[17,7,5]
+powerInjPV171123[17,7,8]
+powerInjPV171123[17,8,8]
+powerInjPV171123[17,8,22]
+powerInjPV171123[17,9,1]
+powerInjPV171123[17,9,10]
+powerInjPV171123[17,9,20]
+powerInjPV171123[17,10,10]
+powerInjPV171123[17,10,11]
+powerInjPV171123[17,10,16]
+powerInjPV171123[17,10,22]
+powerInjPV171123[17,11,15]
+powerInj_UseBat171123[0,0,2]
+powerInj_UseBat171123[0,0,8]
+powerInj_UseBat171123[0,0,20]
+powerInj_UseBat171123[0,1,11]
+powerInj_UseBat171123[0,1,13]
+powerInj_UseBat171123[0,1,23]
+powerInj_UseBat171123[0,2,0]
+powerInj_UseBat171123[0,3,1]
+powerInj_UseBat171123[0,3,10]
+powerInj_UseBat171123[0,3,11]
+powerInj_UseBat171123[0,3,20]
+powerInj_UseBat171123[0,4,5]
+powerInj_UseBat171123[0,4,16]
+powerInj_UseBat171123[0,4,18]
+powerInj_UseBat171123[0,4,21]
+powerInj_UseBat171123[0,5,0]
+powerInj_UseBat171123[0,5,7]
+powerInj_UseBat171123[0,5,14]
+powerInj_UseBat171123[0,5,19]
+powerInj_UseBat171123[0,6,10]
+powerInj_UseBat171123[0,6,13]
+powerInj_UseBat171123[0,7,3]
+powerInj_UseBat171123[0,8,8]
+powerInj_UseBat171123[0,8,20]
+powerInj_UseBat171123[0,9,1]
+powerInj_UseBat171123[0,9,13]
+powerInj_UseBat171123[0,9,18]
+powerInj_UseBat171123[0,9,22]
+powerInj_UseBat171123[0,10,1]
+powerInj_UseBat171123[0,10,9]
+powerInj_UseBat171123[0,11,3]
+powerInj_UseBat171123[0,11,6]
+powerInj_UseBat171123[0,11,11]
+powerInj_UseBat171123[0,11,12]
+powerInj_UseBat171123[0,11,17]
+powerInj_UseBat171123[1,0,2]
+powerInj_UseBat171123[1,0,3]
+powerInj_UseBat171123[1,0,4]
+powerInj_UseBat171123[1,0,10]
+powerInj_UseBat171123[1,0,18]
+powerInj_UseBat171123[1,0,23]
+powerInj_UseBat171123[1,1,8]
+powerInj_UseBat171123[1,1,14]
+powerInj_UseBat171123[1,1,16]
+powerInj_UseBat171123[1,1,21]
+powerInj_UseBat171123[1,2,3]
+powerInj_UseBat171123[1,3,2]
+powerInj_UseBat171123[1,3,16]
+powerInj_UseBat171123[1,3,17]
+powerInj_UseBat171123[1,3,21]
+powerInj_UseBat171123[1,3,23]
+powerInj_UseBat171123[1,4,11]
+powerInj_UseBat171123[1,4,13]
+powerInj_UseBat171123[1,4,14]
+powerInj_UseBat171123[1,4,16]
+powerInj_UseBat171123[1,4,23]
+powerInj_UseBat171123[1,5,14]
+powerInj_UseBat171123[1,6,12]
+powerInj_UseBat171123[1,6,16]
+powerInj_UseBat171123[1,6,18]
+powerInj_UseBat171123[1,7,4]
+powerInj_UseBat171123[1,7,12]
+powerInj_UseBat171123[1,7,15]
+powerInj_UseBat171123[1,7,18]
+powerInj_UseBat171123[1,8,0]
+powerInj_UseBat171123[1,8,3]
+powerInj_UseBat171123[1,8,7]
+powerInj_UseBat171123[1,8,9]
+powerInj_UseBat171123[1,8,12]
+powerInj_UseBat171123[1,9,2]
+powerInj_UseBat171123[1,9,4]
+powerInj_UseBat171123[1,10,1]
+powerInj_UseBat171123[1,10,3]
+powerInj_UseBat171123[1,10,6]
+powerInj_UseBat171123[1,10,13]
+powerInj_UseBat171123[1,11,2]
+powerInj_UseBat171123[1,11,5]
+powerInj_UseBat171123[1,11,6]
+powerInj_UseBat171123[1,11,14]
+powerInj_UseBat171123[1,11,15]
+powerInj_UseBat171123[1,11,22]
+powerInj_UseBat171123[2,0,2]
+powerInj_UseBat171123[2,0,12]
+powerInj_UseBat171123[2,0,15]
+powerInj_UseBat171123[2,0,18]
+powerInj_UseBat171123[2,0,21]
+powerInj_UseBat171123[2,1,9]
+powerInj_UseBat171123[2,1,12]
+powerInj_UseBat171123[2,2,0]
+powerInj_UseBat171123[2,2,15]
+powerInj_UseBat171123[2,2,22]
+powerInj_UseBat171123[2,3,11]
+powerInj_UseBat171123[2,3,12]
+powerInj_UseBat171123[2,3,13]
+powerInj_UseBat171123[2,3,17]
+powerInj_UseBat171123[2,4,3]
+powerInj_UseBat171123[2,4,9]
+powerInj_UseBat171123[2,4,10]
+powerInj_UseBat171123[2,4,13]
+powerInj_UseBat171123[2,4,19]
+powerInj_UseBat171123[2,4,22]
+powerInj_UseBat171123[2,5,2]
+powerInj_UseBat171123[2,5,11]
+powerInj_UseBat171123[2,5,12]
+powerInj_UseBat171123[2,5,16]
+powerInj_UseBat171123[2,5,19]
+powerInj_UseBat171123[2,6,4]
+powerInj_UseBat171123[2,6,10]
+powerInj_UseBat171123[2,6,11]
+powerInj_UseBat171123[2,6,16]
+powerInj_UseBat171123[2,6,21]
+powerInj_UseBat171123[2,7,5]
+powerInj_UseBat171123[2,7,6]
+powerInj_UseBat171123[2,7,9]
+powerInj_UseBat171123[2,7,10]
+powerInj_UseBat171123[2,7,15]
+powerInj_UseBat171123[2,7,18]
+powerInj_UseBat171123[2,7,19]
+powerInj_UseBat171123[2,8,0]
+powerInj_UseBat171123[2,8,4]
+powerInj_UseBat171123[2,8,17]
+powerInj_UseBat171123[2,9,1]
+powerInj_UseBat171123[2,9,9]
+powerInj_UseBat171123[2,9,16]
+powerInj_UseBat171123[2,9,19]
+powerInj_UseBat171123[2,10,6]
+powerInj_UseBat171123[2,10,13]
+powerInj_UseBat171123[2,10,16]
+powerInj_UseBat171123[2,10,20]
+powerInj_UseBat171123[2,10,23]
+powerInj_UseBat171123[2,11,4]
+powerInj_UseBat171123[2,11,5]
+powerInj_UseBat171123[2,11,19]
+powerInj_UseBat171123[3,0,2]
+powerInj_UseBat171123[3,0,3]
+powerInj_UseBat171123[3,0,6]
+powerInj_UseBat171123[3,0,10]
+powerInj_UseBat171123[3,0,18]
+powerInj_UseBat171123[3,0,20]
+powerInj_UseBat171123[3,1,12]
+powerInj_UseBat171123[3,1,19]
+powerInj_UseBat171123[3,1,23]
+powerInj_UseBat171123[3,2,22]
+powerInj_UseBat171123[3,3,1]
+powerInj_UseBat171123[3,3,20]
+powerInj_UseBat171123[3,3,22]
+powerInj_UseBat171123[3,3,23]
+powerInj_UseBat171123[3,4,6]
+powerInj_UseBat171123[3,4,20]
+powerInj_UseBat171123[3,5,5]
+powerInj_UseBat171123[3,5,15]
+powerInj_UseBat171123[3,6,10]
+powerInj_UseBat171123[3,6,14]
+powerInj_UseBat171123[3,6,21]
+powerInj_UseBat171123[3,7,4]
+powerInj_UseBat171123[3,7,21]
+powerInj_UseBat171123[3,8,1]
+powerInj_UseBat171123[3,8,3]
+powerInj_UseBat171123[3,8,8]
+powerInj_UseBat171123[3,8,9]
+powerInj_UseBat171123[3,8,18]
+powerInj_UseBat171123[3,9,3]
+powerInj_UseBat171123[3,9,5]
+powerInj_UseBat171123[3,9,12]
+powerInj_UseBat171123[3,9,14]
+powerInj_UseBat171123[3,9,18]
+powerInj_UseBat171123[3,11,0]
+powerInj_UseBat171123[3,11,2]
+powerInj_UseBat171123[3,11,3]
+powerInj_UseBat171123[3,11,4]
+powerInj_UseBat171123[3,11,7]
+powerInj_UseBat171123[3,11,13]
+powerInj_UseBat171123[3,11,18]
+powerInj_UseBat171123[4,0,0]
+powerInj_UseBat171123[4,0,3]
+powerInj_UseBat171123[4,0,12]
+powerInj_UseBat171123[4,1,11]
+powerInj_UseBat171123[4,1,12]
+powerInj_UseBat171123[4,1,13]
+powerInj_UseBat171123[4,1,14]
+powerInj_UseBat171123[4,1,15]
+powerInj_UseBat171123[4,1,22]
+powerInj_UseBat171123[4,2,1]
+powerInj_UseBat171123[4,2,11]
+powerInj_UseBat171123[4,2,12]
+powerInj_UseBat171123[4,2,21]
+powerInj_UseBat171123[4,3,12]
+powerInj_UseBat171123[4,3,19]
+powerInj_UseBat171123[4,4,3]
+powerInj_UseBat171123[4,4,7]
+powerInj_UseBat171123[4,4,16]
+powerInj_UseBat171123[4,4,17]
+powerInj_UseBat171123[4,4,21]
+powerInj_UseBat171123[4,6,2]
+powerInj_UseBat171123[4,6,6]
+powerInj_UseBat171123[4,7,20]
+powerInj_UseBat171123[4,7,23]
+powerInj_UseBat171123[4,8,16]
+powerInj_UseBat171123[4,9,7]
+powerInj_UseBat171123[4,9,13]
+powerInj_UseBat171123[4,10,10]
+powerInj_UseBat171123[4,10,13]
+powerInj_UseBat171123[4,10,17]
+powerInj_UseBat171123[4,11,8]
+powerInj_UseBat171123[4,11,9]
+powerInj_UseBat171123[5,0,5]
+powerInj_UseBat171123[5,0,10]
+powerInj_UseBat171123[5,0,16]
+powerInj_UseBat171123[5,1,1]
+powerInj_UseBat171123[5,1,4]
+powerInj_UseBat171123[5,1,5]
+powerInj_UseBat171123[5,1,7]
+powerInj_UseBat171123[5,1,10]
+powerInj_UseBat171123[5,1,12]
+powerInj_UseBat171123[5,1,14]
+powerInj_UseBat171123[5,1,22]
+powerInj_UseBat171123[5,2,0]
+powerInj_UseBat171123[5,2,1]
+powerInj_UseBat171123[5,2,2]
+powerInj_UseBat171123[5,2,8]
+powerInj_UseBat171123[5,2,12]
+powerInj_UseBat171123[5,3,3]
+powerInj_UseBat171123[5,3,7]
+powerInj_UseBat171123[5,3,11]
+powerInj_UseBat171123[5,3,15]
+powerInj_UseBat171123[5,3,17]
+powerInj_UseBat171123[5,4,11]
+powerInj_UseBat171123[5,4,18]
+powerInj_UseBat171123[5,4,19]
+powerInj_UseBat171123[5,4,22]
+powerInj_UseBat171123[5,5,8]
+powerInj_UseBat171123[5,5,10]
+powerInj_UseBat171123[5,5,18]
+powerInj_UseBat171123[5,6,18]
+powerInj_UseBat171123[5,7,0]
+powerInj_UseBat171123[5,7,2]
+powerInj_UseBat171123[5,7,22]
+powerInj_UseBat171123[5,7,23]
+powerInj_UseBat171123[5,8,15]
+powerInj_UseBat171123[5,8,16]
+powerInj_UseBat171123[5,9,0]
+powerInj_UseBat171123[5,9,19]
+powerInj_UseBat171123[5,10,7]
+powerInj_UseBat171123[5,10,10]
+powerInj_UseBat171123[5,10,13]
+powerInj_UseBat171123[5,10,21]
+powerInj_UseBat171123[5,11,1]
+powerInj_UseBat171123[5,11,7]
+powerInj_UseBat171123[5,11,12]
+powerInj_UseBat171123[6,0,3]
+powerInj_UseBat171123[6,0,6]
+powerInj_UseBat171123[6,0,7]
+powerInj_UseBat171123[6,0,9]
+powerInj_UseBat171123[6,0,19]
+powerInj_UseBat171123[6,1,2]
+powerInj_UseBat171123[6,1,4]
+powerInj_UseBat171123[6,2,12]
+powerInj_UseBat171123[6,3,14]
+powerInj_UseBat171123[6,3,17]
+powerInj_UseBat171123[6,4,0]
+powerInj_UseBat171123[6,4,3]
+powerInj_UseBat171123[6,5,10]
+powerInj_UseBat171123[6,5,16]
+powerInj_UseBat171123[6,5,17]
+powerInj_UseBat171123[6,5,23]
+powerInj_UseBat171123[6,6,3]
+powerInj_UseBat171123[6,6,17]
+powerInj_UseBat171123[6,6,21]
+powerInj_UseBat171123[6,7,17]
+powerInj_UseBat171123[6,8,2]
+powerInj_UseBat171123[6,8,16]
+powerInj_UseBat171123[6,8,21]
+powerInj_UseBat171123[6,8,23]
+powerInj_UseBat171123[6,9,5]
+powerInj_UseBat171123[6,9,10]
+powerInj_UseBat171123[6,9,21]
+powerInj_UseBat171123[6,10,0]
+powerInj_UseBat171123[6,10,2]
+powerInj_UseBat171123[6,10,8]
+powerInj_UseBat171123[6,10,17]
+powerInj_UseBat171123[6,10,20]
+powerInj_UseBat171123[6,11,1]
+powerInj_UseBat171123[6,11,5]
+powerInj_UseBat171123[6,11,11]
+powerInj_UseBat171123[6,11,17]
+powerInj_UseBat171123[7,0,0]
+powerInj_UseBat171123[7,0,10]
+powerInj_UseBat171123[7,1,12]
+powerInj_UseBat171123[7,2,13]
+powerInj_UseBat171123[7,3,1]
+powerInj_UseBat171123[7,3,14]
+powerInj_UseBat171123[7,3,15]
+powerInj_UseBat171123[7,3,16]
+powerInj_UseBat171123[7,3,19]
+powerInj_UseBat171123[7,3,21]
+powerInj_UseBat171123[7,4,0]
+powerInj_UseBat171123[7,4,16]
+powerInj_UseBat171123[7,4,18]
+powerInj_UseBat171123[7,5,3]
+powerInj_UseBat171123[7,5,12]
+powerInj_UseBat171123[7,6,5]
+powerInj_UseBat171123[7,6,7]
+powerInj_UseBat171123[7,6,18]
+powerInj_UseBat171123[7,6,20]
+powerInj_UseBat171123[7,6,22]
+powerInj_UseBat171123[7,8,11]
+powerInj_UseBat171123[7,8,19]
+powerInj_UseBat171123[7,8,22]
+powerInj_UseBat171123[7,9,4]
+powerInj_UseBat171123[7,9,20]
+powerInj_UseBat171123[7,9,22]
+powerInj_UseBat171123[7,9,23]
+powerInj_UseBat171123[7,10,4]
+powerInj_UseBat171123[7,10,5]
+powerInj_UseBat171123[7,10,8]
+powerInj_UseBat171123[7,10,21]
+powerInj_UseBat171123[7,11,10]
+powerInj_UseBat171123[7,11,11]
+powerInj_UseBat171123[8,0,2]
+powerInj_UseBat171123[8,0,9]
+powerInj_UseBat171123[8,0,11]
+powerInj_UseBat171123[8,0,15]
+powerInj_UseBat171123[8,1,4]
+powerInj_UseBat171123[8,1,12]
+powerInj_UseBat171123[8,1,21]
+powerInj_UseBat171123[8,2,7]
+powerInj_UseBat171123[8,3,2]
+powerInj_UseBat171123[8,3,8]
+powerInj_UseBat171123[8,3,11]
+powerInj_UseBat171123[8,3,18]
+powerInj_UseBat171123[8,3,19]
+powerInj_UseBat171123[8,3,22]
+powerInj_UseBat171123[8,4,1]
+powerInj_UseBat171123[8,4,3]
+powerInj_UseBat171123[8,4,9]
+powerInj_UseBat171123[8,4,13]
+powerInj_UseBat171123[8,4,19]
+powerInj_UseBat171123[8,4,20]
+powerInj_UseBat171123[8,5,4]
+powerInj_UseBat171123[8,5,6]
+powerInj_UseBat171123[8,5,7]
+powerInj_UseBat171123[8,5,14]
+powerInj_UseBat171123[8,5,18]
+powerInj_UseBat171123[8,6,0]
+powerInj_UseBat171123[8,6,7]
+powerInj_UseBat171123[8,6,18]
+powerInj_UseBat171123[8,6,23]
+powerInj_UseBat171123[8,7,5]
+powerInj_UseBat171123[8,7,11]
+powerInj_UseBat171123[8,7,15]
+powerInj_UseBat171123[8,7,22]
+powerInj_UseBat171123[8,8,0]
+powerInj_UseBat171123[8,8,9]
+powerInj_UseBat171123[8,8,14]
+powerInj_UseBat171123[8,8,17]
+powerInj_UseBat171123[8,8,19]
+powerInj_UseBat171123[8,9,1]
+powerInj_UseBat171123[8,9,10]
+powerInj_UseBat171123[8,9,19]
+powerInj_UseBat171123[8,9,22]
+powerInj_UseBat171123[8,9,23]
+powerInj_UseBat171123[8,10,5]
+powerInj_UseBat171123[8,10,10]
+powerInj_UseBat171123[8,10,11]
+powerInj_UseBat171123[8,10,15]
+powerInj_UseBat171123[8,10,22]
+powerInj_UseBat171123[8,11,5]
+powerInj_UseBat171123[8,11,10]
+powerInj_UseBat171123[8,11,11]
+powerInj_UseBat171123[8,11,16]
+powerInj_UseBat171123[8,11,20]
+powerInj_UseBat171123[9,0,0]
+powerInj_UseBat171123[9,0,11]
+powerInj_UseBat171123[9,0,12]
+powerInj_UseBat171123[9,0,18]
+powerInj_UseBat171123[9,0,20]
+powerInj_UseBat171123[9,1,7]
+powerInj_UseBat171123[9,1,10]
+powerInj_UseBat171123[9,1,11]
+powerInj_UseBat171123[9,1,16]
+powerInj_UseBat171123[9,1,20]
+powerInj_UseBat171123[9,1,21]
+powerInj_UseBat171123[9,2,11]
+powerInj_UseBat171123[9,2,14]
+powerInj_UseBat171123[9,2,15]
+powerInj_UseBat171123[9,2,17]
+powerInj_UseBat171123[9,2,23]
+powerInj_UseBat171123[9,3,0]
+powerInj_UseBat171123[9,3,9]
+powerInj_UseBat171123[9,3,15]
+powerInj_UseBat171123[9,3,18]
+powerInj_UseBat171123[9,3,21]
+powerInj_UseBat171123[9,4,1]
+powerInj_UseBat171123[9,4,4]
+powerInj_UseBat171123[9,4,11]
+powerInj_UseBat171123[9,4,23]
+powerInj_UseBat171123[9,5,8]
+powerInj_UseBat171123[9,5,9]
+powerInj_UseBat171123[9,5,14]
+powerInj_UseBat171123[9,5,22]
+powerInj_UseBat171123[9,5,23]
+powerInj_UseBat171123[9,6,2]
+powerInj_UseBat171123[9,6,13]
+powerInj_UseBat171123[9,6,19]
+powerInj_UseBat171123[9,7,14]
+powerInj_UseBat171123[9,7,17]
+powerInj_UseBat171123[9,8,1]
+powerInj_UseBat171123[9,8,7]
+powerInj_UseBat171123[9,8,13]
+powerInj_UseBat171123[9,8,17]
+powerInj_UseBat171123[9,9,6]
+powerInj_UseBat171123[9,9,8]
+powerInj_UseBat171123[9,10,8]
+powerInj_UseBat171123[9,10,10]
+powerInj_UseBat171123[9,10,14]
+powerInj_UseBat171123[9,11,4]
+powerInj_UseBat171123[9,11,6]
+powerInj_UseBat171123[9,11,13]
+powerInj_UseBat171123[9,11,21]
+powerInj_UseBat171123[9,11,23]
+powerInj_UseBat171123[10,0,8]
+powerInj_UseBat171123[10,0,9]
+powerInj_UseBat171123[10,0,17]
+powerInj_UseBat171123[10,1,1]
+powerInj_UseBat171123[10,1,2]
+powerInj_UseBat171123[10,1,6]
+powerInj_UseBat171123[10,1,13]
+powerInj_UseBat171123[10,1,18]
+powerInj_UseBat171123[10,1,23]
+powerInj_UseBat171123[10,2,3]
+powerInj_UseBat171123[10,2,7]
+powerInj_UseBat171123[10,2,14]
+powerInj_UseBat171123[10,2,18]
+powerInj_UseBat171123[10,2,22]
+powerInj_UseBat171123[10,3,6]
+powerInj_UseBat171123[10,3,12]
+powerInj_UseBat171123[10,3,14]
+powerInj_UseBat171123[10,3,17]
+powerInj_UseBat171123[10,3,19]
+powerInj_UseBat171123[10,3,21]
+powerInj_UseBat171123[10,4,1]
+powerInj_UseBat171123[10,5,2]
+powerInj_UseBat171123[10,5,4]
+powerInj_UseBat171123[10,5,11]
+powerInj_UseBat171123[10,5,18]
+powerInj_UseBat171123[10,5,20]
+powerInj_UseBat171123[10,5,23]
+powerInj_UseBat171123[10,6,6]
+powerInj_UseBat171123[10,6,8]
+powerInj_UseBat171123[10,6,11]
+powerInj_UseBat171123[10,6,13]
+powerInj_UseBat171123[10,6,14]
+powerInj_UseBat171123[10,6,15]
+powerInj_UseBat171123[10,6,18]
+powerInj_UseBat171123[10,7,0]
+powerInj_UseBat171123[10,7,6]
+powerInj_UseBat171123[10,7,7]
+powerInj_UseBat171123[10,7,21]
+powerInj_UseBat171123[10,7,23]
+powerInj_UseBat171123[10,8,22]
+powerInj_UseBat171123[10,9,0]
+powerInj_UseBat171123[10,9,7]
+powerInj_UseBat171123[10,9,16]
+powerInj_UseBat171123[10,9,20]
+powerInj_UseBat171123[10,9,22]
+powerInj_UseBat171123[10,10,3]
+powerInj_UseBat171123[10,10,23]
+powerInj_UseBat171123[10,11,3]
+powerInj_UseBat171123[10,11,18]
+powerInj_UseBat171123[11,0,2]
+powerInj_UseBat171123[11,0,7]
+powerInj_UseBat171123[11,0,16]
+powerInj_UseBat171123[11,0,17]
+powerInj_UseBat171123[11,0,18]
+powerInj_UseBat171123[11,1,15]
+powerInj_UseBat171123[11,2,3]
+powerInj_UseBat171123[11,2,4]
+powerInj_UseBat171123[11,2,7]
+powerInj_UseBat171123[11,2,15]
+powerInj_UseBat171123[11,2,17]
+powerInj_UseBat171123[11,2,18]
+powerInj_UseBat171123[11,2,23]
+powerInj_UseBat171123[11,3,6]
+powerInj_UseBat171123[11,3,13]
+powerInj_UseBat171123[11,3,20]
+powerInj_UseBat171123[11,4,7]
+powerInj_UseBat171123[11,4,9]
+powerInj_UseBat171123[11,4,23]
+powerInj_UseBat171123[11,5,5]
+powerInj_UseBat171123[11,5,15]
+powerInj_UseBat171123[11,5,18]
+powerInj_UseBat171123[11,5,23]
+powerInj_UseBat171123[11,6,2]
+powerInj_UseBat171123[11,6,8]
+powerInj_UseBat171123[11,6,19]
+powerInj_UseBat171123[11,7,7]
+powerInj_UseBat171123[11,7,9]
+powerInj_UseBat171123[11,7,15]
+powerInj_UseBat171123[11,7,22]
+powerInj_UseBat171123[11,7,23]
+powerInj_UseBat171123[11,8,1]
+powerInj_UseBat171123[11,8,4]
+powerInj_UseBat171123[11,8,7]
+powerInj_UseBat171123[11,8,15]
+powerInj_UseBat171123[11,8,18]
+powerInj_UseBat171123[11,9,1]
+powerInj_UseBat171123[11,9,10]
+powerInj_UseBat171123[11,10,1]
+powerInj_UseBat171123[11,10,4]
+powerInj_UseBat171123[11,10,5]
+powerInj_UseBat171123[11,10,8]
+powerInj_UseBat171123[11,10,12]
+powerInj_UseBat171123[11,11,12]
+powerInj_UseBat171123[11,11,14]
+powerInj_UseBat171123[11,11,18]
+powerInj_UseBat171123[11,11,20]
+powerInj_UseBat171123[12,0,7]
+powerInj_UseBat171123[12,0,11]
+powerInj_UseBat171123[12,0,14]
+powerInj_UseBat171123[12,0,20]
+powerInj_UseBat171123[12,0,23]
+powerInj_UseBat171123[12,1,1]
+powerInj_UseBat171123[12,1,14]
+powerInj_UseBat171123[12,1,15]
+powerInj_UseBat171123[12,1,22]
+powerInj_UseBat171123[12,2,2]
+powerInj_UseBat171123[12,2,7]
+powerInj_UseBat171123[12,2,8]
+powerInj_UseBat171123[12,2,15]
+powerInj_UseBat171123[12,2,21]
+powerInj_UseBat171123[12,3,7]
+powerInj_UseBat171123[12,4,12]
+powerInj_UseBat171123[12,5,5]
+powerInj_UseBat171123[12,5,23]
+powerInj_UseBat171123[12,6,0]
+powerInj_UseBat171123[12,6,8]
+powerInj_UseBat171123[12,6,20]
+powerInj_UseBat171123[12,7,5]
+powerInj_UseBat171123[12,7,8]
+powerInj_UseBat171123[12,7,9]
+powerInj_UseBat171123[12,8,4]
+powerInj_UseBat171123[12,8,7]
+powerInj_UseBat171123[12,8,8]
+powerInj_UseBat171123[12,8,9]
+powerInj_UseBat171123[12,8,13]
+powerInj_UseBat171123[12,8,18]
+powerInj_UseBat171123[12,9,1]
+powerInj_UseBat171123[12,9,6]
+powerInj_UseBat171123[12,9,16]
+powerInj_UseBat171123[12,10,0]
+powerInj_UseBat171123[12,10,1]
+powerInj_UseBat171123[12,11,0]
+powerInj_UseBat171123[12,11,11]
+powerInj_UseBat171123[12,11,14]
+powerInj_UseBat171123[12,11,22]
+powerInj_UseBat171123[13,0,1]
+powerInj_UseBat171123[13,0,2]
+powerInj_UseBat171123[13,0,18]
+powerInj_UseBat171123[13,1,5]
+powerInj_UseBat171123[13,1,7]
+powerInj_UseBat171123[13,1,16]
+powerInj_UseBat171123[13,1,18]
+powerInj_UseBat171123[13,1,21]
+powerInj_UseBat171123[13,2,3]
+powerInj_UseBat171123[13,2,6]
+powerInj_UseBat171123[13,2,14]
+powerInj_UseBat171123[13,2,21]
+powerInj_UseBat171123[13,3,5]
+powerInj_UseBat171123[13,3,12]
+powerInj_UseBat171123[13,3,16]
+powerInj_UseBat171123[13,3,17]
+powerInj_UseBat171123[13,4,13]
+powerInj_UseBat171123[13,5,2]
+powerInj_UseBat171123[13,5,3]
+powerInj_UseBat171123[13,5,5]
+powerInj_UseBat171123[13,5,8]
+powerInj_UseBat171123[13,5,12]
+powerInj_UseBat171123[13,5,14]
+powerInj_UseBat171123[13,6,10]
+powerInj_UseBat171123[13,6,13]
+powerInj_UseBat171123[13,6,15]
+powerInj_UseBat171123[13,6,19]
+powerInj_UseBat171123[13,6,21]
+powerInj_UseBat171123[13,7,4]
+powerInj_UseBat171123[13,7,10]
+powerInj_UseBat171123[13,7,18]
+powerInj_UseBat171123[13,8,4]
+powerInj_UseBat171123[13,9,1]
+powerInj_UseBat171123[13,9,15]
+powerInj_UseBat171123[13,10,4]
+powerInj_UseBat171123[13,10,11]
+powerInj_UseBat171123[13,10,16]
+powerInj_UseBat171123[13,10,22]
+powerInj_UseBat171123[13,11,2]
+powerInj_UseBat171123[13,11,4]
+powerInj_UseBat171123[13,11,13]
+powerInj_UseBat171123[14,0,0]
+powerInj_UseBat171123[14,0,1]
+powerInj_UseBat171123[14,0,2]
+powerInj_UseBat171123[14,0,6]
+powerInj_UseBat171123[14,0,10]
+powerInj_UseBat171123[14,0,13]
+powerInj_UseBat171123[14,0,14]
+powerInj_UseBat171123[14,0,18]
+powerInj_UseBat171123[14,0,21]
+powerInj_UseBat171123[14,2,15]
+powerInj_UseBat171123[14,3,1]
+powerInj_UseBat171123[14,3,2]
+powerInj_UseBat171123[14,3,11]
+powerInj_UseBat171123[14,3,13]
+powerInj_UseBat171123[14,3,16]
+powerInj_UseBat171123[14,3,20]
+powerInj_UseBat171123[14,5,1]
+powerInj_UseBat171123[14,5,5]
+powerInj_UseBat171123[14,6,0]
+powerInj_UseBat171123[14,6,4]
+powerInj_UseBat171123[14,6,11]
+powerInj_UseBat171123[14,6,16]
+powerInj_UseBat171123[14,6,19]
+powerInj_UseBat171123[14,7,9]
+powerInj_UseBat171123[14,7,13]
+powerInj_UseBat171123[14,7,15]
+powerInj_UseBat171123[14,7,16]
+powerInj_UseBat171123[14,8,5]
+powerInj_UseBat171123[14,8,6]
+powerInj_UseBat171123[14,8,8]
+powerInj_UseBat171123[14,8,22]
+powerInj_UseBat171123[14,9,3]
+powerInj_UseBat171123[14,9,5]
+powerInj_UseBat171123[14,9,12]
+powerInj_UseBat171123[14,10,2]
+powerInj_UseBat171123[14,10,7]
+powerInj_UseBat171123[14,10,14]
+powerInj_UseBat171123[14,10,17]
+powerInj_UseBat171123[14,10,23]
+powerInj_UseBat171123[14,11,11]
+powerInj_UseBat171123[14,11,13]
+powerInj_UseBat171123[15,0,6]
+powerInj_UseBat171123[15,0,23]
+powerInj_UseBat171123[15,1,2]
+powerInj_UseBat171123[15,1,3]
+powerInj_UseBat171123[15,1,8]
+powerInj_UseBat171123[15,1,12]
+powerInj_UseBat171123[15,1,16]
+powerInj_UseBat171123[15,2,18]
+powerInj_UseBat171123[15,2,22]
+powerInj_UseBat171123[15,2,23]
+powerInj_UseBat171123[15,3,2]
+powerInj_UseBat171123[15,3,3]
+powerInj_UseBat171123[15,3,10]
+powerInj_UseBat171123[15,3,11]
+powerInj_UseBat171123[15,3,15]
+powerInj_UseBat171123[15,3,16]
+powerInj_UseBat171123[15,4,3]
+powerInj_UseBat171123[15,4,17]
+powerInj_UseBat171123[15,4,23]
+powerInj_UseBat171123[15,5,2]
+powerInj_UseBat171123[15,5,5]
+powerInj_UseBat171123[15,5,14]
+powerInj_UseBat171123[15,5,20]
+powerInj_UseBat171123[15,6,10]
+powerInj_UseBat171123[15,6,17]
+powerInj_UseBat171123[15,6,21]
+powerInj_UseBat171123[15,7,11]
+powerInj_UseBat171123[15,7,17]
+powerInj_UseBat171123[15,8,10]
+powerInj_UseBat171123[15,8,22]
+powerInj_UseBat171123[15,8,23]
+powerInj_UseBat171123[15,9,0]
+powerInj_UseBat171123[15,9,12]
+powerInj_UseBat171123[15,9,19]
+powerInj_UseBat171123[15,9,22]
+powerInj_UseBat171123[15,10,13]
+powerInj_UseBat171123[15,10,23]
+powerInj_UseBat171123[15,11,0]
+powerInj_UseBat171123[15,11,3]
+powerInj_UseBat171123[15,11,11]
+powerInj_UseBat171123[15,11,12]
+powerInj_UseBat171123[15,11,14]
+powerInj_UseBat171123[15,11,16]
+powerInj_UseBat171123[16,0,5]
+powerInj_UseBat171123[16,0,14]
+powerInj_UseBat171123[16,0,16]
+powerInj_UseBat171123[16,1,20]
+powerInj_UseBat171123[16,1,22]
+powerInj_UseBat171123[16,2,12]
+powerInj_UseBat171123[16,2,22]
+powerInj_UseBat171123[16,3,0]
+powerInj_UseBat171123[16,3,4]
+powerInj_UseBat171123[16,3,5]
+powerInj_UseBat171123[16,3,6]
+powerInj_UseBat171123[16,3,9]
+powerInj_UseBat171123[16,3,15]
+powerInj_UseBat171123[16,3,18]
+powerInj_UseBat171123[16,4,7]
+powerInj_UseBat171123[16,4,17]
+powerInj_UseBat171123[16,4,22]
+powerInj_UseBat171123[16,5,3]
+powerInj_UseBat171123[16,5,6]
+powerInj_UseBat171123[16,5,15]
+powerInj_UseBat171123[16,5,19]
+powerInj_UseBat171123[16,5,23]
+powerInj_UseBat171123[16,6,8]
+powerInj_UseBat171123[16,7,1]
+powerInj_UseBat171123[16,7,2]
+powerInj_UseBat171123[16,7,8]
+powerInj_UseBat171123[16,7,15]
+powerInj_UseBat171123[16,7,21]
+powerInj_UseBat171123[16,8,0]
+powerInj_UseBat171123[16,8,1]
+powerInj_UseBat171123[16,8,3]
+powerInj_UseBat171123[16,8,4]
+powerInj_UseBat171123[16,8,10]
+powerInj_UseBat171123[16,8,11]
+powerInj_UseBat171123[16,8,15]
+powerInj_UseBat171123[16,8,18]
+powerInj_UseBat171123[16,8,20]
+powerInj_UseBat171123[16,8,21]
+powerInj_UseBat171123[16,8,23]
+powerInj_UseBat171123[16,9,0]
+powerInj_UseBat171123[16,9,1]
+powerInj_UseBat171123[16,9,9]
+powerInj_UseBat171123[16,10,0]
+powerInj_UseBat171123[16,10,10]
+powerInj_UseBat171123[16,11,17]
+powerInj_UseBat171123[17,0,4]
+powerInj_UseBat171123[17,0,10]
+powerInj_UseBat171123[17,0,11]
+powerInj_UseBat171123[17,1,3]
+powerInj_UseBat171123[17,1,7]
+powerInj_UseBat171123[17,1,9]
+powerInj_UseBat171123[17,1,13]
+powerInj_UseBat171123[17,1,14]
+powerInj_UseBat171123[17,1,18]
+powerInj_UseBat171123[17,2,6]
+powerInj_UseBat171123[17,2,14]
+powerInj_UseBat171123[17,2,17]
+powerInj_UseBat171123[17,3,2]
+powerInj_UseBat171123[17,3,5]
+powerInj_UseBat171123[17,3,16]
+powerInj_UseBat171123[17,4,4]
+powerInj_UseBat171123[17,4,5]
+powerInj_UseBat171123[17,4,6]
+powerInj_UseBat171123[17,4,14]
+powerInj_UseBat171123[17,4,17]
+powerInj_UseBat171123[17,5,2]
+powerInj_UseBat171123[17,5,20]
+powerInj_UseBat171123[17,6,12]
+powerInj_UseBat171123[17,6,19]
+powerInj_UseBat171123[17,7,0]
+powerInj_UseBat171123[17,7,1]
+powerInj_UseBat171123[17,7,9]
+powerInj_UseBat171123[17,7,19]
+powerInj_UseBat171123[17,8,0]
+powerInj_UseBat171123[17,8,5]
+powerInj_UseBat171123[17,8,6]
+powerInj_UseBat171123[17,8,7]
+powerInj_UseBat171123[17,8,11]
+powerInj_UseBat171123[17,8,14]
+powerInj_UseBat171123[17,8,19]
+powerInj_UseBat171123[17,8,20]
+powerInj_UseBat171123[17,8,22]
+powerInj_UseBat171123[17,8,23]
+powerInj_UseBat171123[17,10,0]
+powerInj_UseBat171123[17,10,6]
+powerInj_UseBat171123[17,10,19]
+powerInj_UseBat171123[17,10,20]
+powerInj_UseBat171123[17,11,1]
+powerInj_UseBat171123[17,11,3]
+powerInj_UseBat171123[17,11,4]
+powerInj_UseBat171123[17,11,17]
+powerInj_UseBat171123[17,11,18]
+powerInj_UseBat171123[17,11,21]
+powerInj_UseBat171123[17,11,23]
+powerInj_UseBat171123[0,0,5]
+powerInj_UseBat171123[0,0,8]
+powerInj_UseBat171123[0,0,9]
+powerInj_UseBat171123[0,0,17]
+powerInj_UseBat171123[0,0,23]
+powerInj_UseBat171123[0,1,3]
+powerInj_UseBat171123[0,1,4]
+powerInj_UseBat171123[0,1,23]
+powerInj_UseBat171123[0,2,1]
+powerInj_UseBat171123[0,2,4]
+powerInj_UseBat171123[0,2,23]
+powerInj_UseBat171123[0,3,5]
+powerInj_UseBat171123[0,3,6]
+powerInj_UseBat171123[0,3,9]
+powerInj_UseBat171123[0,4,3]
+powerInj_UseBat171123[0,4,11]
+powerInj_UseBat171123[0,4,12]
+powerInj_UseBat171123[0,4,21]
+powerInj_UseBat171123[0,5,11]
+powerInj_UseBat171123[0,5,19]
+powerInj_UseBat171123[0,5,20]
+powerInj_UseBat171123[0,6,3]
+powerInj_UseBat171123[0,6,6]
+powerInj_UseBat171123[0,6,8]
+powerInj_UseBat171123[0,6,16]
+powerInj_UseBat171123[0,6,17]
+powerInj_UseBat171123[0,7,17]
+powerInj_UseBat171123[0,7,23]
+powerInj_UseBat171123[0,8,0]
+powerInj_UseBat171123[0,8,2]
+powerInj_UseBat171123[0,8,6]
+powerInj_UseBat171123[0,8,7]
+powerInj_UseBat171123[0,8,9]
+powerInj_UseBat171123[0,9,10]
+powerInj_UseBat171123[0,9,13]
+powerInj_UseBat171123[0,9,15]
+powerInj_UseBat171123[0,9,17]
+powerInj_UseBat171123[0,9,20]
+powerInj_UseBat171123[0,9,23]
+powerInj_UseBat171123[0,10,6]
+powerInj_UseBat171123[0,10,14]
+powerInj_UseBat171123[0,10,22]
+powerInj_UseBat171123[0,11,17]
+powerInj_UseBat171123[0,11,20]
+powerInj_UseBat171123[1,0,1]
+powerInj_UseBat171123[1,0,17]
+powerInj_UseBat171123[1,3,3]
+powerInj_UseBat171123[1,3,16]
+powerInj_UseBat171123[1,3,21]
+powerInj_UseBat171123[1,4,10]
+powerInj_UseBat171123[1,4,14]
+powerInj_UseBat171123[1,4,21]
+powerInj_UseBat171123[1,5,12]
+powerInj_UseBat171123[1,6,1]
+powerInj_UseBat171123[1,6,4]
+powerInj_UseBat171123[1,7,4]
+powerInj_UseBat171123[1,7,7]
+powerInj_UseBat171123[1,7,10]
+powerInj_UseBat171123[1,7,11]
+powerInj_UseBat171123[1,7,13]
+powerInj_UseBat171123[1,8,15]
+powerInj_UseBat171123[1,8,19]
+powerInj_UseBat171123[1,9,4]
+powerInj_UseBat171123[1,9,5]
+powerInj_UseBat171123[1,9,8]
+powerInj_UseBat171123[1,9,12]
+powerInj_UseBat171123[1,9,15]
+powerInj_UseBat171123[1,9,17]
+powerInj_UseBat171123[1,10,0]
+powerInj_UseBat171123[1,10,7]
+powerInj_UseBat171123[1,10,23]
+powerInj_UseBat171123[1,11,6]
+powerInj_UseBat171123[1,11,7]
+powerInj_UseBat171123[1,11,8]
+powerInj_UseBat171123[1,11,13]
+powerInj_UseBat171123[1,11,15]
+powerInj_UseBat171123[2,0,10]
+powerInj_UseBat171123[2,1,2]
+powerInj_UseBat171123[2,1,3]
+powerInj_UseBat171123[2,1,8]
+powerInj_UseBat171123[2,1,9]
+powerInj_UseBat171123[2,1,10]
+powerInj_UseBat171123[2,1,11]
+powerInj_UseBat171123[2,1,13]
+powerInj_UseBat171123[2,2,5]
+powerInj_UseBat171123[2,2,7]
+powerInj_UseBat171123[2,2,16]
+powerInj_UseBat171123[2,3,7]
+powerInj_UseBat171123[2,3,13]
+powerInj_UseBat171123[2,3,14]
+powerInj_UseBat171123[2,3,18]
+powerInj_UseBat171123[2,4,8]
+powerInj_UseBat171123[2,4,15]
+powerInj_UseBat171123[2,4,16]
+powerInj_UseBat171123[2,4,18]
+powerInj_UseBat171123[2,4,20]
+powerInj_UseBat171123[2,4,22]
+powerInj_UseBat171123[2,4,23]
+powerInj_UseBat171123[2,5,0]
+powerInj_UseBat171123[2,5,2]
+powerInj_UseBat171123[2,5,3]
+powerInj_UseBat171123[2,5,15]
+powerInj_UseBat171123[2,5,19]
+powerInj_UseBat171123[2,6,4]
+powerInj_UseBat171123[2,6,11]
+powerInj_UseBat171123[2,6,15]
+powerInj_UseBat171123[2,7,7]
+powerInj_UseBat171123[2,7,19]
+powerInj_UseBat171123[2,7,22]
+powerInj_UseBat171123[2,8,2]
+powerInj_UseBat171123[2,8,7]
+powerInj_UseBat171123[2,8,10]
+powerInj_UseBat171123[2,8,12]
+powerInj_UseBat171123[2,8,22]
+powerInj_UseBat171123[2,9,1]
+powerInj_UseBat171123[2,9,3]
+powerInj_UseBat171123[2,9,5]
+powerInj_UseBat171123[2,9,9]
+powerInj_UseBat171123[2,9,11]
+powerInj_UseBat171123[2,9,21]
+powerInj_UseBat171123[2,11,10]
+powerInj_UseBat171123[2,11,19]
+powerInj_UseBat171123[3,0,3]
+powerInj_UseBat171123[3,0,22]
+powerInj_UseBat171123[3,1,1]
+powerInj_UseBat171123[3,1,8]
+powerInj_UseBat171123[3,2,0]
+powerInj_UseBat171123[3,2,12]
+powerInj_UseBat171123[3,2,13]
+powerInj_UseBat171123[3,2,21]
+powerInj_UseBat171123[3,2,23]
+powerInj_UseBat171123[3,3,2]
+powerInj_UseBat171123[3,3,4]
+powerInj_UseBat171123[3,3,16]
+powerInj_UseBat171123[3,3,18]
+powerInj_UseBat171123[3,4,22]
+powerInj_UseBat171123[3,5,1]
+powerInj_UseBat171123[3,5,11]
+powerInj_UseBat171123[3,5,15]
+powerInj_UseBat171123[3,5,21]
+powerInj_UseBat171123[3,6,10]
+powerInj_UseBat171123[3,6,14]
+powerInj_UseBat171123[3,6,19]
+powerInj_UseBat171123[3,7,7]
+powerInj_UseBat171123[3,8,0]
+powerInj_UseBat171123[3,8,7]
+powerInj_UseBat171123[3,8,16]
+powerInj_UseBat171123[3,8,22]
+powerInj_UseBat171123[3,9,11]
+powerInj_UseBat171123[3,9,12]
+powerInj_UseBat171123[3,10,1]
+powerInj_UseBat171123[3,10,8]
+powerInj_UseBat171123[3,11,0]
+powerInj_UseBat171123[3,11,6]
+powerInj_UseBat171123[4,0,2]
+powerInj_UseBat171123[4,0,18]
+powerInj_UseBat171123[4,0,22]
+powerInj_UseBat171123[4,1,21]
+powerInj_UseBat171123[4,1,22]
+powerInj_UseBat171123[4,2,0]
+powerInj_UseBat171123[4,2,1]
+powerInj_UseBat171123[4,2,14]
+powerInj_UseBat171123[4,2,23]
+powerInj_UseBat171123[4,3,0]
+powerInj_UseBat171123[4,3,3]
+powerInj_UseBat171123[4,3,20]
+powerInj_UseBat171123[4,4,4]
+powerInj_UseBat171123[4,4,8]
+powerInj_UseBat171123[4,4,11]
+powerInj_UseBat171123[4,4,15]
+powerInj_UseBat171123[4,4,16]
+powerInj_UseBat171123[4,5,0]
+powerInj_UseBat171123[4,5,2]
+powerInj_UseBat171123[4,5,20]
+powerInj_UseBat171123[4,6,4]
+powerInj_UseBat171123[4,6,5]
+powerInj_UseBat171123[4,7,5]
+powerInj_UseBat171123[4,7,7]
+powerInj_UseBat171123[4,7,9]
+powerInj_UseBat171123[4,7,15]
+powerInj_UseBat171123[4,7,18]
+powerInj_UseBat171123[4,7,20]
+powerInj_UseBat171123[4,7,23]
+powerInj_UseBat171123[4,8,4]
+powerInj_UseBat171123[4,8,5]
+powerInj_UseBat171123[4,8,10]
+powerInj_UseBat171123[4,8,11]
+powerInj_UseBat171123[4,8,14]
+powerInj_UseBat171123[4,8,21]
+powerInj_UseBat171123[4,8,23]
+powerInj_UseBat171123[4,9,1]
+powerInj_UseBat171123[4,9,12]
+powerInj_UseBat171123[4,9,15]
+powerInj_UseBat171123[4,9,19]
+powerInj_UseBat171123[4,9,20]
+powerInj_UseBat171123[4,9,22]
+powerInj_UseBat171123[4,10,0]
+powerInj_UseBat171123[4,11,8]
+powerInj_UseBat171123[4,11,9]
+powerInj_UseBat171123[5,0,4]
+powerInj_UseBat171123[5,0,6]
+powerInj_UseBat171123[5,0,11]
+powerInj_UseBat171123[5,1,14]
+powerInj_UseBat171123[5,1,15]
+powerInj_UseBat171123[5,1,19]
+powerInj_UseBat171123[5,2,13]
+powerInj_UseBat171123[5,2,22]
+powerInj_UseBat171123[5,3,7]
+powerInj_UseBat171123[5,3,23]
+powerInj_UseBat171123[5,4,1]
+powerInj_UseBat171123[5,4,5]
+powerInj_UseBat171123[5,4,8]
+powerInj_UseBat171123[5,4,17]
+powerInj_UseBat171123[5,4,23]
+powerInj_UseBat171123[5,5,1]
+powerInj_UseBat171123[5,5,11]
+powerInj_UseBat171123[5,5,22]
+powerInj_UseBat171123[5,6,8]
+powerInj_UseBat171123[5,6,9]
+powerInj_UseBat171123[5,7,0]
+powerInj_UseBat171123[5,7,21]
+powerInj_UseBat171123[5,8,1]
+powerInj_UseBat171123[5,8,5]
+powerInj_UseBat171123[5,8,10]
+powerInj_UseBat171123[5,8,17]
+powerInj_UseBat171123[5,8,20]
+powerInj_UseBat171123[5,9,0]
+powerInj_UseBat171123[5,9,11]
+powerInj_UseBat171123[5,9,16]
+powerInj_UseBat171123[5,9,17]
+powerInj_UseBat171123[5,10,9]
+powerInj_UseBat171123[5,11,4]
+powerInj_UseBat171123[5,11,10]
+powerInj_UseBat171123[6,1,3]
+powerInj_UseBat171123[6,1,13]
+powerInj_UseBat171123[6,1,18]
+powerInj_UseBat171123[6,2,5]
+powerInj_UseBat171123[6,2,6]
+powerInj_UseBat171123[6,2,7]
+powerInj_UseBat171123[6,2,10]
+powerInj_UseBat171123[6,2,13]
+powerInj_UseBat171123[6,2,14]
+powerInj_UseBat171123[6,2,22]
+powerInj_UseBat171123[6,3,10]
+powerInj_UseBat171123[6,4,5]
+powerInj_UseBat171123[6,4,17]
+powerInj_UseBat171123[6,5,0]
+powerInj_UseBat171123[6,5,9]
+powerInj_UseBat171123[6,5,20]
+powerInj_UseBat171123[6,6,11]
+powerInj_UseBat171123[6,6,13]
+powerInj_UseBat171123[6,7,3]
+powerInj_UseBat171123[6,7,7]
+powerInj_UseBat171123[6,7,13]
+powerInj_UseBat171123[6,7,23]
+powerInj_UseBat171123[6,8,1]
+powerInj_UseBat171123[6,8,5]
+powerInj_UseBat171123[6,8,11]
+powerInj_UseBat171123[6,8,12]
+powerInj_UseBat171123[6,9,2]
+powerInj_UseBat171123[6,9,3]
+powerInj_UseBat171123[6,9,14]
+powerInj_UseBat171123[6,10,8]
+powerInj_UseBat171123[6,10,20]
+powerInj_UseBat171123[6,11,1]
+powerInj_UseBat171123[6,11,9]
+powerInj_UseBat171123[6,11,22]
+powerInj_UseBat171123[7,0,12]
+powerInj_UseBat171123[7,0,17]
+powerInj_UseBat171123[7,0,20]
+powerInj_UseBat171123[7,0,22]
+powerInj_UseBat171123[7,1,14]
+powerInj_UseBat171123[7,1,15]
+powerInj_UseBat171123[7,2,1]
+powerInj_UseBat171123[7,2,2]
+powerInj_UseBat171123[7,2,9]
+powerInj_UseBat171123[7,2,11]
+powerInj_UseBat171123[7,2,14]
+powerInj_UseBat171123[7,2,22]
+powerInj_UseBat171123[7,3,6]
+powerInj_UseBat171123[7,4,1]
+powerInj_UseBat171123[7,4,8]
+powerInj_UseBat171123[7,5,10]
+powerInj_UseBat171123[7,5,14]
+powerInj_UseBat171123[7,5,17]
+powerInj_UseBat171123[7,5,20]
+powerInj_UseBat171123[7,5,22]
+powerInj_UseBat171123[7,6,5]
+powerInj_UseBat171123[7,7,4]
+powerInj_UseBat171123[7,7,7]
+powerInj_UseBat171123[7,7,11]
+powerInj_UseBat171123[7,7,19]
+powerInj_UseBat171123[7,8,2]
+powerInj_UseBat171123[7,8,3]
+powerInj_UseBat171123[7,8,8]
+powerInj_UseBat171123[7,8,23]
+powerInj_UseBat171123[7,9,2]
+powerInj_UseBat171123[7,9,10]
+powerInj_UseBat171123[7,9,11]
+powerInj_UseBat171123[7,9,16]
+powerInj_UseBat171123[7,10,2]
+powerInj_UseBat171123[7,10,17]
+powerInj_UseBat171123[7,10,19]
+powerInj_UseBat171123[7,11,8]
+powerInj_UseBat171123[7,11,13]
+powerInj_UseBat171123[7,11,19]
+powerInj_UseBat171123[8,0,1]
+powerInj_UseBat171123[8,0,2]
+powerInj_UseBat171123[8,0,17]
+powerInj_UseBat171123[8,1,0]
+powerInj_UseBat171123[8,1,6]
+powerInj_UseBat171123[8,1,20]
+powerInj_UseBat171123[8,1,21]
+powerInj_UseBat171123[8,1,23]
+powerInj_UseBat171123[8,3,6]
+powerInj_UseBat171123[8,3,18]
+powerInj_UseBat171123[8,3,19]
+powerInj_UseBat171123[8,4,3]
+powerInj_UseBat171123[8,4,17]
+powerInj_UseBat171123[8,4,18]
+powerInj_UseBat171123[8,4,23]
+powerInj_UseBat171123[8,5,5]
+powerInj_UseBat171123[8,5,6]
+powerInj_UseBat171123[8,5,9]
+powerInj_UseBat171123[8,5,12]
+powerInj_UseBat171123[8,5,16]
+powerInj_UseBat171123[8,5,18]
+powerInj_UseBat171123[8,6,4]
+powerInj_UseBat171123[8,6,5]
+powerInj_UseBat171123[8,6,7]
+powerInj_UseBat171123[8,6,10]
+powerInj_UseBat171123[8,6,18]
+powerInj_UseBat171123[8,7,7]
+powerInj_UseBat171123[8,7,15]
+powerInj_UseBat171123[8,7,16]
+powerInj_UseBat171123[8,7,19]
+powerInj_UseBat171123[8,8,9]
+powerInj_UseBat171123[8,9,10]
+powerInj_UseBat171123[8,9,19]
+powerInj_UseBat171123[8,9,22]
+powerInj_UseBat171123[8,10,15]
+powerInj_UseBat171123[8,10,21]
+powerInj_UseBat171123[8,11,1]
+powerInj_UseBat171123[8,11,16]
+powerInj_UseBat171123[8,11,18]
+powerInj_UseBat171123[8,11,21]
+powerInj_UseBat171123[9,0,1]
+powerInj_UseBat171123[9,0,14]
+powerInj_UseBat171123[9,0,20]
+powerInj_UseBat171123[9,0,21]
+powerInj_UseBat171123[9,1,5]
+powerInj_UseBat171123[9,1,6]
+powerInj_UseBat171123[9,1,17]
+powerInj_UseBat171123[9,1,21]
+powerInj_UseBat171123[9,1,23]
+powerInj_UseBat171123[9,2,10]
+powerInj_UseBat171123[9,3,4]
+powerInj_UseBat171123[9,3,5]
+powerInj_UseBat171123[9,3,8]
+powerInj_UseBat171123[9,3,21]
+powerInj_UseBat171123[9,3,22]
+powerInj_UseBat171123[9,3,23]
+powerInj_UseBat171123[9,4,2]
+powerInj_UseBat171123[9,4,12]
+powerInj_UseBat171123[9,5,3]
+powerInj_UseBat171123[9,5,6]
+powerInj_UseBat171123[9,5,7]
+powerInj_UseBat171123[9,5,15]
+powerInj_UseBat171123[9,5,22]
+powerInj_UseBat171123[9,6,7]
+powerInj_UseBat171123[9,6,8]
+powerInj_UseBat171123[9,6,10]
+powerInj_UseBat171123[9,6,11]
+powerInj_UseBat171123[9,7,0]
+powerInj_UseBat171123[9,7,11]
+powerInj_UseBat171123[9,7,16]
+powerInj_UseBat171123[9,8,10]
+powerInj_UseBat171123[9,8,12]
+powerInj_UseBat171123[9,8,13]
+powerInj_UseBat171123[9,8,17]
+powerInj_UseBat171123[9,9,9]
+powerInj_UseBat171123[9,9,10]
+powerInj_UseBat171123[9,9,12]
+powerInj_UseBat171123[9,9,17]
+powerInj_UseBat171123[9,10,16]
+powerInj_UseBat171123[9,11,3]
+powerInj_UseBat171123[9,11,14]
+powerInj_UseBat171123[10,0,1]
+powerInj_UseBat171123[10,0,9]
+powerInj_UseBat171123[10,0,10]
+powerInj_UseBat171123[10,0,13]
+powerInj_UseBat171123[10,0,14]
+powerInj_UseBat171123[10,0,17]
+powerInj_UseBat171123[10,0,20]
+powerInj_UseBat171123[10,1,9]
+powerInj_UseBat171123[10,1,11]
+powerInj_UseBat171123[10,1,13]
+powerInj_UseBat171123[10,1,16]
+powerInj_UseBat171123[10,1,17]
+powerInj_UseBat171123[10,2,1]
+powerInj_UseBat171123[10,2,3]
+powerInj_UseBat171123[10,2,4]
+powerInj_UseBat171123[10,2,6]
+powerInj_UseBat171123[10,2,13]
+powerInj_UseBat171123[10,3,2]
+powerInj_UseBat171123[10,3,7]
+powerInj_UseBat171123[10,4,2]
+powerInj_UseBat171123[10,4,11]
+powerInj_UseBat171123[10,4,13]
+powerInj_UseBat171123[10,4,18]
+powerInj_UseBat171123[10,5,13]
+powerInj_UseBat171123[10,6,17]
+powerInj_UseBat171123[10,7,5]
+powerInj_UseBat171123[10,7,9]
+powerInj_UseBat171123[10,7,12]
+powerInj_UseBat171123[10,8,3]
+powerInj_UseBat171123[10,8,10]
+powerInj_UseBat171123[10,8,13]
+powerInj_UseBat171123[10,8,20]
+powerInj_UseBat171123[10,8,23]
+powerInj_UseBat171123[10,9,0]
+powerInj_UseBat171123[10,9,12]
+powerInj_UseBat171123[10,9,13]
+powerInj_UseBat171123[10,10,1]
+powerInj_UseBat171123[10,11,16]
+powerInj_UseBat171123[11,0,5]
+powerInj_UseBat171123[11,0,7]
+powerInj_UseBat171123[11,0,18]
+powerInj_UseBat171123[11,0,19]
+powerInj_UseBat171123[11,0,20]
+powerInj_UseBat171123[11,1,7]
+powerInj_UseBat171123[11,1,14]
+powerInj_UseBat171123[11,1,16]
+powerInj_UseBat171123[11,2,1]
+powerInj_UseBat171123[11,2,8]
+powerInj_UseBat171123[11,2,16]
+powerInj_UseBat171123[11,2,17]
+powerInj_UseBat171123[11,3,3]
+powerInj_UseBat171123[11,3,6]
+powerInj_UseBat171123[11,3,7]
+powerInj_UseBat171123[11,3,11]
+powerInj_UseBat171123[11,4,2]
+powerInj_UseBat171123[11,4,8]
+powerInj_UseBat171123[11,5,14]
+powerInj_UseBat171123[11,5,15]
+powerInj_UseBat171123[11,5,19]
+powerInj_UseBat171123[11,6,5]
+powerInj_UseBat171123[11,6,13]
+powerInj_UseBat171123[11,6,22]
+powerInj_UseBat171123[11,7,12]
+powerInj_UseBat171123[11,7,18]
+powerInj_UseBat171123[11,8,1]
+powerInj_UseBat171123[11,8,4]
+powerInj_UseBat171123[11,8,6]
+powerInj_UseBat171123[11,8,7]
+powerInj_UseBat171123[11,8,22]
+powerInj_UseBat171123[11,9,6]
+powerInj_UseBat171123[11,9,7]
+powerInj_UseBat171123[11,9,8]
+powerInj_UseBat171123[11,9,17]
+powerInj_UseBat171123[11,10,0]
+powerInj_UseBat171123[11,11,15]
+powerInj_UseBat171123[12,0,21]
+powerInj_UseBat171123[12,1,18]
+powerInj_UseBat171123[12,2,4]
+powerInj_UseBat171123[12,2,11]
+powerInj_UseBat171123[12,2,15]
+powerInj_UseBat171123[12,2,18]
+powerInj_UseBat171123[12,2,20]
+powerInj_UseBat171123[12,3,2]
+powerInj_UseBat171123[12,3,7]
+powerInj_UseBat171123[12,3,10]
+powerInj_UseBat171123[12,3,12]
+powerInj_UseBat171123[12,4,15]
+powerInj_UseBat171123[12,4,16]
+powerInj_UseBat171123[12,4,22]
+powerInj_UseBat171123[12,4,23]
+powerInj_UseBat171123[12,5,7]
+powerInj_UseBat171123[12,5,12]
+powerInj_UseBat171123[12,5,15]
+powerInj_UseBat171123[12,5,16]
+powerInj_UseBat171123[12,6,2]
+powerInj_UseBat171123[12,6,6]
+powerInj_UseBat171123[12,6,10]
+powerInj_UseBat171123[12,6,14]
+powerInj_UseBat171123[12,6,20]
+powerInj_UseBat171123[12,7,2]
+powerInj_UseBat171123[12,8,8]
+powerInj_UseBat171123[12,8,16]
+powerInj_UseBat171123[12,9,6]
+powerInj_UseBat171123[12,10,0]
+powerInj_UseBat171123[12,10,1]
+powerInj_UseBat171123[12,10,3]
+powerInj_UseBat171123[12,11,7]
+powerInj_UseBat171123[13,0,23]
+powerInj_UseBat171123[13,1,3]
+powerInj_UseBat171123[13,1,10]
+powerInj_UseBat171123[13,1,11]
+powerInj_UseBat171123[13,1,15]
+powerInj_UseBat171123[13,2,2]
+powerInj_UseBat171123[13,2,6]
+powerInj_UseBat171123[13,2,14]
+powerInj_UseBat171123[13,2,16]
+powerInj_UseBat171123[13,3,9]
+powerInj_UseBat171123[13,3,15]
+powerInj_UseBat171123[13,3,16]
+powerInj_UseBat171123[13,4,4]
+powerInj_UseBat171123[13,4,6]
+powerInj_UseBat171123[13,4,7]
+powerInj_UseBat171123[13,4,12]
+powerInj_UseBat171123[13,4,22]
+powerInj_UseBat171123[13,5,3]
+powerInj_UseBat171123[13,5,5]
+powerInj_UseBat171123[13,5,14]
+powerInj_UseBat171123[13,5,16]
+powerInj_UseBat171123[13,6,0]
+powerInj_UseBat171123[13,6,3]
+powerInj_UseBat171123[13,6,7]
+powerInj_UseBat171123[13,6,8]
+powerInj_UseBat171123[13,6,18]
+powerInj_UseBat171123[13,7,0]
+powerInj_UseBat171123[13,7,3]
+powerInj_UseBat171123[13,7,16]
+powerInj_UseBat171123[13,7,23]
+powerInj_UseBat171123[13,8,1]
+powerInj_UseBat171123[13,8,10]
+powerInj_UseBat171123[13,8,11]
+powerInj_UseBat171123[13,8,13]
+powerInj_UseBat171123[13,8,22]
+powerInj_UseBat171123[13,9,6]
+powerInj_UseBat171123[13,9,16]
+powerInj_UseBat171123[13,9,22]
+powerInj_UseBat171123[13,10,3]
+powerInj_UseBat171123[13,10,11]
+powerInj_UseBat171123[13,10,14]
+powerInj_UseBat171123[13,10,19]
+powerInj_UseBat171123[13,11,3]
+powerInj_UseBat171123[13,11,17]
+powerInj_UseBat171123[14,1,0]
+powerInj_UseBat171123[14,1,3]
+powerInj_UseBat171123[14,1,5]
+powerInj_UseBat171123[14,1,6]
+powerInj_UseBat171123[14,2,7]
+powerInj_UseBat171123[14,2,15]
+powerInj_UseBat171123[14,2,16]
+powerInj_UseBat171123[14,3,16]
+powerInj_UseBat171123[14,3,22]
+powerInj_UseBat171123[14,4,7]
+powerInj_UseBat171123[14,4,16]
+powerInj_UseBat171123[14,4,17]
+powerInj_UseBat171123[14,5,2]
+powerInj_UseBat171123[14,5,6]
+powerInj_UseBat171123[14,5,13]
+powerInj_UseBat171123[14,5,21]
+powerInj_UseBat171123[14,5,23]
+powerInj_UseBat171123[14,6,5]
+powerInj_UseBat171123[14,7,11]
+powerInj_UseBat171123[14,7,14]
+powerInj_UseBat171123[14,7,19]
+powerInj_UseBat171123[14,8,0]
+powerInj_UseBat171123[14,8,13]
+powerInj_UseBat171123[14,9,3]
+powerInj_UseBat171123[14,9,12]
+powerInj_UseBat171123[14,9,17]
+powerInj_UseBat171123[14,10,5]
+powerInj_UseBat171123[14,11,1]
+powerInj_UseBat171123[14,11,6]
+powerInj_UseBat171123[14,11,8]
+powerInj_UseBat171123[14,11,12]
+powerInj_UseBat171123[14,11,20]
+powerInj_UseBat171123[14,11,22]
+powerInj_UseBat171123[15,0,2]
+powerInj_UseBat171123[15,0,3]
+powerInj_UseBat171123[15,0,7]
+powerInj_UseBat171123[15,0,14]
+powerInj_UseBat171123[15,1,0]
+powerInj_UseBat171123[15,1,5]
+powerInj_UseBat171123[15,2,7]
+powerInj_UseBat171123[15,2,12]
+powerInj_UseBat171123[15,2,20]
+powerInj_UseBat171123[15,3,1]
+powerInj_UseBat171123[15,3,5]
+powerInj_UseBat171123[15,3,12]
+powerInj_UseBat171123[15,3,15]
+powerInj_UseBat171123[15,4,12]
+powerInj_UseBat171123[15,4,15]
+powerInj_UseBat171123[15,4,19]
+powerInj_UseBat171123[15,5,0]
+powerInj_UseBat171123[15,5,4]
+powerInj_UseBat171123[15,5,16]
+powerInj_UseBat171123[15,5,19]
+powerInj_UseBat171123[15,6,7]
+powerInj_UseBat171123[15,6,10]
+powerInj_UseBat171123[15,6,13]
+powerInj_UseBat171123[15,6,22]
+powerInj_UseBat171123[15,7,3]
+powerInj_UseBat171123[15,7,4]
+powerInj_UseBat171123[15,7,10]
+powerInj_UseBat171123[15,7,16]
+powerInj_UseBat171123[15,9,8]
+powerInj_UseBat171123[15,9,15]
+powerInj_UseBat171123[15,10,5]
+powerInj_UseBat171123[15,10,13]
+powerInj_UseBat171123[15,10,21]
+powerInj_UseBat171123[15,11,6]
+powerInj_UseBat171123[15,11,14]
+powerInj_UseBat171123[15,11,23]
+powerInj_UseBat171123[16,0,5]
+powerInj_UseBat171123[16,1,3]
+powerInj_UseBat171123[16,1,5]
+powerInj_UseBat171123[16,1,6]
+powerInj_UseBat171123[16,2,5]
+powerInj_UseBat171123[16,2,9]
+powerInj_UseBat171123[16,2,10]
+powerInj_UseBat171123[16,3,2]
+powerInj_UseBat171123[16,3,14]
+powerInj_UseBat171123[16,3,20]
+powerInj_UseBat171123[16,3,22]
+powerInj_UseBat171123[16,4,1]
+powerInj_UseBat171123[16,5,4]
+powerInj_UseBat171123[16,5,9]
+powerInj_UseBat171123[16,5,17]
+powerInj_UseBat171123[16,7,4]
+powerInj_UseBat171123[16,7,7]
+powerInj_UseBat171123[16,7,9]
+powerInj_UseBat171123[16,7,11]
+powerInj_UseBat171123[16,7,20]
+powerInj_UseBat171123[16,7,22]
+powerInj_UseBat171123[16,8,0]
+powerInj_UseBat171123[16,8,9]
+powerInj_UseBat171123[16,8,20]
+powerInj_UseBat171123[16,9,10]
+powerInj_UseBat171123[16,9,12]
+powerInj_UseBat171123[16,10,7]
+powerInj_UseBat171123[16,10,20]
+powerInj_UseBat171123[16,11,4]
+powerInj_UseBat171123[16,11,10]
+powerInj_UseBat171123[16,11,22]
+powerInj_UseBat171123[17,0,2]
+powerInj_UseBat171123[17,0,6]
+powerInj_UseBat171123[17,0,17]
+powerInj_UseBat171123[17,0,19]
+powerInj_UseBat171123[17,1,7]
+powerInj_UseBat171123[17,1,19]
+powerInj_UseBat171123[17,3,15]
+powerInj_UseBat171123[17,3,23]
+powerInj_UseBat171123[17,4,2]
+powerInj_UseBat171123[17,4,13]
+powerInj_UseBat171123[17,4,14]
+powerInj_UseBat171123[17,5,10]
+powerInj_UseBat171123[17,6,6]
+powerInj_UseBat171123[17,6,10]
+powerInj_UseBat171123[17,6,11]
+powerInj_UseBat171123[17,6,17]
+powerInj_UseBat171123[17,6,20]
+powerInj_UseBat171123[17,7,1]
+powerInj_UseBat171123[17,7,8]
+powerInj_UseBat171123[17,8,1]
+powerInj_UseBat171123[17,8,5]
+powerInj_UseBat171123[17,8,6]
+powerInj_UseBat171123[17,8,11]
+powerInj_UseBat171123[17,8,16]
+powerInj_UseBat171123[17,8,21]
+powerInj_UseBat171123[17,9,4]
+powerInj_UseBat171123[17,9,15]
+powerInj_UseBat171123[17,9,18]
+powerInj_UseBat171123[17,10,10]
+powerInj_UseBat171123[17,10,13]
+powerInj_UseBat171123[17,10,20]
+powerInj_UseBat171123[17,10,22]
+powerInj_UseBat171123[17,11,1]
+powerInj_UseBat171123[17,11,4]
+powerInj_UseBat171123[17,11,10]
+powerInj_UseBat171123[17,11,11]

@@ -10,6 +10,7 @@ from __future__ import division
 import gurobipy as gp
 import numpy as np
 import pickle
+import pandas as pd
 
 # import own function
 import python.hpopt_energy as hpopt
@@ -719,13 +720,10 @@ def compute(net, eco, devs, clustered, params, options):
         f.close()
         
 
-    #print(voltNode[5,11,16])
-    print(powerLine[4,5,11,16])
-    #for [n,m] in nodeLines:
     print(voltNode[1,5,17])
     print(voltNode[2,5,17])
     print(voltNode[3,5,17])
-      #  print(voltLoad[m,5,17])
+
     #%% retrieve results
     
     # grid results    
@@ -748,8 +746,7 @@ def compute(net, eco, devs, clustered, params, options):
         res_voltLoad[m] = np.array([[voltLoad[m,d,t].X for t in timesteps] for d in days])
     
         
- #   res_voltNode = np.array([voltNode[m,d,t].X for m in gridnodes])
-    
+
     # battery operation results
     res_capacity = {}
     res_powerCh = {}
