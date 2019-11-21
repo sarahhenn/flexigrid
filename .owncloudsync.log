@@ -8362,3 +8362,6 @@
 13:03:46||results/inputs_EFH_2005.pkl|INST_SYNC|Up|1574341427|e039eb053246e565a1aa8816f54e412a|1082537|2072340103oc8d6fac567d|4||204|1082537|1574341323|0e3dd88a-4e6c-45d1-b84a-499a21b7f78e|
 13:03:46||gurobi.log|INST_SYNC|Up|1574341427|128a1320c1899d62bb6865461a3a7318|2894166|2072338947oc8d6fac567d|4||204|2887847|1574341404|757b95c8-01ce-4931-9929-787bd6cd2c08|
 #=#=#=# Syncrun finished 2019-11-21T13:03:50Z (last step: 782 msec, total: 939 msec)
+#=#=#=# Syncrun started 2019-11-21T13:04:26Z
+#=#=#=#=# Propagation starts 2019-11-21T13:04:27Z (last step: 229 msec, total: 229 msec)
+#=#=#=# Syncrun finished 2019-11-21T13:04:27Z (last step: 98 msec, total: 327 msec)
