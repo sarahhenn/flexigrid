@@ -173,7 +173,8 @@ def compute(net, eco, devs, clustered, params, options):
     gridnodes = list(nodes["grid"])
     
     # set nominal Voltage for grid
-    U_nominal = net.trafo.vn_lv_kv*1000
+    #U_nominal = net.trafo.vn_lv_kv*1000
+    U_nominal = 400
     
     # extract existing lines 
     nodeLines = []
@@ -282,11 +283,9 @@ def compute(net, eco, devs, clustered, params, options):
     # set line bounds due to technical limits                             
     powerLine = model.addVars(nodeLines,days,timesteps, vtype="C", lb=-10000, name="powerLine_")
     voltLine = model.addVars(nodeLines,days,timesteps, vtype="C", lb=-10000, name="voltLine_")
-    #voltNode = model.addVars(gridnodes, days, timesteps, vtype="C", lb=voltNode_min, ub=voltNode_max, name="voltNode_"+str(n)+str(t))
-    #voltNode = model.addVars(gridnodes, days, timesteps, vtype="C", name="voltNode_"+str(n)+str(t))
-    #voltLoad = model.addVars(gridnodes, days, timesteps, vtype="C", name="voltLoad_"+str(n)+str(t))
-    voltNode = model.addVars(gridnodes, days, timesteps, vtype="C", name="voltNode_")
-    voltLoad = model.addVars(gridnodes, days, timesteps, vtype="C", name="voltLoad_")
+    #voltNode = model.addVars(gridnodes, days, timesteps, vtype="C", name="voltNode_")
+    voltNode = model.addVars(gridnodes, days, timesteps, vtype="C", lb=voltNode_min, ub=voltNode_max, name="voltNode_")
+    #voltLoad = model.addVars(gridnodes, days, timesteps, vtype="C", name="voltLoad_")
     
     # add bat variables to model
     x_bat = model.addVars(gridnodes, vtype="B", name="bat_existance_"+str(n))      
@@ -503,45 +502,17 @@ def compute(net, eco, devs, clustered, params, options):
                     model.addConstr(voltLine[n,m,d,t] == (powerLine[n,m,d,t] * lineLength[n,m] * specRes_ap[n,m] / U_nominal))
                     
     
-    #voltLoad[1,d,t] = voltNode_min
-    #voltLoad[1,d,t] = U_nominal
+
+    for d in days:
+        for t in timesteps:
+            model.addConstr(voltNode[1,d,t] == U_nominal)  
+            
     for [n,m] in nodeLines:
         for d in days:
             for t in timesteps:
-                    voltNode[1,d,t] = U_nominal
-                    #voltLoad[1,d,t] = voltNode_min
-                    #
-                    # ## voltNode ohne Constraint ist tupledict!
-                    #
-                    model.addConstr(voltLine[n,m,d,t] == voltNode[n,d,t] - voltNode[m,d,t], name="node voltage_")
-                    #voltLine[n,m,d,t] = voltNode[n,d,t] - voltNode[m,d,t]
+                    model.addConstr(voltNode[m,d,t] == voltNode[n,d,t] - voltLine[n,m,d,t], name="node voltage_")
                     
-                    #voltNode[m,d,t] = (voltNode[n,d,t] - voltLine[n,m,d,t])
-                    #model.addConstr(voltLine[n,m,d,t] == (voltNode[n,d,t] - voltNode[m,d,t]))
-                    #model.addConstr(voltLoad[n,d,t] - voltNode[m,d,t] == (voltLine[n,m,d,t]))
-                    #model.addConstr(0 == (voltNode[n,d,t] - voltLoad[m,d,t] - voltLine[n,m,d,t]))
-                    #model.addConstr(voltLoad[m,d,t] == (voltNode[m,d,t]))
-                    #
-                    #model.addConstr(voltNode[m,d,t] == (voltLoad[n,d,t] - voltLine[n,m,d,t]))
-                    #model.addConstr(voltLoad[m,d,t] == (voltNode[n,d,t] - voltLine[n,m,d,t]))
-                    #
-                    #model.addConstr(0 == (voltLoad[n,d,t] - voltNode[m,d,t] - voltLine[n,m,d,t]))
-                    #model.addConstr(voltLoad[m,d,t] == (voltNode[n,d,t] - voltLine[n,m,d,t]))
-                    #
-                    #voltNode[m,d,t] = (voltLoad[n,d,t] - voltLine[n,m,d,t])
-                    #voltLoad[m,d,t] = (voltNode[n,d,t] - voltLine[n,m,d,t])
-                    #
-#                    #voltNode definieren und füllen!
-#                    #model.addConstr(voltNode[m,d,t] <= voltNode_max, name="node volt max_"+str(n)+str(m)+str(t))
-#                    #model.addConstr(voltNode[m,d,t] >= voltNode_min, name="node volt min_"+str(n)+str(m)+str(t))
-
-#   for n in gridnodes:
-#           for d in days:
-#               for t in timesteps:
-#                       model.addConstr(voltLine.sum(n,'*',d,t) - voltLine.sum('*',n,d,t) == 
-#                                       powerInj[n,d,t] - powerLoad[n,d,t], name="node balance_"+str(n))
-
-
+                   
    #%% battery constraints
     
     # Battery can be switched on only if it has been purchased       
@@ -718,11 +689,7 @@ def compute(net, eco, devs, clustered, params, options):
                 f.write('%s' % c.constrName)
                 f.write('\n')
         f.close()
-        
 
-    print(voltNode[1,5,17])
-    print(voltNode[2,5,17])
-    print(voltNode[3,5,17])
 
     #%% retrieve results
     
@@ -739,13 +706,9 @@ def compute(net, eco, devs, clustered, params, options):
         res_voltLine[n,m] = np.array([[voltLine[n,m,d,t].X for t in timesteps] for d in days])
                 
     res_voltNode = {}
-    for m in gridnodes:
-        res_voltNode[m] = np.array([[voltNode[m,d,t].X for t in timesteps] for d in days])
-    res_voltLoad = {}
-    for m in gridnodes:
-        res_voltLoad[m] = np.array([[voltLoad[m,d,t].X for t in timesteps] for d in days])
-    
-        
+    for n in gridnodes:
+        res_voltNode[n] = np.array([[voltNode[n,d,t].X for t in timesteps] for d in days])
+        #res_voltNode[n] = np.array([[voltNode[n,d,t] for t in timesteps] for d in days])       
 
     # battery operation results
     res_capacity = {}
@@ -878,8 +841,7 @@ def compute(net, eco, devs, clustered, params, options):
         pickle.dump(res_heatHP, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_heatEH, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_voltLine, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_voltNode, fout, pickle.HIGHEST_PROTOCOL)##
-        pickle.dump(res_voltLoad, fout, pickle.HIGHEST_PROTOCOL)##        
+#        pickle.dump(res_voltNode, fout, pickle.HIGHEST_PROTOCOL)##      
         pickle.dump(res_powerHPGrid, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerHPPV, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerHPBat, fout, pickle.HIGHEST_PROTOCOL)
@@ -890,4 +852,4 @@ def compute(net, eco, devs, clustered, params, options):
         pickle.dump(res_actBat, fout, pickle.HIGHEST_PROTOCOL)
         
         
-        return (res_c_total_grid, res_emission_grid)
+        return (res_c_total_grid, res_emission_grid, res_voltNode)

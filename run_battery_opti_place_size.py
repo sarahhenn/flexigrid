@@ -56,6 +56,10 @@ options =   {"static_emissions": True,  # True: calculation with static emission
 
 #determine the optimization folder in which all input data and results are placed
 operationFolder="C:\\Users\\Chrissi\\Git\\Flexigrid"
+'''
+Hier ist dein operationFolder noch abgelegt ;-D
+'''
+#operationFolder="D:\\git\\flexigrid"       
 #the input data is always in this source folder
 sourceFolder=operationFolder+"\\input"
 
@@ -175,7 +179,7 @@ with open(filename, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
          
-(costs, emission) = opti.compute(net, eco, devs, clustered, params, options)
+(costs, emission, voltNode) = opti.compute(net, eco, devs, clustered, params, options)
 
 outputs = reader.read_results(building_type + "_" + building_age)
 
