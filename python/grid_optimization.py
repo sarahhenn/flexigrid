@@ -763,11 +763,11 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     
     # set objective function
     
-    #model.setObjective(sum((emission_nodes[n])for n in gridnodes), gp.GRB.MINIMIZE)
+    model.setObjective(sum((emission_nodes[n])for n in gridnodes), gp.GRB.MINIMIZE)
 
     """model.setObjective(sum(sum(sum((powerSubtr[n, d, t] - powerInj[n, d, t])for n in gridnodes) * clustered["co2_stat"][d,t]
                                for t in timesteps) for d in days), gp.GRB.MINIMIZE)"""
-    model.setObjective(c_total_nodes, gp.GRB.MINIMIZE)
+    #model.setObjective(c_total_nodes, gp.GRB.MINIMIZE)
 
     # adgust gurobi settings
     #model.Params.TimeLimit = 60
@@ -1033,7 +1033,7 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
     print("optimization successfull")
 
-    return (res_c_total_grid, res_emission_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, res_powerInj, res_powerSubtr, res_emission_nodes, res_c_total_nodes, costs_added)
+    return (res_c_total_grid, res_emission_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, res_powerInj, res_powerSubtr, res_emission_nodes, res_c_total_nodes, emissions_added)
 
 
 

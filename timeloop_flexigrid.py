@@ -20,8 +20,8 @@ def timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, g
 
     #create controllers (to control P values of the load and the gen, which are now combined as positive and negative values in one dataframe)
     #create one controller for every node.
-    for n in gridnodes:
-        create_controllers(net, dsInj, dsSubtr, dsTotal, n)
+    create_controllers(net, dsInj, dsSubtr, dsTotal, gridnodes)
+    #create_controllers(net, dsInj, dsSubtr, dsTotal, gridnodes)
 
     #the output writer with the desired results to be stored to files
     ow = create_output_writer(net, timesteps, output_dir=output_dir)
@@ -59,10 +59,16 @@ def retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes):
 
     return profilesInj, profilesSubtr, dsInj, dsSubtr, dsTotal
 
-def create_controllers(net, dsInj, dsSubtr, dsTotal, n):
+def create_controllers(net, dsInj, dsSubtr, dsTotal,gridnodes):
 
-    #ConstControl(net, element='sgen',variable='p_mw',element_index=net.load.index,data_source=dsInj, profile_name=[n])
-    ConstControl(net, element='load', variable='p_mw', element_index=net.load.index,data_source=dsTotal, profile_name=[n])
+    """gridnodes_str = []
+    for n in gridnodes:
+        gridnodes_str.append(str(gridnodes[n]))"""
+    #ConstControl(net, element='sgen',variable='p_mw',element_index=net.load.index,data_source=dsInj, profile_name=[gridnodes])
+    #ConstControl(net, element='sgen',variable='p_mw',element_index=net.load.index,data_source=dsInj, profile_name=gridnodes)
+    #ConstControl(net, element='load', variable='p_mw', element_index=net.load.index,data_source=dsTotal, profile_name=dsTotal.df.columns)
+    for n in gridnodes:
+        ConstControl(net, element='load', variable='p_mw', element_index=net.load.index,data_source=dsTotal, profile_name=[n])
 
     """create the output writer. Instead of saving the whole net (which would take a lot of time), we extract only pre defined outputs.
         In this case we:
@@ -78,7 +84,7 @@ def create_output_writer(net, timesteps, output_dir):
     #ow.log_variable('res_load', 'p_mw')
     ow.log_variable('res_bus', 'vm_pu')
     ow.log_variable('res_line', 'loading_percent')
-    ow.log_variable('res_line', 'i_ka')
+    #ow.log_variable('res_line', 'i_ka')
     return ow
 
 
