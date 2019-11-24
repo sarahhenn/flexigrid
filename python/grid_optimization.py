@@ -162,19 +162,24 @@ def compute(net, eco, devs, clustered, params, options):
     nodes["trafo"] = net.trafo['lv_bus'].to_numpy()
     nodes["load"] = net.load['bus'].to_numpy()
     #nodeInj = net.load['bus'].to_numpy()
-    nodes["branch"] = nodes["grid"]  
-    nodes["branch"] = np.delete(nodes["branch"],nodes["load"])   #Reihenfolge wichtig !
-    nodes["branch"] = np.delete(nodes["branch"],[0,1])           #Reihenfolge wichtig !
-   
+    nodes["supply"] = nodes["grid"]  
+    nodes["supply"] = np.delete(nodes["supply"],nodes["load"])   #Reihenfolge wichtig !
+    nodes["supply"] = np.delete(nodes["supply"],[0,1])           #Reihenfolge wichtig !
+    
     nodes["bat"] = net.load['bus'].to_numpy()   #Batterien an Loads zugelassen    
-  #  nodes["bat"] = nodes["branch"]   #Batterien an Verzweigungen zugelassen
+  #  nodes["bat"] = nodes["supply"]   #Batterien an Verzweigungen zugelassen
 
     
     gridnodes = list(nodes["grid"])
     
-    # set nominal Voltage for grid
-    #U_nominal = net.trafo.vn_lv_kv*1000
-    U_nominal = 400
+    # set nominal Voltage for grid and Voltage bounds for nodes
+    #U_nominal = net.trafo.vn_lv_kv*1000 #Series object
+    #U_nominal = U_nominal.astype(float)
+    #U_nominal["vn_lv_kv"] = U_nominal.vn_lv_kv.astype(float)
+    U_nominal = 400.0
+    voltNode_max         = U_nominal*1.04
+    voltNode_min         = U_nominal*0.96
+    
     
     # extract existing lines 
     nodeLines = []
@@ -189,8 +194,6 @@ def compute(net, eco, devs, clustered, params, options):
         powerLine_max[n,m] = (net.line['max_i_ka'][nodeLines.index((n,m))])*U_nominal
     
     # maximal and minimal voltage in kV as difference from rated voltage
-    #voltNode_max = {}  #
-    #voltNode_min = {}
     lineLength = {}
     specRes_r = {}
     specRes_x = {}
@@ -204,8 +207,7 @@ def compute(net, eco, devs, clustered, params, options):
    
     
     #for n in gridnodes:
-        voltNode_max         = U_nominal*1.04
-        voltNode_min         = U_nominal*0.96
+
         
     # extract battery nodes and define technical data for them
     capBat_max = {}
@@ -285,7 +287,7 @@ def compute(net, eco, devs, clustered, params, options):
     voltLine = model.addVars(nodeLines,days,timesteps, vtype="C", lb=-10000, name="voltLine_")
     #voltNode = model.addVars(gridnodes, days, timesteps, vtype="C", name="voltNode_")
     voltNode = model.addVars(gridnodes, days, timesteps, vtype="C", lb=voltNode_min, ub=voltNode_max, name="voltNode_")
-    #voltLoad = model.addVars(gridnodes, days, timesteps, vtype="C", name="voltLoad_")
+
     
     # add bat variables to model
     x_bat = model.addVars(gridnodes, vtype="B", name="bat_existance_"+str(n))      
@@ -708,8 +710,7 @@ def compute(net, eco, devs, clustered, params, options):
     res_voltNode = {}
     for n in gridnodes:
         res_voltNode[n] = np.array([[voltNode[n,d,t].X for t in timesteps] for d in days])
-        #res_voltNode[n] = np.array([[voltNode[n,d,t] for t in timesteps] for d in days])       
-
+        
     # battery operation results
     res_capacity = {}
     res_powerCh = {}
@@ -799,57 +800,58 @@ def compute(net, eco, devs, clustered, params, options):
     
     # save results 
     with open(options["filename_results"], "wb") as fout:
-        pickle.dump(model.ObjVal, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(model.Runtime, fout, pickle.HIGHEST_PROTOCOL)  
-        pickle.dump(model.MIPGap, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerTrafoLoad, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerTrafoInj, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerLine, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_capacity, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerCh, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerDis, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_SOC, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_SOC_init, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerLoad, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerInj, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerInjPV, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerInjBat, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerUsePV, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerUseBat, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerPV, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerPlug, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_c_inv, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_c_om, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_c_dem, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_c_fix, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_rev, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_c_dem_grid, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_rev_grid, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_c_node, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_c_total_nodes, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_c_total_grid, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_emission_nodes, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_emission_grid, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(nodes, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(nodeLines, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_actHP, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerHP, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerEH, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_SOC_tes, fout, pickle.HIGHEST_PROTOCOL)   
-        pickle.dump(res_ch_tes, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_dch_tes, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_heatHP, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_heatEH, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_voltLine, fout, pickle.HIGHEST_PROTOCOL)
-#        pickle.dump(res_voltNode, fout, pickle.HIGHEST_PROTOCOL)##      
-        pickle.dump(res_powerHPGrid, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerHPPV, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerHPBat, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerEHGrid, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerEHPV, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_powerEHBat, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_exBat, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_actBat, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(model.ObjVal, fout, pickle.HIGHEST_PROTOCOL)            #01
+        pickle.dump(model.Runtime, fout, pickle.HIGHEST_PROTOCOL)           #02  
+        pickle.dump(model.MIPGap, fout, pickle.HIGHEST_PROTOCOL)            #03
+        pickle.dump(res_powerTrafoLoad, fout, pickle.HIGHEST_PROTOCOL)      #04
+        pickle.dump(res_powerTrafoInj, fout, pickle.HIGHEST_PROTOCOL)       #05
+        pickle.dump(res_powerLine, fout, pickle.HIGHEST_PROTOCOL)           #06
+        pickle.dump(res_capacity, fout, pickle.HIGHEST_PROTOCOL)            #07
+        pickle.dump(res_powerCh, fout, pickle.HIGHEST_PROTOCOL)             #08
+        pickle.dump(res_powerDis, fout, pickle.HIGHEST_PROTOCOL)            #09
+        pickle.dump(res_SOC, fout, pickle.HIGHEST_PROTOCOL)                 #10
+        pickle.dump(res_SOC_init, fout, pickle.HIGHEST_PROTOCOL)            #11
+        pickle.dump(res_powerLoad, fout, pickle.HIGHEST_PROTOCOL)           #12
+        pickle.dump(res_powerInj, fout, pickle.HIGHEST_PROTOCOL)            #13
+        pickle.dump(res_powerInjPV, fout, pickle.HIGHEST_PROTOCOL)          #14
+        pickle.dump(res_powerInjBat, fout, pickle.HIGHEST_PROTOCOL)         #15
+        pickle.dump(res_powerUsePV, fout, pickle.HIGHEST_PROTOCOL)          #16
+        pickle.dump(res_powerUseBat, fout, pickle.HIGHEST_PROTOCOL)         #17
+        pickle.dump(res_powerPV, fout, pickle.HIGHEST_PROTOCOL)             #18
+        pickle.dump(res_powerPlug, fout, pickle.HIGHEST_PROTOCOL)           #19
+        pickle.dump(res_c_inv, fout, pickle.HIGHEST_PROTOCOL)               #20
+        pickle.dump(res_c_om, fout, pickle.HIGHEST_PROTOCOL)                #21
+        pickle.dump(res_c_dem, fout, pickle.HIGHEST_PROTOCOL)               #22
+        pickle.dump(res_c_fix, fout, pickle.HIGHEST_PROTOCOL)               #23
+        pickle.dump(res_rev, fout, pickle.HIGHEST_PROTOCOL)                 #24
+        pickle.dump(res_c_dem_grid, fout, pickle.HIGHEST_PROTOCOL)          #25
+        pickle.dump(res_rev_grid, fout, pickle.HIGHEST_PROTOCOL)            #26
+        pickle.dump(res_c_node, fout, pickle.HIGHEST_PROTOCOL)              #27
+        pickle.dump(res_c_total_nodes, fout, pickle.HIGHEST_PROTOCOL)       #28
+        pickle.dump(res_c_total_grid, fout, pickle.HIGHEST_PROTOCOL)        #29
+        pickle.dump(res_emission_nodes, fout, pickle.HIGHEST_PROTOCOL)      #30
+        pickle.dump(res_emission_grid, fout, pickle.HIGHEST_PROTOCOL)       #31
+        pickle.dump(nodes, fout, pickle.HIGHEST_PROTOCOL)                   #32
+        pickle.dump(nodeLines, fout, pickle.HIGHEST_PROTOCOL)               #33
+        pickle.dump(res_actHP, fout, pickle.HIGHEST_PROTOCOL)               #34
+        pickle.dump(res_powerHP, fout, pickle.HIGHEST_PROTOCOL)             #35
+        pickle.dump(res_powerEH, fout, pickle.HIGHEST_PROTOCOL)             #36
+        pickle.dump(res_SOC_tes, fout, pickle.HIGHEST_PROTOCOL)             #37
+        pickle.dump(res_SOC_init_tes, fout, pickle.HIGHEST_PROTOCOL)        #
+        pickle.dump(res_ch_tes, fout, pickle.HIGHEST_PROTOCOL)              #38
+        pickle.dump(res_dch_tes, fout, pickle.HIGHEST_PROTOCOL)             #39
+        pickle.dump(res_heatHP, fout, pickle.HIGHEST_PROTOCOL)              #40
+        pickle.dump(res_heatEH, fout, pickle.HIGHEST_PROTOCOL)              #41
+        pickle.dump(res_voltLine, fout, pickle.HIGHEST_PROTOCOL)            #42
+        pickle.dump(res_voltNode, fout, pickle.HIGHEST_PROTOCOL)            #43
+        pickle.dump(res_powerHPGrid, fout, pickle.HIGHEST_PROTOCOL)         #44
+        pickle.dump(res_powerHPPV, fout, pickle.HIGHEST_PROTOCOL)           #45
+        pickle.dump(res_powerHPBat, fout, pickle.HIGHEST_PROTOCOL)          #46
+        pickle.dump(res_powerEHGrid, fout, pickle.HIGHEST_PROTOCOL)         #47
+        pickle.dump(res_powerEHPV, fout, pickle.HIGHEST_PROTOCOL)           #48
+        pickle.dump(res_powerEHBat, fout, pickle.HIGHEST_PROTOCOL)          #49
+        pickle.dump(res_exBat, fout, pickle.HIGHEST_PROTOCOL)               #50
+        pickle.dump(res_actBat, fout, pickle.HIGHEST_PROTOCOL)              #51
         
         
-        return (res_c_total_grid, res_emission_grid, res_voltNode)
+        return (res_c_total_grid, res_emission_grid, U_nominal)

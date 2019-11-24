@@ -10,7 +10,7 @@ import xlsxwriter
 import run_kerber_net as kerber
 #from random import randint
 
-(net, nodes, nodelines, lineLength, lineRes, res_per_line, r, x, res) = kerber.net_values()
+(net, nodes, nodelines, lineLength, lineCurrent, res_per_line, r, x, res) = kerber.net_values()
 
 option = {'model' : "net" } #random, #liu, #net
 
@@ -20,7 +20,6 @@ S = 4500         #in W
 
 P = 0.9*S        #in W
 Q = 0.4359*S     #in W
-
 
 U_liu_sq = {}
 U_liu = {}
@@ -44,11 +43,11 @@ for [n,m] in nodelines:
         U_liu[m] = (-1)*((-1)*U_liu_sq[m])**(1/2)
     else:
         U_liu[m] = (U_liu_sq[m])**(1/2)
-    U_noe[m] = U_noe[n] - S*res[n,m]/U_noe[1]
-    U_act[m] = U_act[n] - S*res[n,m]/U_act[n]
-    #U_act[m] = U_act[n] - (S*res[n,m])**(1/2)
+    #U_noe[m] = U_noe[n] - (S*res[n,m]*lineLength[n,m])/U_noe[1]
+    U_noe[m] = U_noe[n] - (S*0.91/(lineCurrent[n,m]*1000))
+    #U_act[m] = U_act[n] - S*res[n,m]/U_act[n]
+    U_act[m] = U_act[n] - (S*res[n,m]*lineLength[n,m])**(1/2)
 
-        
 #%% Write in Workbook
 
 print("Results ready...")
