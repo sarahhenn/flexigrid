@@ -19,6 +19,7 @@ import python.clustering_medoid as clustering
 import python.parse_inputs as pik
 import python.grid_optimization as opti
 #import python.grid_optimization_master as opti2
+import python.building_distribution as dist 
 import python.read_basic as reader
 
 
@@ -171,6 +172,11 @@ if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
     plot.simple_plot(net, show_plot=True)
 
+#%% find distribution for various building types
+    
+(num_of_branches, num_of_loads) = dist.allocate(net, options)
+
+
     #%% Store clustered input parameters
     
 filename = "results/inputs_" + building_type + "_" + building_age + ".pkl"
@@ -179,7 +185,7 @@ with open(filename, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
          
-(costs, emission, voltNode) = opti.compute(net, eco, devs, clustered, params, options)
+(costs, emission, U_nominal) = opti.compute(net, eco, devs, clustered, params, options)
 
 outputs = reader.read_results(building_type + "_" + building_age)
 
