@@ -200,6 +200,7 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     if(options["allow_apc_opti"] == False):
         powerGenReal = {}
         powerGenRealMax = {}
+        powerGenCurt = {}
         for n in gridnodes:
             for t in timesteps:
                 for d in days:
@@ -207,11 +208,14 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                         powerGenRealMax[n,d] = constraint_apc[n,d] * powerPVMax
                         if(powerGen[n,d,t] > powerGenRealMax[n,d]):
                             powerGenReal[n,d,t] = powerGenRealMax[n,d]
+                            powerGenCurt[n,d,t] = powerGen[n,d,t] - powerGenReal[n,d,t]
                         else:
                             powerGenReal[n,d,t] = powerGen[n,d,t]
+                            powerGenCurt[n,d,t] = 0
                     else:
                         powerGenRealMax[n,d] = 0
                         powerGenReal[n,d,t] = 0
+                        powerGenCurt[n,d,t] = 0
 
         powerGenReal_array = np.array([[[powerGenReal[n,d,t] for n in gridnodes]for d in days] for t in timesteps])
         powerGen_array = np.array([[[powerGen[n,d,t] for n in gridnodes]for d in days] for t in timesteps])
@@ -277,6 +281,8 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
         apc_total = model.addVars(gridnodes, days, vtype="C", ub=1, name="apc_total"+str(n)+str(d))
         powerGenRealMax = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerGenRealMax"+str(n)+str(d))
         powerGenReal = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerGenReal"+str(n)+str(d)+str(t))
+        # introduce powerGenCurt, which tells, how much of powerGen got curtailed
+        powerGenCurt = model.addVars(gridnodes, days, timesteps, vtype="C")
 
     # power flowing from net into complex of bat, house, pv and eh (hp seperated)
     powerSubtr = model.addVars(gridnodes,days,timesteps, vtype="C", name="powerSubtr_"+str(n)+str(t))
@@ -344,9 +350,10 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
     if options["heatpump_seperated_costs"]:
         # compute annual fix costs for electricity per load node
-        model.addConstrs((c_fix[n] == eco["el"]["el_hp"]["fix"][0] + eco["el"]["el_sta"]["fix"][0] for n in nodes["load"]), name="fix_costs"+str(n))
+        # approximated costs for "rundsteuerempfänger bei einspeisemanagement" at 700 Euros
+        model.addConstrs((c_fix[n] ==900 + eco["el"]["el_hp"]["fix"][0] + eco["el"]["el_sta"]["fix"][0] for n in nodes["load"]), name="fix_costs"+str(n))
     else:
-        model.addConstrs((c_fix[n] == eco["el"]["el_sta"]["fix"][0] for n in nodes["load"]), name="fix_costs" + str(n))
+        model.addConstrs((c_fix[n] ==900 + eco["el"]["el_sta"]["fix"][0] for n in nodes["load"]), name="fix_costs" + str(n))
 
 
     # compute annual demand related costs load node
@@ -385,7 +392,7 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                      name="demand_costs_grid")
     
     # compute annual revenues for electricity feed-in per node
-    # here: it's assumed that revenues are generated only for PV power
+    # here: it's assumed that revenues are generated only for PV power and curtailed generation
     InjPV_total_node = {}
     for n in gridnodes:
         InjPV_total_node[n] = (sum(clustered["weights"][d] * sum(powerInjPV[n,d,t]
@@ -396,18 +403,25 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
         Inj_total_node[n] = (sum(clustered["weights"][d] * sum(powerInj[n,d,t]
                             for t in timesteps) for d in days) * dt)
 
+    Curt_total_node = {}
+    for n in gridnodes:
+        Curt_total_node[n] = (sum(clustered["weights"][d] * sum(powerGenCurt[n,d,t]
+                            for t in timesteps) for d in days) * dt)
+
     #fpo: TODO: this is missing the possibility of buying electricity and selling it at another time.
-    model.addConstrs((revenues[n] == eco["crf"] * eco["b"]["infl"] * InjPV_total_node[n] * eco["price_sell_eeg"] 
-                        for n in gridnodes), name="revenues"+str(n))
+    model.addConstrs((revenues[n] == eco["crf"] * eco["b"]["infl"] * (InjPV_total_node[n] + Curt_total_node[n]) * eco["price_sell_eeg"]
+                      for n in gridnodes), name="revenues"+str(n))
     
     # compute annual revenues for electricity feed-in per node
     # here: it's assumed that revenues are generated for all injections to the higher level grid
+    # plus the curtailed energy of every node needs to be considered aswell
     Inj_total_grid = (sum(clustered["weights"][d] * sum(powerTrafoInj[d,t]
                             for t in timesteps) for d in days) * dt)
+    Curt_total_grid = sum(Curt_total_node[n] for n in gridnodes)
 
     #fpo: TODO: price sell eeg has to be changed aswell, if possibility of charging bat out of net is open
     model.addConstr(revenues_grid == 
-                     eco["crf"] * eco["b"]["infl"] * Inj_total_grid * eco["price_sell_eeg"], 
+                     eco["crf"] * eco["b"]["infl"] * (Inj_total_grid + Curt_total_grid)* eco["price_sell_eeg"],
                      name="revenues"+str(n))            
     
     #%% ecological constraints
@@ -503,6 +517,7 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                     model.addConstr(powerGenRealMax[n, d, t] == (1 - apc_total[n, d]) * powerPVMax)
                     model.addConstr(powerGenReal[n, d, t] <= powerGen[n, d, t])
                     model.addConstr(powerGenReal[n,d,t] <= powerGenRealMax[n,d,t])
+                    model.addConstr(powerGenCurt[n,d,t] <= powerGen[n,d,t] - powerGenReal[n,d,t])
 
     
     # set energy balance for all nodes
@@ -830,27 +845,18 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
     # retrieve apc results
     if options["allow_apc_opti"]:
-        """res_apc_var = {}
-        res_apc_total = {}
-        res_constraint_apc = {}
-        res_powerGenRealMax = {}
-        res_powerGenReal = {}
-
-        for n in gridnodes:
-            res_apc_var = np.array([apc_var[n,d].X for d in days])
-            res_apc_total = np.array([apc_total[n,d].X for d in days])
-            res_constraint_apc = np.array([constraint_apc[n,d] for d in days])
-            res_powerGenRealMax = np.array([[powerGenRealMax[n,d,t].X for d in days] for t in timesteps])
-            res_powerGenReal = np.array([[powerGenReal[n,d,t].X for d in days] for t in timesteps])"""
         res_apc_var = np.array([[apc_var[n, d].X for d in days] for n in gridnodes])
         res_apc_total = np.array([[apc_total[n, d].X for d in days]for n in gridnodes])
         res_constraint_apc = np.array([[constraint_apc[n, d] for d in days]for n in gridnodes])
         res_powerGenRealMax = np.array([[[powerGenRealMax[n, d, t].X for d in days] for t in timesteps]for n in gridnodes])
-        res_powerGenReal = np.array([[[powerGenReal[n, d, t].X for d in days] for t in timesteps]for n in gridnodes])
+        res_powerGenReal = np.array([[[powerGenReal[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+        res_powerGenCurt = np.array([[[powerGenCurt[n, d, t].X for t in timesteps] for d in days]for n in gridnodes])
+
 
     else:
-        res_powerGenRealMax = np.array([[[powerGenRealMax[n, d, t] for d in days] for t in timesteps] for n in gridnodes])
-        res_powerGenReal = np.array([[[powerGenReal[n, d, t] for d in days] for t in timesteps] for n in gridnodes])
+        res_powerGenRealMax = np.array([[[powerGenRealMax[n, d, t] for t in timesteps] for d in days]for n in gridnodes])
+        res_powerGenReal = np.array([[[powerGenReal[n, d, t] for t in timesteps] for d in days]for n in gridnodes])
+        res_powerGenCurt = np.array([[[powerGenCurt[n,d,t]for t in timesteps] for d in days]for n in gridnodes])
 
 
     # node energy management results
@@ -956,6 +962,7 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
         pickle.dump(res_constraint_apc, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerGenRealMax, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_powerGenReal, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerGenCurt, fout, pickle.HIGHEST_PROTOCOL)
 
         pickle.dump(res_c_inv, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_c_om, fout, pickle.HIGHEST_PROTOCOL)

@@ -7,7 +7,7 @@ import pickle
 def read_results(name, options):
     results = {}
     
-    with open("results/inputs_" + name + ".pkl", "rb") as f_in:
+    with open(options["filename_results"], "rb") as f_in:
         results["inputs_clustered"] = pickle.load(f_in)
     
     with open ("results/"+ name + '.pkl', "rb") as fin:
@@ -43,6 +43,7 @@ def read_results(name, options):
         results["res_constraint_apc"] = pickle.load(fin)
         results["res_powerGenRealMax"] = pickle.load(fin)
         results["res_powerGenReal"] = pickle.load(fin)
+        results["res_powerGenCurt"] = pickle.load(fin)
         results["res_c_inv"] = pickle.load(fin)
         results["res_c_om"] = pickle.load(fin)
         results["res_c_dem"] = pickle.load(fin)
