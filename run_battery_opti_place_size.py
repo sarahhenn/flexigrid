@@ -48,7 +48,7 @@ options =   {"static_emissions": False,  # True: calculation with static emissio
             "rev_emissions": False,      # True: emissions revenues for feed-in
                                         # False: no emissions revenues for feed-in
             "dhw_electric": False,       # define if dhw is provided decentrally by electricity
-            "P_pv": 10.00,              # installed peak PV power
+            "P_pv": 5.00,              # installed peak PV power
             "with_hp": True,            # usage of heat pumps
             "hp_mode": "grid_opt",    # choose between "energy_opt" and "grid_opt"
             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
@@ -57,9 +57,9 @@ options =   {"static_emissions": False,  # True: calculation with static emissio
             "show_grid_plots": False,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
-                                                   building_age + ".pkl",
+                                                   building_age + "Typtage_30.pkl",
             "filename_inputs": "results/inputs_" + building_type + "_" + \
-                                                   building_age + ".pkl",
+                                                   building_age + "Typtage_30.pkl",
             "apc_while_voltage_violation": True,    #True: uses apc, when voltage violations occur
                                                     #False: does not use apc, when voltage violations occur
             "cut_Inj/Subtr_while_voltage_violation": True, #True: cuts Inj or Subtr, when voltage violations occur
@@ -102,7 +102,7 @@ inputs_clustering = np.array([raw_inputs["heat"],
                               raw_inputs["temperature"],
                               raw_inputs["co2_dyn"]])
 
-number_clusters = 12
+number_clusters = 30
 (inputs, nc, z) = clustering.cluster(inputs_clustering, 
                                      number_clusters=number_clusters,
                                      norm=2,
@@ -249,9 +249,22 @@ while boolean_loop:
                             for t in timesteps:
                                 if(critical_flag[n,d,t] == 1):
                                     if (vm_pu_total[n,d,t] < 0.96):
-                                        constraint_Subtr[n,d,t] = 0.90 * powSubtrPrev[n,d,t]
+                                        # relative Lösung wirft Problem der Spannungsweiterleitung auf
+                                        #constraint_Subtr[n,d,t] = 0.90 * powSubtrPrev[n,d,t]
+                                        # absolute Regelung:
+                                        if (powSubtrPrev[n, d, t] < 3):
+                                            constraint_Subtr[n, d, t] = 0
+                                            print("limit for voltage barely kept for node" +str(n) + " and timestep" +str(t))
+                                        else:
+                                            constraint_Subtr[n,d,t] = powSubtrPrev[n,d,t] - 3
+
                                     elif (vm_pu_total[n,d,t] > 1.04):
-                                        constraint_Inj[n, d, t] = 0.90 * powInjPrev[n,d,t]
+                                        #constraint_Inj[n, d, t] = 0.90 * powInjPrev[n,d,t]
+                                        if (powInjPrev[n,d,t] < 2):
+                                            constraint_Inj[n,d,t] = 0
+                                            print("limit for voltage barely kept for node" +str(n) + " and timestep" +str(t))
+                                        else:
+                                            constraint_Inj[n,d,t] = powInjPrev[n,d,t] - 3
 
                 else:
                     print("You selected only apc in case of voltage violations.")
@@ -275,9 +288,22 @@ while boolean_loop:
                     for t in timesteps:
                         if (critical_flag[n, d, t] == 1):
                             if (vm_pu_total[n, d, t] < 0.96):
-                                constraint_Subtr[n, d, t] = 0.90 * powSubtrPrev[n, d, t]
+                                # relative Lösung wirft Problem der Spannungsweiterleitung auf
+                                # constraint_Subtr[n,d,t] = 0.90 * powSubtrPrev[n,d,t]
+                                # absolute Regelung:
+                                if (powSubtrPrev[n, d, t] < 2):
+                                    constraint_Subtr[n, d, t] = 0
+                                    print("limit for voltage barely kept for node" + str(n) + " and timestep" + str(t))
+                                else:
+                                    constraint_Subtr[n, d, t] = powSubtrPrev[n, d, t] - 3
+
                             elif (vm_pu_total[n, d, t] > 1.04):
-                                constraint_Inj[n, d, t] = 0.90 * powInjPrev[n, d, t]
+                                # constraint_Inj[n, d, t] = 0.90 * powInjPrev[n,d,t]
+                                if (powInjPrev[n, d, t] < 2):
+                                    constraint_Inj[n, d, t] = 0
+                                    print("limit for voltage barely kept for node" + str(n) + " and timestep" + str(t))
+                                else:
+                                    constraint_Inj[n, d, t] = powInjPrev[n, d, t] - 3
 
             elif (options["cut_Inj/Subtr_while_voltage_violation"] == False and options["apc_while_voltage_violation"] == False):
                 print("Error: You did not select any measure in case of voltage violations!")
