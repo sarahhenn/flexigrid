@@ -157,7 +157,7 @@ def compute(net, eco, devs, clustered, params, options):
     
     # specify grid nodes for whole grid and trafo; choose and allocate load, injection and battery nodes
     nodes = {}
-
+    
     nodes["grid"] = net.bus.index.to_numpy()
     nodes["trafo"] = net.trafo['lv_bus'].to_numpy()
     nodes["load"] = net.load['bus'].to_numpy()
@@ -173,10 +173,7 @@ def compute(net, eco, devs, clustered, params, options):
     gridnodes = list(nodes["grid"])
     
     # set nominal Voltage for grid and Voltage bounds for nodes
-    #U_nominal = net.trafo.vn_lv_kv*1000 #Series object
-    #U_nominal = U_nominal.astype(float)
-    #U_nominal["vn_lv_kv"] = U_nominal.vn_lv_kv.astype(float)
-    U_nominal = 400.0
+    U_nominal = net.trafo.vn_lv_kv[0]*1000 
     voltNode_max         = U_nominal*1.04
     voltNode_min         = U_nominal*0.96
     
