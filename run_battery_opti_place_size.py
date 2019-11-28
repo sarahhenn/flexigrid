@@ -65,6 +65,7 @@ options =   {#"case": "random",            # best, worst, random
                                         # False: calculation with timevariant emissions
              "rev_emissions": True,      # True: emissions revenues for feed-in
                                         # False: no emissions revenues for feed-in
+<<<<<<< HEAD
              "dhw_electric": True,       # define if dhw is provided decentrally by electricity
              "P_pv": 10.0,               # installed peak PV power
              "hp_mode": "energy_opt",    # choose between "off" (no hp) and "energy_opt" and "grid_opt"
@@ -72,6 +73,16 @@ options =   {#"case": "random",            # best, worst, random
              "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
              "beta_th": 1.,              # relative size of thermal energy storage (between 0 and 1)
              "show_grid_plots": False,    # show gridplots before and after optimization
+=======
+            "dhw_electric": True,       # define if dhw is provided decentrally by electricity
+            "P_pv": 10.0,               # installed peak PV power
+            "hp_mode": "grid_opt",    # choose between "off" (no hp) and "energy_opt" and "grid_opt"
+            "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
+            "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
+            "beta_th": 1.,             # relative size of thermal energy storage (between 0 and 1)
+            "EV_mode":"on_demand",      # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi-directional"
+            "show_grid_plots": True,   # show gridplots before and after optimization
+>>>>>>> remotes/origin/master
             
              "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl",
@@ -79,8 +90,12 @@ options =   {#"case": "random",            # best, worst, random
              
             }
 
+<<<<<<< HEAD
 #randomfile = "random_filler_name.xlsx" ### TO DO: generate name for random_file
 randomfile =  "net_" + net_type + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_tes" + tes + "_ev" + ev + ".xlsx"                       
+=======
+                     
+>>>>>>> remotes/origin/master
 #%% data import
 
 #determine the optimization folder in which all input data and results are placed
@@ -179,6 +194,7 @@ extreme kerber grids:   landnetz_freileitung(),
 
 #net = nw.create_kerber_landnetz_freileitung_1()
 #net = nw.create_kerber_landnetz_freileitung_2()
+<<<<<<< HEAD
 net = nw.create_kerber_landnetz_kabel_1()
 #net = nw.create_kerber_landnetz_kabel_2()
 #net = nw.create_kerber_dorfnetz()
@@ -197,6 +213,9 @@ net = nw.create_kerber_landnetz_kabel_1()
 #net = nw.kb_extrem_vorstadtnetz_trafo_1()
 #net = nw.kb_extrem_vorstadtnetz_trafo_2()
 
+=======
+net = nw.create_kerber_landnetz_freileitung_1()
+>>>>>>> remotes/origin/master
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
@@ -217,7 +236,11 @@ with open(filename, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
          
+<<<<<<< HEAD
 (costs, emission, U_nominal) = opti.compute(net, eco, devs, clustered, params, options)
+=======
+(costs, emission) = opti.compute(net, eco, devs, clustered, params, options)
+>>>>>>> remotes/origin/master
 
 ### TO DO : second variable for building results for "reader" ANPASSEN (s.o.)
 outputs = reader.read_results(building_type + "_" + building_age, net_type + "_" + pv)
@@ -236,4 +259,11 @@ if options["show_grid_plots"]:
 #    simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
     netx=net
     netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
+<<<<<<< HEAD
     simple_plot(netx, show_plot=True, bus_color='b', bat_color='r')
+=======
+    simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
+
+
+test = 0
+>>>>>>> remotes/origin/master

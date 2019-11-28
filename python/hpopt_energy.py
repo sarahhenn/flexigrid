@@ -167,7 +167,11 @@ def optimize(options, params, clustered, devs, capa_hp, capa_tes):
     res_heatHP = np.array([[heat_hp[d,t].X for t in timesteps]for d in days])
     res_heatEH = np.array([[heat_eh[d,t].X for t in timesteps]for d in days])
     res_SOC = np.array([[soc[d,t].X for t in timesteps]for d in days])
+<<<<<<< HEAD
     res_SOC_init = np.array([[soc[d,t].X for t in timesteps]for d in days]) ## Format, ohne timesteps?
+=======
+    res_SOC_init = np.array([soc[d].X for d in days])
+>>>>>>> remotes/origin/master
     res_ch = np.array([[ch[d,t].X for t in timesteps]for d in days])
     res_dch = np.array([[dch[d,t].X for t in timesteps]for d in days])
 

@@ -10,7 +10,11 @@ from __future__ import division
 import gurobipy as gp
 import numpy as np
 import pickle
+<<<<<<< HEAD
 import pandas as pd
+=======
+import random
+>>>>>>> remotes/origin/master
 
 # import own function
 import python.hpopt_energy as hpopt
@@ -151,8 +155,13 @@ def compute(net, eco, devs, clustered, params, options):
         if options ["dhw_electric"]:
             powerElec = clustered["electricity"] + clustered["dhw"]
         else:
+<<<<<<< HEAD
             powerElec = clustered["electricity"]
   
+=======
+            powerElec = clustered["electricity"]         
+            
+>>>>>>> remotes/origin/master
 #%% extract node and line information from pandas-network
     
     # specify grid nodes for whole grid and trafo; choose and allocate load, injection and battery nodes
@@ -188,6 +197,7 @@ def compute(net, eco, devs, clustered, params, options):
     # multiply with 400 V to get maximal power in kW      
     powerLine_max = {}
     for [n,m] in nodeLines:
+<<<<<<< HEAD
         powerLine_max[n,m] = (net.line['max_i_ka'][nodeLines.index((n,m))])*U_nominal
     
     # maximal and minimal voltage in kV as difference from rated voltage
@@ -205,6 +215,38 @@ def compute(net, eco, devs, clustered, params, options):
     
     #for n in gridnodes:
 
+=======
+        powerLine_max[n,m] = (net.line['max_i_ka'][nodeLines.index((n,m))])*400
+
+#%% insert EVs
+            
+    # build realistic random daily demands in kWh
+    demEV = {}
+    for n in gridnodes:
+        for d in days:
+            if n in nodes["load"]:
+                demEV[n,d] = random.uniform(2.5,4.7)
+            else: 
+                demEV[n,d] = 0
+    
+    # build random availability matrix
+    availEVday = {}
+    availEV = {}
+    for n in gridnodes:
+        for d in days:
+            if n in nodes["load"]:
+                availEVday[n,d] = random.randrange(15,20)
+            else: 
+                availEVday[n,d] = 0
+            for t in timesteps:
+                if t >= availEVday[n,d]:
+                    availEV[n,d,t] = 1
+                else:
+                   availEV[n,d,t] = 0 
+                
+    
+#%% define battery settings, final gens and loads
+>>>>>>> remotes/origin/master
         
     # extract battery nodes and define technical data for them
     capBat_max = {}
@@ -262,8 +304,8 @@ def compute(net, eco, devs, clustered, params, options):
     revenues_grid = model.addVar(vtype="C", name="revenue_grid")
     
     # variables for total node costs, total costs and total emissions
-    c_total_nodes = model.addVar(vtype="C", name="c_total", lb= -gp.GRB.INFINITY)
-    c_total_grid = model.addVar(vtype="C", name="c_total", lb= -gp.GRB.INFINITY)
+    c_total_nodes = model.addVar(vtype="C", name="c_total_nodes", lb= -gp.GRB.INFINITY)
+    c_total_grid = model.addVar(vtype="C", name="c_total_grid", lb= -gp.GRB.INFINITY)
     emission_nodes = model.addVars(gridnodes, vtype="C", name= "CO2_emission", lb= -gp.GRB.INFINITY) 
     emission_grid = model.addVar(vtype="C", name= "CO2_emission", lb= -gp.GRB.INFINITY)  
     
@@ -420,14 +462,14 @@ def compute(net, eco, devs, clustered, params, options):
         
         # calculate emissions with static CO2-factor and revenues
         if options["rev_emissions"]:
-            model.addConstrs((emission_nodes[n] == Load_total_node[n] - emissions_Inj_nodes[n]
+            model.addConstrs((emission_nodes[n] == emissions_Load_nodes[n] - emissions_Inj_nodes[n]
                             for n in gridnodes), name= "emissions_stat_rev_node"+str(n)) 
             model.addConstr(emission_grid == emissions_Load_grid - emissions_Inj_grid,
                             name= "emissions_stat_rev_grid")
             
         # calculate emissions with static CO2-factor without revenues
         else:
-            model.addConstrs((emission_nodes[n] == Load_total_node[n]
+            model.addConstrs((emission_nodes[n] == emissions_Load_nodes[n]
                              for n in gridnodes), name= "emissions_stat_rev_node"+str(n))     
             model.addConstr(emission_grid == emissions_Load_grid,
                             name= "emissions_stat_rev_grid")      
@@ -451,14 +493,14 @@ def compute(net, eco, devs, clustered, params, options):
         
         # calculate emissions with timevariant CO2-factor and revenues
         if options["rev_emissions"]:
-            model.addConstrs((emission_nodes[n] == Load_total_node[n] - emissions_Inj_nodes[n]
+            model.addConstrs((emission_nodes[n] == emissions_Load_nodes[n] - emissions_Inj_nodes[n]
                              for n in gridnodes), name= "emissions_dyn_rev_node") 
             model.addConstr(emission_grid == emissions_Load_grid - emissions_Inj_grid,
                             name= "emissions_dyn_rev_grid")
             
         # calculate emissions with timevariant CO2-factor without revenues
         else:
-            model.addConstrs((emission_nodes[n] == Load_total_node[n]
+            model.addConstrs((emission_nodes[n] == emissions_Load_nodes[n]
                              for n in gridnodes), name= "emissions_dyn_rev_node")     
             model.addConstr(emission_grid == emissions_Load_grid,
                             name= "emissions_dyn_rev_grid")
@@ -563,7 +605,11 @@ def compute(net, eco, devs, clustered, params, options):
                 model.addConstr(SOC[n,d,t] == SOC_previous 
                             + (dt * (powerCh[n,d,t] * devs["bat"]["eta"] - powerDis[n,d,t]/devs["bat"]["eta"])) 
                             - devs["bat"]["k_loss"]*dt*SOC_previous, name="storage balance_"+str(n)+str(t))
+<<<<<<< HEAD
           
+=======
+    
+>>>>>>> remotes/origin/master
     #%% heat pump and tes constraints 
     
     if options["hp_mode"] == "grid_opt":
@@ -666,9 +712,15 @@ def compute(net, eco, devs, clustered, params, options):
 #    powerInj[n,d,t] - powerLoad[n,d,t]
     
     # adgust gurobi settings
+<<<<<<< HEAD
     model.Params.TimeLimit = 100
     
     model.Params.MIPGap = 0.05
+=======
+    model.Params.TimeLimit = 1000
+    
+    model.Params.MIPGap = 0.00
+>>>>>>> remotes/origin/master
     model.Params.NumericFocus = 3
     model.Params.MIPFocus = 3
     model.Params.Aggregate = 1
@@ -790,13 +842,19 @@ def compute(net, eco, devs, clustered, params, options):
     res_exBat = {}
     res_actBat = {}
     
+<<<<<<< HEAD
     for n in gridnodes:           
+=======
+    for n in gridnodes:
+            
+>>>>>>> remotes/origin/master
         res_exBat[n] = x_bat[n].X
         res_actBat[n] = np.array([[y_bat[n,d,t].X for t in timesteps] for d in days])
         
     
     # save results 
     with open(options["filename_results"], "wb") as fout:
+<<<<<<< HEAD
         pickle.dump(model.ObjVal, fout, pickle.HIGHEST_PROTOCOL)            #01
         pickle.dump(model.Runtime, fout, pickle.HIGHEST_PROTOCOL)           #02  
         pickle.dump(model.MIPGap, fout, pickle.HIGHEST_PROTOCOL)            #03
@@ -852,3 +910,57 @@ def compute(net, eco, devs, clustered, params, options):
         
         
         return (res_c_total_grid, res_emission_grid, U_nominal)
+=======
+        pickle.dump(model.ObjVal, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(model.Runtime, fout, pickle.HIGHEST_PROTOCOL)  
+        pickle.dump(model.MIPGap, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerTrafoLoad, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerTrafoInj, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerLine, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_capacity, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerCh, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerDis, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_SOC, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_SOC_init, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerLoad, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerInj, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerInjPV, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerInjBat, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerUsePV, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerUseBat, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerPV, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerPlug, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_c_inv, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_c_om, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_c_dem, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_c_fix, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_rev, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_c_dem_grid, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_rev_grid, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_c_node, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_c_total_nodes, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_c_total_grid, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_emission_nodes, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_emission_grid, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(nodes, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_actHP, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerHP, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerEH, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_SOC_tes, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_SOC_init_tes, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_ch_tes, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_dch_tes, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_heatHP, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_heatEH, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerHPGrid, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerHPPV, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerHPBat, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerEHGrid, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerEHPV, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_powerEHBat, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_exBat, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_actBat, fout, pickle.HIGHEST_PROTOCOL)
+        
+    
+        return (res_c_total_grid, res_emission_grid)
+>>>>>>> remotes/origin/master
