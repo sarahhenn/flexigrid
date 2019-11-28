@@ -27,8 +27,24 @@ import python.read_basic as reader
 building_type = "EFH"       # EFH, ZFH, MFH_6WE, MFH_10WE, MFH_15WE
 building_age  = "2005"      # 1960, 1980, 2005 
 emission_year = "2017"      # 2017, 2030, 2050 
-net_type = "kerberTest1"
-pv = "70test"
+# District parameters
+# second "option" for district coices, as floats
+net_type = "kerberTest1"    # from list of Kerber-net-names
+mfh = "33"                  # ratio of MFH to EFH in %
+pv = "70"                   # ratio in %
+hp = "50"                   # ratio in %
+tes = "20"
+ev = "30"                   # ratio in %
+case = "best"               # Case: best, worst, random
+
+district_options = {"net_type" : "KerberTest",
+                    "mfh" : 0.33,                  # ratio of MFH to EFH in %
+                    "pv" : 0.7,                    # ratio in %
+                    "hp" : 0.5,                    # ratio in %
+                    "tes": 0.2,                    # ratio in %
+                    "ev" : 0.3,                    # ratio in %
+                    "case" : "best"  
+                    }
 
 # TODO: implement mixed shares of buildings
 # TODO: adjust emission factors regarding to national weather conditions
@@ -39,34 +55,36 @@ pv = "70test"
 
 # set options
 options =   {"case": "best",            # best, worst, random     
-            "static_emissions": True,   # True: calculation with static emissions, 
+             "static_emissions": True,   # True: calculation with static emissions, 
                                         # False: calculation with timevariant emissions
-            "rev_emissions": True,      # True: emissions revenues for feed-in
+             "rev_emissions": True,      # True: emissions revenues for feed-in
                                         # False: no emissions revenues for feed-in
-            "dhw_electric": True,       # define if dhw is provided decentrally by electricity
-            "P_pv": 10.0,               # installed peak PV power
-            "hp_mode": "energy_opt",    # choose between "off" (no hp) and "energy_opt" and "grid_opt"
-            "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
-            "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
-            "beta_th": 1.,              # relative size of thermal energy storage (between 0 and 1)
-            "show_grid_plots": True,    # show gridplots before and after optimization
+             "dhw_electric": True,       # define if dhw is provided decentrally by electricity
+             "P_pv": 10.0,               # installed peak PV power
+             "hp_mode": "energy_opt",    # choose between "off" (no hp) and "energy_opt" and "grid_opt"
+             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
+             "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
+             "beta_th": 1.,              # relative size of thermal energy storage (between 0 and 1)
+             "show_grid_plots": True,    # show gridplots before and after optimization
             
-            "filename_results": "results/" + building_type + "_" + \
+             "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl",
-            "building_results": "results/" + net_type + "_" + pv + ".pkl"   #b,w,r ans ende
+             "building_results": "results/" + net_type + "_" + pv + ".pkl"   #b,w,r ans ende
+             
             }
 
-                    
+randomfile = "results/random_filler_name.xslx" ### TO DO: generate name for random_file                   
 #%% data import
 
 #determine the optimization folder in which all input data and results are placed
-operationFolder="C:\\Users\\Chrissi\\Git\\Flexigrid"
+operationFolder = "C:\\Users\\Chrissi\\Git\\Flexigrid"
 '''
-Hier ist dein operationFolder noch abgelegt ;-D
+Hier ist dein operationFolder noch abgelegt ;-) 
 '''
 #operationFolder="D:\\git\\flexigrid"       
 #the input data is always in this source folder
-sourceFolder=operationFolder+"\\input"
+sourceFolder = operationFolder + "\\input"
+distributionFolder = operationFolder + "\\distribution"
 
 raw_inputs = {} 
 
@@ -178,7 +196,8 @@ if options["show_grid_plots"]:
 
 #%% find distribution for various building types
     
-(num_of_branches, num_of_loads, loads_per_branch, line_to_load, loads_with, nodes) = dist.allocate(net, options)
+#(num_of_branches, num_of_loads, line_to_load, loads_with) = dist.allocate(net, options)
+() = dist.allocate(net, options, distributionFolder, randomfile)
 
 
 #%% Store clustered input parameters

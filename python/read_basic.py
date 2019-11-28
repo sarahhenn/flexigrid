@@ -12,8 +12,15 @@ def read_results(name_results, name_dist):
         
     
     with open ("results/"+ name_dist + '.pkl', "rb") as fin:
-        results["loads_with"] = pickle.load(fin)
-        results["line_to_loads"] = pickle.load(fin)
+        results["loads_with"] = pickle.load(fin)                        #01
+        results["line_to_loads"] = pickle.load(fin)                     #02
+        results["loads_per_branch"] = pickle.load(fin)                  #03
+        results["loads_per_net_with"] = pickle.load(fin)                #04
+#        results["line_to_loads"] = pickle.load(fin)                     #05
+#        results["line_to_loads"] = pickle.load(fin)                     #06
+#        results["line_to_loads"] = pickle.load(fin)                     #07
+#        results["line_to_loads"] = pickle.load(fin)                     #08
+        
         
     
     with open ("results/"+ name_results + '.pkl', "rb") as fin:
