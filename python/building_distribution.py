@@ -28,7 +28,7 @@ def remove_n_maximums(d, n):
         max_key = max(d.keys(), key=lambda k: d[k])
         del d[max_key]
 
-def remove_n_randoms(d, n):         ## TO DO: change to choose_n_randoms and add writing in excel
+def remove_n_randoms(d, n):         ## TO DO? change to choose_n_randoms and add writing in excel
     for i in range(n):
         random_key = random.choice(list(d))
         del d[random_key]
@@ -36,15 +36,14 @@ def remove_n_randoms(d, n):         ## TO DO: change to choose_n_randoms and add
     
 
 #%% Main Function of allocation
-def allocate (net, options, distributionFolder, randomfile): 
-
-    randomfile_name = "Spannungsvergleich" ### ersetzen in run
+def allocate (net, options, district_options, distributionFolder, randomfile): 
     
     ratio = {}
-    ratio["pv"] = 0.7
-    ratio["hp"] = 0.5
-    ratio["tes"] = 0.4
-    ratio["ev"] = 0.4
+    ratio["pv"] = district_options["pv"]
+    ratio["mfh"] = district_options["mfh"]
+    ratio["hp"] = district_options["hp"]
+    ratio["tes"] = district_options["tes"]
+    ratio["ev"] = district_options["ev"]
     
     nodes = {}
     
@@ -67,35 +66,24 @@ def allocate (net, options, distributionFolder, randomfile):
     num_of_branches = 0
     for n,m in nodeLines:
         if n == 1:
-            num_of_branches = num_of_branches + 1
+            num_of_branches += 1
     
     loads_per_net_with = {}
     loads_per_net_with["pv"] = round_to_int (ratio["pv"]* num_of_loads)
+    loads_per_net_with["mfh"] = round_to_int (ratio["mfh"]* num_of_loads)
     loads_per_net_with["hp"] = round_to_int (ratio["hp"]* num_of_loads)
+    loads_per_net_with["tes"] = round_to_int (ratio["tes"]* num_of_loads)
     loads_per_net_with["ev"] = round_to_int (ratio["ev"]* num_of_loads)
-    
-#    i=0
-#    nodes_per_branch = {}
-#    for n,m in nodeLines:
-#        if n == 1:
-#            i=i+1
-#            nodes_per_branch[i] = [m]            
-#        else:
-#            nodes_per_branch[i].append(m) 
             
     j=0
     loads_per_branch = {}
     for n,m in nodeLines:
         if n == 1:
-            j=j+1
+            j+=1
             loads_per_branch["branch_" + str(j)] = []            
         elif m in nodes["load"]:
             loads_per_branch["branch_" + str(j)].append(m) 
-            
-#    loads_per_branch_with["pv"] = round_to_int (ratio["pv"]* num_of_loads/num_of_branches)
-#    loads_per_branch_with["hp"] = round_to_int (ratio["hp"]* num_of_loads/num_of_branches)
-#    loads_per_branch_with["ev"] = round_to_int (ratio["ev"]* num_of_loads/num_of_branches)
-    
+               
     lineLength = {}
     for [n,m] in nodeLines:
         lineLength[n,m] = net.line.length_km[m-2]
@@ -108,7 +96,7 @@ def allocate (net, options, distributionFolder, randomfile):
     
     
     line_to_node = {}
-    line_to_node-[1] = 0
+    line_to_node[1] = 0
     for [n,m] in nodeLines:
         line_to_node[m] = lineLength[n,m] + line_to_node[n]
     
@@ -119,7 +107,9 @@ def allocate (net, options, distributionFolder, randomfile):
     
     loads_with={}
     loads_with["pv"] = dict(line_to_load)
+    loads_with["mfh"] = dict(line_to_load)
     loads_with["hp"] = dict(line_to_load)
+    loads_with["tes"] = dict(line_to_load)
     loads_with["ev"] = dict(line_to_load)
     
     #sorted_lineLength = sorted(line_to.items(), key=operator.itemgetter(1))
@@ -128,41 +118,52 @@ def allocate (net, options, distributionFolder, randomfile):
     #%% Test for allocation 
 #    if options["case"] == "best":
     l_pv = num_of_loads - loads_per_net_with["pv"]
+    l_mfh = num_of_loads - loads_per_net_with["mfh"]
     l_hp = num_of_loads - loads_per_net_with["hp"]
+    l_tes = num_of_loads - loads_per_net_with["tes"]
     l_ev = num_of_loads - loads_per_net_with["ev"]
-    remove_n_maximums(loads_with["pv"], l_pv)
-    remove_n_minimums(loads_with["hp"], l_hp)
-   
-    remove_n_randoms(loads_with["ev"], l_ev)
-
+    
 ##### 
-    if options["case"] == "best":
-        pass
-    elif options["case"] == "worst":
-        pass
-    elif options["case"] == "random":                #case == random
+    if district_options["case"] == "best":
+        print("Best case grid")
+    elif district_options["case"] == "worst":
+        print("Worst case grid")
+    elif district_options["case"] == "random":                #case == random
         try:
             f = open(distributionFolder + "\\" + randomfile + ".xlsx")
-            print("Loading random distribution")
             f.close()
-            #### load workbook 
-            
+            print("Loading random distribution")
+            #### load workbook             
             random_book  = xlrd.open_workbook(distributionFolder + "\\" + randomfile) # directory?
             sheet = random_book.sheet_by_name("Sheet1")
             #available_sheets = random_book.sheet_names()
-            for n in [1,sheet.nrows]:
-                loads_with["pv"] = sheet   
+            for row in [1,sheet.nrows]:
+                loads_with["pv"] = sheet.cell_value(row, 0)
+                loads_with["mfh"] = sheet.cell_value(row, 0)
+                loads_with["hp"] = sheet.cell_value(row, 0)
+                loads_with["tes"] = sheet.cell_value(row, 0)
+                loads_with["ev"] = sheet.cell_value(row, 0)
+                
         except FileNotFoundError:
             print('Random district is generated')
-            #### random_dict erstellen, workbook erstellen, workbook füllen  nur randomfunktion? rest oben?
             remove_n_randoms(loads_with["pv"], l_pv)
-            #remove_n_randoms(loads_with["ev"], l_ev)
-            #remove_n_randoms(loads_with["ev"], l_ev)
-            #remove_n_randoms(loads_with["ev"], l_ev)
-            workbook = xlsxwriter.Workbook(randomfile + '.xlsx')
-            worksheet = workbook.add_worksheet()
+            remove_n_randoms(loads_with["mfh"], l_mfh)
+            remove_n_randoms(loads_with["hp"], l_hp)
+            remove_n_randoms(loads_with["tes"], l_tes)
+            remove_n_randoms(loads_with["ev"], l_ev)
+            random_book = xlsxwriter.Workbook(distributionFolder + "\\" + randomfile)
+            sheet = random_book.add_worksheet()
+            col = -1
+            for key in loads_with.keys():
+                row = 0
+                col +=1
+                sheet.write(row, col, key)
+                for item in loads_with[key]:
+                    row += 1
+                    sheet.write(row, col, item)
+            random_book.close()      
     else: 
-        print("Error: Select case for building distribution")    
+        print("Error: Select case for building distribution")
     
     #%% return results
     with open(options["building_results"], "wb") as fout:

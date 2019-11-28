@@ -7,12 +7,18 @@ Created on Wed Jun 26 15:34:57 2019
 
 # import extern functions
 import numpy as np
+import math
 import pickle
 import pandas as pd
 import pandapower as pp
 import pandapower.networks as nw
 import pandapower.plotting as plot
-from pandapower.plotting.simple_plot_bat import simple_plot_bat
+#from pandapower.plotting.plotly import simple_plotly
+#import pandapower.plotting.plotly.simple_plotly 
+#from pandapower.plotting import *
+#from pandapower.plotting.simple_plot_bat import simple_plot_bat
+from pandapower.plotting.simple_plot import simple_plot
+
  
 # import own function
 import python.clustering_medoid as clustering
@@ -29,22 +35,22 @@ building_age  = "2005"      # 1960, 1980, 2005
 emission_year = "2017"      # 2017, 2030, 2050 
 # District parameters
 # second "option" for district coices, as floats
-net_type = "kerberTest1"    # from list of Kerber-net-names
-mfh = "33"                  # ratio of MFH to EFH in %
-pv = "70"                   # ratio in %
-hp = "50"                   # ratio in %
-tes = "20"
-ev = "30"                   # ratio in %
-case = "best"               # Case: best, worst, random
-
 district_options = {"net_type" : "KerberTest",
                     "mfh" : 0.33,                  # ratio of MFH to EFH in %
                     "pv" : 0.7,                    # ratio in %
                     "hp" : 0.5,                    # ratio in %
                     "tes": 0.2,                    # ratio in %
                     "ev" : 0.3,                    # ratio in %
-                    "case" : "best"  
+                    "case" : "random"  
                     }
+
+net_type = district_options["net_type"]             # from list of Kerber-net-names
+mfh = str(math.floor(district_options["mfh"]*100))  # ratio of MFH to EFH in %
+pv = str(math.floor(district_options["pv"]*100))    # ratio in %
+hp = str(math.floor(district_options["hp"]*100))    # ratio in %
+tes = str(math.floor(district_options["tes"]*100))  # ratio in %
+ev = str(math.floor(district_options["ev"]*100))    # ratio in %
+case = district_options["case"]                     # Case: best, worst, random
 
 # TODO: implement mixed shares of buildings
 # TODO: adjust emission factors regarding to national weather conditions
@@ -54,7 +60,7 @@ district_options = {"net_type" : "KerberTest",
 #useable_roofarea  = 0.30    #Default value: 0.25
 
 # set options
-options =   {"case": "best",            # best, worst, random     
+options =   {#"case": "random",            # best, worst, random     
              "static_emissions": True,   # True: calculation with static emissions, 
                                         # False: calculation with timevariant emissions
              "rev_emissions": True,      # True: emissions revenues for feed-in
@@ -65,7 +71,7 @@ options =   {"case": "best",            # best, worst, random
              "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
              "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
              "beta_th": 1.,              # relative size of thermal energy storage (between 0 and 1)
-             "show_grid_plots": True,    # show gridplots before and after optimization
+             "show_grid_plots": False,    # show gridplots before and after optimization
             
              "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl",
@@ -73,7 +79,8 @@ options =   {"case": "best",            # best, worst, random
              
             }
 
-randomfile = "results/random_filler_name.xslx" ### TO DO: generate name for random_file                   
+#randomfile = "random_filler_name.xlsx" ### TO DO: generate name for random_file
+randomfile =  "net_" + net_type + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_tes" + tes + "_ev" + ev + ".xlsx"                       
 #%% data import
 
 #determine the optimization folder in which all input data and results are placed
@@ -84,7 +91,7 @@ Hier ist dein operationFolder noch abgelegt ;-)
 #operationFolder="D:\\git\\flexigrid"       
 #the input data is always in this source folder
 sourceFolder = operationFolder + "\\input"
-distributionFolder = operationFolder + "\\distribution"
+distributionFolder =  operationFolder + "\\distribution"
 
 raw_inputs = {} 
 
@@ -169,9 +176,11 @@ extreme kerber grids:   landnetz_freileitung(),
     -> create network with nw.kb_extrem_name   
             
 '''
+net_name = "create_kerber_" + net_type + "()"
+net = nw.net_name                         ### in abh von oben
 #net = nw.create_kerber_landnetz_freileitung_1()
 #net = nw.create_kerber_landnetz_freileitung_2()
-net = nw.create_kerber_landnetz_kabel_1()
+#net = nw.create_kerber_landnetz_kabel_1()
 #net = nw.create_kerber_landnetz_kabel_2()
 #net = nw.create_kerber_dorfnetz()
 #net = nw.create_kerber_vorstadtnetz_kabel_1()
@@ -193,11 +202,12 @@ net = nw.create_kerber_landnetz_kabel_1()
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
     plot.simple_plot(net, show_plot=True)
+#    simple_plotly(net)  
 
 #%% find distribution for various building types
     
 #(num_of_branches, num_of_loads, line_to_load, loads_with) = dist.allocate(net, options)
-() = dist.allocate(net, options, distributionFolder, randomfile)
+() = dist.allocate(net, options, district_options, distributionFolder, randomfile)
 
 
 #%% Store clustered input parameters
@@ -222,6 +232,9 @@ if options["show_grid_plots"]:
         if outputs["res_capacity"][n] >0:
             bat_ex[n] = 1
     
+#    netx=net
+#    netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
+#    simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
     netx=net
     netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
-    simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
+    simple_plot(netx, show_plot=True, bus_color='b', bat_color='r')
