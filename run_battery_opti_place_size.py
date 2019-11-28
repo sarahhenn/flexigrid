@@ -35,7 +35,7 @@ building_age  = "2005"      # 1960, 1980, 2005
 emission_year = "2017"      # 2017, 2030, 2050 
 # District parameters
 # second "option" for district coices, as floats
-district_options = {"net_type" : "KerberTest",
+district_options = {"net_type" : "KerberTest",     # from list of Kerber-net-names
                     "mfh" : 0.33,                  # ratio of MFH to EFH in %
                     "pv" : 0.7,                    # ratio in %
                     "hp" : 0.5,                    # ratio in %
@@ -176,11 +176,10 @@ extreme kerber grids:   landnetz_freileitung(),
     -> create network with nw.kb_extrem_name   
             
 '''
-net_name = "create_kerber_" + net_type + "()"
-net = nw.net_name                         ### in abh von oben
+
 #net = nw.create_kerber_landnetz_freileitung_1()
 #net = nw.create_kerber_landnetz_freileitung_2()
-#net = nw.create_kerber_landnetz_kabel_1()
+net = nw.create_kerber_landnetz_kabel_1()
 #net = nw.create_kerber_landnetz_kabel_2()
 #net = nw.create_kerber_dorfnetz()
 #net = nw.create_kerber_vorstadtnetz_kabel_1()
