@@ -178,4 +178,4 @@ def allocate (net, options, district_options, distributionFolder, randomfile):
     
 
     
-    return ()#num_of_branches, num_of_loads, line_to_load, loads_with)
+    return (loads_with)#num_of_branches, num_of_loads, line_to_load, loads_with)

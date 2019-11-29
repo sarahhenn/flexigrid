@@ -62,27 +62,17 @@ case = district_options["case"]                     # Case: best, worst, random
 # set options
 options =   {#"case": "random",            # best, worst, random     
              "static_emissions": True,   # True: calculation with static emissions, 
-                                        # False: calculation with timevariant emissions
+                                         # False: calculation with timevariant emissions
              "rev_emissions": True,      # True: emissions revenues for feed-in
                                         # False: no emissions revenues for feed-in
-<<<<<<< HEAD
              "dhw_electric": True,       # define if dhw is provided decentrally by electricity
              "P_pv": 10.0,               # installed peak PV power
              "hp_mode": "energy_opt",    # choose between "off" (no hp) and "energy_opt" and "grid_opt"
              "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
              "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
-             "beta_th": 1.,              # relative size of thermal energy storage (between 0 and 1)
-             "show_grid_plots": False,    # show gridplots before and after optimization
-=======
-            "dhw_electric": True,       # define if dhw is provided decentrally by electricity
-            "P_pv": 10.0,               # installed peak PV power
-            "hp_mode": "grid_opt",    # choose between "off" (no hp) and "energy_opt" and "grid_opt"
-            "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
-            "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
-            "beta_th": 1.,             # relative size of thermal energy storage (between 0 and 1)
-            "EV_mode":"on_demand",      # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi-directional"
-            "show_grid_plots": True,   # show gridplots before and after optimization
->>>>>>> remotes/origin/master
+             "beta_th": 1.,             # relative size of thermal energy storage (between 0 and 1)
+             "EV_mode":"on_demand",      # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi-directional"
+             "show_grid_plots": False,   # show gridplots before and after optimization
             
              "filename_results": "results/" + building_type + "_" + \
                                                    building_age + ".pkl",
@@ -90,12 +80,8 @@ options =   {#"case": "random",            # best, worst, random
              
             }
 
-<<<<<<< HEAD
-#randomfile = "random_filler_name.xlsx" ### TO DO: generate name for random_file
-randomfile =  "net_" + net_type + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_tes" + tes + "_ev" + ev + ".xlsx"                       
-=======
-                     
->>>>>>> remotes/origin/master
+#randomfile =  "net_" + net_type + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_tes" + tes + "_ev" + ev + ".xlsx"                       
+
 #%% data import
 
 #determine the optimization folder in which all input data and results are placed
@@ -193,29 +179,43 @@ extreme kerber grids:   landnetz_freileitung(),
 '''
 
 #net = nw.create_kerber_landnetz_freileitung_1()
+#net.name = "landnetz_freileitungl_1"
 #net = nw.create_kerber_landnetz_freileitung_2()
-<<<<<<< HEAD
+#net.name = "landnetz_freileitung_2"
 net = nw.create_kerber_landnetz_kabel_1()
+net.name = "landnetz_kabel_1"
 #net = nw.create_kerber_landnetz_kabel_2()
+#net.name = "landnetz_kabel_2"
 #net = nw.create_kerber_dorfnetz()
+#net.name = "dorfnetz"
 #net = nw.create_kerber_vorstadtnetz_kabel_1()
+#net.name = "vorstadtnetz_kabel_1"
 #net = nw.create_kerber_vorstadtnetz_kabel_2()
-
-
+#net.name = "vorstadtnetz_kabel_2"
+#
 #net = nw.kb_extrem_landnetz_freileitung()
+#net.name = "ex_landnetz_freileitung"
 #net = nw.kb_extrem_landnetz_kabel()
+#net.name = "ex_landnetz_kabel_"
 #net = nw.kb_extrem_landnetz_freileitung_trafo()
+#net.name = "ex_landnetz_freileitung_trafo"
 #net = nw.kb_extrem_landnetz_kabel_trafo()
+#net.name = "ex_landnetz_kabel_trafo"
 #net = nw.kb_extrem_dorfnetz()
+#net.name = "ex_dorfnetz"
 #net = nw.kb_extrem_dorfnetz_trafo()
+#net.name = "ex_dorfnetz_trafo"
 #net = nw.kb_extrem_vorstadtnetz_1()
+#net.name = "ex_vorstadtnetz_1"
 #net = nw.kb_extrem_vorstadtnetz_2()
+#net.name = "ex_vorstadtnetz_2"
 #net = nw.kb_extrem_vorstadtnetz_trafo_1()
+#net.name = "ex_vorstadtnetz_trafo_1"
 #net = nw.kb_extrem_vorstadtnetz_trafo_2()
+#net.name = "ex_vorstadtnetz_trafo_2"
 
-=======
-net = nw.create_kerber_landnetz_freileitung_1()
->>>>>>> remotes/origin/master
+randomfile =  "net_" + net.name + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_tes" + tes + "_ev" + ev + ".xlsx"                       
+
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
@@ -223,10 +223,8 @@ if options["show_grid_plots"]:
 #    simple_plotly(net)  
 
 #%% find distribution for various building types
-    
-#(num_of_branches, num_of_loads, line_to_load, loads_with) = dist.allocate(net, options)
-() = dist.allocate(net, options, district_options, distributionFolder, randomfile)
 
+(load_with) = dist.allocate(net, options, district_options, distributionFolder, randomfile)
 
 #%% Store clustered input parameters
     
@@ -236,11 +234,9 @@ with open(filename, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
          
-<<<<<<< HEAD
-(costs, emission, U_nominal) = opti.compute(net, eco, devs, clustered, params, options)
-=======
-(costs, emission) = opti.compute(net, eco, devs, clustered, params, options)
->>>>>>> remotes/origin/master
+
+(costs, emission, U_nominal) = opti.compute(net, eco, devs, clustered, params, options, load_with)
+
 
 ### TO DO : second variable for building results for "reader" ANPASSEN (s.o.)
 outputs = reader.read_results(building_type + "_" + building_age, net_type + "_" + pv)
@@ -259,11 +255,9 @@ if options["show_grid_plots"]:
 #    simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
     netx=net
     netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
-<<<<<<< HEAD
+
     simple_plot(netx, show_plot=True, bus_color='b', bat_color='r')
-=======
-    simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
 
 
 test = 0
->>>>>>> remotes/origin/master
+
