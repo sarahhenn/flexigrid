@@ -7,11 +7,11 @@ import pickle
 def read_results(name_results, name_dist):
     results = {}
     
-    with open("results/inputs_" + name_results + ".pkl", "rb") as f_in:
+    with open( name_results + ".pkl", "rb") as f_in:
         results["inputs_clustered"] = pickle.load(f_in)
         
     
-    with open ("results/"+ name_dist + '.pkl', "rb") as fin:
+    with open ( name_dist + '.pkl', "rb") as fin:
         results["loads_with"] = pickle.load(fin)                        #01
         results["line_to_loads"] = pickle.load(fin)                     #02
         results["loads_per_branch"] = pickle.load(fin)                  #03
@@ -23,7 +23,7 @@ def read_results(name_results, name_dist):
         
         
     
-    with open ("results/"+ name_results + '.pkl', "rb") as fin:
+    with open ( name_results + '.pkl', "rb") as fin:
         results["1_ObjVal"] = pickle.load(fin)                          #01
         results["2_Runtime"] = pickle.load(fin)                         #02
         results["3_MIPGap"] = pickle.load(fin)                          #03

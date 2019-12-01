@@ -19,36 +19,36 @@ import pandapower.plotting as plot
 #from pandapower.plotting.simple_plot_bat import simple_plot_bat
 from pandapower.plotting.simple_plot import simple_plot
 
- 
+
 # import own function
 import python.clustering_medoid as clustering
 import python.parse_inputs as pik
-import python.grid_optimization as opti
+import python.grid_optimization_2nd_building as opti
+#import python.grid_optimization_alt as opti
 #import python.grid_optimization_master as opti2
 import python.building_distribution as dist 
 import python.read_basic as reader
 
 
-# set parameters 
+#%% set parameters 
 building_type = "EFH"       # EFH, ZFH, MFH_6WE, MFH_10WE, MFH_15WE
+building_type2 = "MFH_6WE"  # second building type, query "mfh"
 building_age  = "2005"      # 1960, 1980, 2005 
 emission_year = "2017"      # 2017, 2030, 2050 
 # District parameters
 # second "option" for district coices, as floats
 district_options = {"net_type" : "KerberTest",     # from list of Kerber-net-names
                     "mfh" : 0.33,                  # ratio of MFH to EFH in %
-                    "pv" : 0.7,                    # ratio in %
+                    "pv" : 0.8,                    # ratio in %
                     "hp" : 0.5,                    # ratio in %
-                    "tes": 0.2,                    # ratio in %
-                    "ev" : 0.3,                    # ratio in %
-                    "case" : "random"  
+                    "ev" : 0.,                    # ratio in %
+                    "case" : "best"  
                     }
 
 net_type = district_options["net_type"]             # from list of Kerber-net-names
 mfh = str(math.floor(district_options["mfh"]*100))  # ratio of MFH to EFH in %
 pv = str(math.floor(district_options["pv"]*100))    # ratio in %
 hp = str(math.floor(district_options["hp"]*100))    # ratio in %
-tes = str(math.floor(district_options["tes"]*100))  # ratio in %
 ev = str(math.floor(district_options["ev"]*100))    # ratio in %
 case = district_options["case"]                     # Case: best, worst, random
 
@@ -57,21 +57,21 @@ case = district_options["case"]                     # Case: best, worst, random
  
 # TODO: load data for useable roofarea per building type
 # TODO: PV area as MILP-variable??     
-#useable_roofarea  = 0.30    #Default value: 0.25
+# useable_roofarea  = 0.30    #Default value: 0.25
 
 # set options
 options =   {#"case": "random",            # best, worst, random     
              "static_emissions": True,   # True: calculation with static emissions, 
                                          # False: calculation with timevariant emissions
              "rev_emissions": True,      # True: emissions revenues for feed-in
-                                        # False: no emissions revenues for feed-in
+                                         # False: no emissions revenues for feed-in
              "dhw_electric": True,       # define if dhw is provided decentrally by electricity
              "P_pv": 10.0,               # installed peak PV power
              "hp_mode": "energy_opt",    # choose between "off" (no hp) and "energy_opt" and "grid_opt"
              "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
              "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
-             "beta_th": 1.,             # relative size of thermal energy storage (between 0 and 1)
-             "EV_mode":"on_demand",      # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi-directional"
+             "beta_th": 0.5,             # relative size of thermal energy storage (between 0 and 1)
+             "EV_mode": "off",         # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi-directional"
              "show_grid_plots": False,   # show gridplots before and after optimization
             
              "filename_results": "results/" + building_type + "_" + \
@@ -79,8 +79,6 @@ options =   {#"case": "random",            # best, worst, random
              "building_results": "results/" + net_type + "_" + pv + ".pkl"   #b,w,r ans ende
              
             }
-
-#randomfile =  "net_" + net_type + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_tes" + tes + "_ev" + ev + ".xlsx"                       
 
 #%% data import
 
@@ -102,6 +100,12 @@ raw_inputs["electricity"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäud
 raw_inputs["solar_roof"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\solar_roof.csv") / 1000)       
 raw_inputs["temperature"] = np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\temperature.csv")
 
+raw_inputs["heat2"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type2+"\\"+building_age+"\\heat.csv") / 1000) 
+raw_inputs["dhw2"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type2+"\\"+building_age+"\\dhw.csv") / 1000) 
+raw_inputs["electricity2"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type2+"\\"+building_age+"\\electricity.csv") / 1000) 
+raw_inputs["solar_roof2"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type2+"\\"+building_age+"\\solar_roof.csv") / 1000)       
+raw_inputs["temperature2"] = np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type2+"\\"+building_age+"\\temperature.csv")
+
 emi_input = pd.read_csv(sourceFolder+"\\emission_factor_"+emission_year+".csv", header=0, usecols=[2])
 raw_inputs["co2_dyn"] = np.zeros([8760])    
 for t in range (0, 8760):   
@@ -116,6 +120,13 @@ inputs_clustering = np.array([raw_inputs["heat"],
                               raw_inputs["solar_roof"],
                               raw_inputs["temperature"],
                               raw_inputs["co2_dyn"]])
+    
+inputs_clustering2 = np.array([raw_inputs["heat2"], 
+                              raw_inputs["dhw2"],
+                              raw_inputs["electricity2"],
+                              raw_inputs["solar_roof2"],
+                              raw_inputs["temperature2"],
+                              raw_inputs["co2_dyn"]])
 
 number_clusters = 12
 (inputs, nc, z) = clustering.cluster(inputs_clustering, 
@@ -123,6 +134,12 @@ number_clusters = 12
                                      norm=2,
                                      mip_gap=0.0,
                                      weights=[1,1,1,1,0,1,1])
+
+(inputs2, nc2, z2) = clustering.cluster(inputs_clustering2, 
+                                        number_clusters=number_clusters,
+                                        norm=2,
+                                        mip_gap=0.0,
+                                        weights=[1,1,1,1,0,1,1])
 
 
 # Determine time steps per day
@@ -139,6 +156,17 @@ clustered["co2_stat"]       = np.zeros_like(clustered["co2_dyn"])
 clustered["co2_stat"][:,:]  = np.mean(raw_inputs["co2_dyn"])
 clustered["weights"]        = nc
 clustered["z"]              = z
+
+clustered["heat2"]           = inputs2[0]
+clustered["dhw2"]            = inputs2[1]
+clustered["electricity2"]    = inputs2[2]
+clustered["solar_irrad2"]    = inputs2[3]
+clustered["temperature2"]    = inputs2[4]
+clustered["co2_dyn"]         = inputs2[5]
+clustered["co2_stat"]        = np.zeros_like(clustered["co2_dyn"])
+clustered["co2_stat"][:,:]   = np.mean(raw_inputs["co2_dyn"])
+clustered["weights2"]        = nc2
+clustered["z2"]              = z2
 
 #%% load devices, econmoics, etc.
    
@@ -214,32 +242,43 @@ net.name = "landnetz_kabel_1"
 #net = nw.kb_extrem_vorstadtnetz_trafo_2()
 #net.name = "ex_vorstadtnetz_trafo_2"
 
-randomfile =  "net_" + net.name + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_tes" + tes + "_ev" + ev + ".xlsx"                       
+if options["dhw_electric"]:
+    filename = net.name + "_" + building_type + "_" + building_age + "_" + building_type2 + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_dhwe" + "_ev" + ev + "_" + case
+else:
+    filename = net.name + "_" + building_type + "_" + building_age + "_" + building_type2 + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_ev" + ev + "_" + case
 
+randomfile = net.name + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_ev" + ev + ".xlsx" 
+
+ev_file = net.name + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + ".xlsx"
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
     plot.simple_plot(net, show_plot=True)
 #    simple_plotly(net)  
 
+
+names =   {"filename_results": "results/" + filename + ".pkl",
+            "building_results": "results/" + "dist_" + filename + ".pkl"   #b,w,r ans ende
+             
+            }
+
+
 #%% find distribution for various building types
 
-(load_with) = dist.allocate(net, options, district_options, distributionFolder, randomfile)
-
+(load_with) = dist.allocate(net, options, names, district_options, distributionFolder, randomfile, ev_file)
+#load_with = 1
 #%% Store clustered input parameters
     
-filename = "results/inputs_" + building_type + "_" + building_age + ".pkl"
-with open(filename, "wb") as f_in:
+filename_input = "results/inputs_" + building_type + "_" + building_age + ".pkl"
+with open(filename_input, "wb") as f_in:
     pickle.dump(clustered, f_in, pickle.HIGHEST_PROTOCOL)
 
 #%% Define dummy parameters, options and start optimization
-         
 
-(costs, emission, U_nominal) = opti.compute(net, eco, devs, clustered, params, options, load_with)
+(costs, emission, U_nominal, bool_bat) = opti.compute(net, eco, devs, clustered, params, options, names, load_with, randomfile, ev_file, distributionFolder)
 
-
-### TO DO : second variable for building results for "reader" ANPASSEN (s.o.)
-outputs = reader.read_results(building_type + "_" + building_age, net_type + "_" + pv)
+### TO DO : second variable for building results for "reader" filename_dist, filename_results
+outputs = reader.read_results("results/" + filename, "results/" + "dist_" + filename)
 
 #%% plot grid with batteries highlighted
 
@@ -247,17 +286,18 @@ if options["show_grid_plots"]:
     
     bat_ex = np.zeros(len(outputs["nodes"]["grid"]))
     for n in outputs["nodes"]["grid"]:
-        if outputs["res_capacity"][n] >0:
+        if outputs["res_capacity"][n] > 0:
             bat_ex[n] = 1
     
 #    netx=net
 #    netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
 #    simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
+    
     netx=net
     netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
 
     simple_plot(netx, show_plot=True, bus_color='b', bat_color='r')
 
 
-test = 0
+#test = 0
 
