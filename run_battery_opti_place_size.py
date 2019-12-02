@@ -93,7 +93,7 @@ for t in range (0, 8760):
     i=t*4
     raw_inputs["co2_dyn"][t]= np.mean(emi_input[i:(i+4)])
 
-#%% data clustering 
+#%% data clustering
     
 inputs_clustering = np.array([raw_inputs["heat"], 
                               raw_inputs["dhw"],
@@ -102,7 +102,7 @@ inputs_clustering = np.array([raw_inputs["heat"],
                               raw_inputs["temperature"],
                               raw_inputs["co2_dyn"]])
 
-number_clusters = 30
+number_clusters = 12
 (inputs, nc, z) = clustering.cluster(inputs_clustering, 
                                      number_clusters=number_clusters,
                                      norm=2,
@@ -154,6 +154,10 @@ net = nw.create_kerber_landnetz_freileitung_2()
 #net = nw.create_kerber_vorstadtnetz_kabel_2()
 #net = nw.create_kerber_landnetz_kabel_2()
 
+#define sgens for net in order for timeloop to work properly
+net.sgen = net.load
+net.sgen.p_mw = 0
+
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
     plot.simple_plot(net, show_plot=True)
@@ -186,8 +190,10 @@ boolean_loop = True
 # constraint_apc models APC, gets reduced from 1 to 0 in iteration steps with range 0.1
 constraint_apc = {}
 # constraint for Injection and Subtraction. Inj gets cut when voltage is too high, Subtr gets cut when voltage is too low
-constraint_Inj = {}
-constraint_Subtr = {}
+constraint_InjMin = {}
+constraint_SubtrMin = {}
+constraint_InjMax = {}
+constraint_SubtrMax = {}
 # create array to flag whether values are critical for powerflow. If not critical: 0, if critical: 1
 critical_flag = {}
 iteration_counter = 0
@@ -199,8 +205,18 @@ for n in gridnodes:
         for t in timesteps:
             critical_flag[n, d, t] = 0
             constraint_apc[n, d] = 0
-            constraint_Inj[n, d, t] = 10000
-            constraint_Subtr[n, d, t] = 10000
+            constraint_InjMin[n, d, t] = 0
+            constraint_SubtrMin[n,d,t] = 0
+            constraint_InjMax[n,d,t] = 10000
+            constraint_SubtrMax[n, d, t] = 10000
+
+constraint_SubtrMin[7,24,0] = 20
+constraint_SubtrMin[6,24,0] = 20
+constraint_SubtrMin[5,24,0] = 20
+constraint_SubtrMin[4,24,0] = 20
+constraint_SubtrMin[7,3,23] = 20
+constraint_SubtrMin[6,3,23] = 20
+
 
 while boolean_loop:
 
@@ -208,9 +224,9 @@ while boolean_loop:
     print("!!! Iteration counter is currently at " +str(iteration_counter) + "!!!")
     print("")
     #run DC-optimization
-    (costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev, emissions_nodes, costs_nodes, objective_function) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered,params, options, constraint_apc, constraint_Inj, constraint_Subtr,critical_flag)
+    (costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev, emissions_nodes, costs_nodes, objective_function) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered,params, options, constraint_apc, constraint_InjMin, constraint_SubtrMin, constraint_InjMax, constraint_SubtrMax,critical_flag)
 
-    outputs = reader.read_results(building_type + "_" + building_age, options)
+    outputs = reader.read_results(options)
     # %% plot grid with batteries highlighted
     if options["show_grid_plots"]:
 
@@ -251,20 +267,26 @@ while boolean_loop:
                                     if (vm_pu_total[n,d,t] < 0.96):
                                         # relative Lösung wirft Problem der Spannungsweiterleitung auf
                                         #constraint_Subtr[n,d,t] = 0.90 * powSubtrPrev[n,d,t]
-                                        # absolute Regelung:
+                                        """# absolute Regelung:
                                         if (powSubtrPrev[n, d, t] < 3):
-                                            constraint_Subtr[n, d, t] = 0
-                                            print("limit for voltage barely kept for node" +str(n) + " and timestep" +str(t))
+                                            constraint_SubtrMax[n, d, t] = 0
+                                            print("Subtraction already set to 0 for node" +str(n) + " and timestep" +str(t))
+                                            print("Raising Injection now!")
+                                            constraint_InjMin[n,d,t] += 3
                                         else:
-                                            constraint_Subtr[n,d,t] = powSubtrPrev[n,d,t] - 3
+                                            constraint_SubtrMax[n,d,t] = powSubtrPrev[n,d,t] - 3"""
+                                        constraint_SubtrMax[n,d,t] = 0
+                                        constraint_InjMin[n,d,t] += 15
 
                                     elif (vm_pu_total[n,d,t] > 1.04):
                                         #constraint_Inj[n, d, t] = 0.90 * powInjPrev[n,d,t]
-                                        if (powInjPrev[n,d,t] < 2):
-                                            constraint_Inj[n,d,t] = 0
-                                            print("limit for voltage barely kept for node" +str(n) + " and timestep" +str(t))
+                                        if (powInjPrev[n,d,t] < 3):
+                                            constraint_InjMax[n,d,t] = 0
+                                            print("Injection already set to 0 for node" +str(n) + " and timestep" +str(t))
+                                            print("Raising Subtraction now!")
+                                            constraint_SubtrMin[n,d,t] += 15
                                         else:
-                                            constraint_Inj[n,d,t] = powInjPrev[n,d,t] - 3
+                                            constraint_InjMax[n,d,t] = powInjPrev[n,d,t] - 3
 
                 else:
                     print("You selected only apc in case of voltage violations.")
@@ -288,22 +310,25 @@ while boolean_loop:
                     for t in timesteps:
                         if (critical_flag[n, d, t] == 1):
                             if (vm_pu_total[n, d, t] < 0.96):
-                                # relative Lösung wirft Problem der Spannungsweiterleitung auf
-                                # constraint_Subtr[n,d,t] = 0.90 * powSubtrPrev[n,d,t]
-                                # absolute Regelung:
-                                if (powSubtrPrev[n, d, t] < 2):
-                                    constraint_Subtr[n, d, t] = 0
-                                    print("limit for voltage barely kept for node" + str(n) + " and timestep" + str(t))
+                                """# absolute Regelung:
+                                if (powSubtrPrev[n, d, t] < 3):
+                                    constraint_SubtrMax[n, d, t] = 0
+                                    print("Subtraction already set to 0 for node" +str(n) + " and timestep" +str(t))
+                                    print("Raising Injection now!")
+                                    constraint_InjMin[n,d,t] += 3
                                 else:
-                                    constraint_Subtr[n, d, t] = powSubtrPrev[n, d, t] - 3
-
+                                    constraint_SubtrMax[n,d,t] = powSubtrPrev[n,d,t] - 3"""
+                                constraint_SubtrMax[n,d,t] = 0
+                                constraint_InjMin[n, d, t] += 2
                             elif (vm_pu_total[n, d, t] > 1.04):
                                 # constraint_Inj[n, d, t] = 0.90 * powInjPrev[n,d,t]
-                                if (powInjPrev[n, d, t] < 2):
-                                    constraint_Inj[n, d, t] = 0
-                                    print("limit for voltage barely kept for node" + str(n) + " and timestep" + str(t))
+                                if (powInjPrev[n, d, t] < 3):
+                                    constraint_InjMax[n, d, t] = 0
+                                    print("Injection already set to 0 for node" + str(n) + " and timestep" + str(t))
+                                    print("Raising Subtraction now!")
+                                    constraint_SubtrMin[n, d, t] += 3
                                 else:
-                                    constraint_Inj[n, d, t] = powInjPrev[n, d, t] - 3
+                                    constraint_InjMax[n, d, t] = powInjPrev[n, d, t] - 3
 
             elif (options["cut_Inj/Subtr_while_voltage_violation"] == False and options["apc_while_voltage_violation"] == False):
                 print("Error: You did not select any measure in case of voltage violations!")
@@ -329,7 +354,7 @@ t2 = int(time.time())
 duration_program = t1 - t2
 
 print("this is the end")
-#plot_res.plot_results(outputs, days, gridnodes, timesteps)
+plot_res.plot_results(outputs, days, gridnodes, timesteps)
 print("")
 print("")
 print("objective value für 30 Typtage:")

@@ -4,13 +4,13 @@
 """
 import pickle 
 
-def read_results(name, options):
+def read_results(options):
     results = {}
     
-    with open(options["filename_results"], "rb") as f_in:
+    with open(options["filename_inputs"], "rb") as f_in:
         results["inputs_clustered"] = pickle.load(f_in)
     
-    with open ("results/"+ name + '.pkl', "rb") as fin:
+    with open (options["filename_results"], "rb") as fin:
         results["1_ObjVal"] = pickle.load(fin) 
         results["2_Runtime"] = pickle.load(fin)
         results["3_MIPGap"] = pickle.load(fin)
@@ -23,8 +23,10 @@ def read_results(name, options):
         results["res_powerDis"] = pickle.load(fin)
         results["res_SOC"] = pickle.load(fin)
         results["res_SOC_init"] = pickle.load(fin)
-        results["res_constraint_Inj"] = pickle.load(fin)
-        results["res_constraint_Subtr"] = pickle.load(fin)
+        results["res_constraint_InjMin"] = pickle.load(fin)
+        results["res_constraint_SubtrMin"] = pickle.load(fin)
+        results["res_constraint_InjMax"] = pickle.load(fin)
+        results["res_constraint_SubtrMax"] = pickle.load(fin)
         results["res_exBat"] = pickle.load(fin)
         results["res_actBat"] = pickle.load(fin)
         results["res_powerInj"] = pickle.load(fin)

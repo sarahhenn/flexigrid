@@ -16,7 +16,7 @@ import python.hpopt_energy as hpopt
 
 #%% Start:
 
-def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params, options, constraint_apc, constraint_Inj, constraint_Subtr, critical_flag):
+def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params, options, constraint_apc, constraint_InjMin, constraint_SubtrMin,constraint_InjMax,constraint_SubtrMax, critical_flag):
     """
     Compute the optimal building energy system consisting of pre-defined 
     devices (devs) for a given building. Furthermore the program can choose
@@ -170,11 +170,15 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     # data is linearized out of devices file
     capBat_max = {}
     capBat_min = {}
-    
+    chBat_max = {}
+    chBat_min = {}
+
     for n in gridnodes:
         if n in nodes["bat"]:
             capBat_max[n] = devs["bat"]["cap_max"]
             capBat_min[n] = devs["bat"]["cap_min"]
+            chBat_max[n] = devs["bat"]["cap_max"]
+            chBat_min[n] = devs["bat"]["cap_min"]
 
     # attach plug-in loads and PV generatrion to building nodes
     # assume that PV is the only generated electricity
@@ -216,9 +220,6 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                         powerGenRealMax[n,d] = 0
                         powerGenReal[n,d,t] = 0
                         powerGenCurt[n,d,t] = 0
-
-        powerGenReal_array = np.array([[[powerGenReal[n,d,t] for n in gridnodes]for d in days] for t in timesteps])
-        powerGen_array = np.array([[[powerGen[n,d,t] for n in gridnodes]for d in days] for t in timesteps])
 
 #%% optimization model
 
@@ -602,7 +603,6 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
             for t in timesteps:
                 if n in nodes["bat"]:
 
-                    # added constraint bat, which gets changed for every iteration (+1kW per iteration) and critical flag to indicate whether voltage violations were struck
                     # prevent batteries from simultaneously charging and discharging (yBat integrated)
                     model.addConstr(powerCh[n,d,t]  <= (devs["bat"]["P_ch_fix"] + capacity[n]*devs["bat"]["P_ch_var"]), name="max_power_"+str(n)+str(t))
                     model.addConstr(powerCh[n,d,t] <= y_bat[n,d,t] * capBat_max[n], name= "bigM_power_"+str(n) +str(d)+str(t))
@@ -718,6 +718,16 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                         powerNetLoad[n, d, t] + powerNetChBat[n, d, t] + powerEHNet[n, d, t] for n in gridnodes for d in days for t in timesteps),
                         name="balance_powerSubtr_" + str(n))
 
+        # split power from heatpump
+        model.addConstrs((power_hp[n, d, t] == powerHPNet[n, d, t] + powerHPPV[n, d, t] + powerHPBat[n, d, t]
+                          for n in gridnodes for d in days for t in timesteps),
+                         name="powerInj_UseBat" + str(n) + str(d) + str(t))
+
+        # split power from electric heater
+        model.addConstrs((power_eh[n, d, t] == powerEHNet[n, d, t] + powerEHPV[n, d, t] + powerEHBat[n, d, t]
+                          for n in gridnodes for d in days for t in timesteps),
+                         name="powerInj_UseBat" + str(n) + str(d) + str(t))
+
         # energy balance PV device
         model.addConstrs((-powerUsePV[n, d, t] - powerEHPV[n, d, t] - powerHPPV[n, d, t] ==
                         -powerGenReal[n, d, t] + powerInjPV[n, d, t] + powerPVChBat[n, d, t] for n in gridnodes for d in days for t in timesteps),
@@ -768,11 +778,14 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     for n in gridnodes:
         for d in days:
             for t in timesteps:
-                model.addConstr(powerInj[n,d,t] <= constraint_Inj[n,d,t])
+                model.addConstr(powerInj[n,d,t] >= constraint_InjMin[n,d,t])
+                model.addConstr(powerInj[n,d,t] <= constraint_InjMax[n,d,t])
                 if options["hp_mode"] == "grid_opt":
-                    model.addConstr(powerSubtr[n,d,t] + powerHPNet[n,d,t] <= constraint_Subtr[n,d,t])
+                    model.addConstr(powerSubtr[n,d,t] + powerHPNet[n,d,t] <= constraint_SubtrMax[n,d,t])
+                    model.addConstr(powerSubtr[n,d,t] + powerHPNet[n,d,t] >= constraint_SubtrMin[n,d,t])
                 else:
-                    model.addConstr(powerSubtr[n, d, t] <= constraint_Subtr[n, d, t])
+                    model.addConstr(powerSubtr[n, d, t] <= constraint_SubtrMax[n, d, t])
+                    model.addConstr(powerSubtr[n,d,t] >= constraint_SubtrMin[n,d,t])
 
     #%% start optimization
     
@@ -840,8 +853,10 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     res_powerDis = np.array([[[powerDis[n, d, t].X for t in timesteps] for d in days] for n in gridnodes])
     res_SOC = np.array([[[SOC[n, d, t].X for t in timesteps] for d in days] for n in gridnodes])
     res_SOC_init = np.array([[SOC_init[n, d].X for d in days] for n in gridnodes])
-    res_constraint_Inj = np.array([[[constraint_Inj[n, d, t] for t in timesteps] for d in days] for n in gridnodes])
-    res_constraint_Subtr = np.array([[[constraint_Subtr[n, d, t] for t in timesteps] for d in days] for n in gridnodes])
+    res_constraint_InjMin = np.array([[[constraint_InjMin[n, d, t] for t in timesteps] for d in days] for n in gridnodes])
+    res_constraint_SubtrMin = np.array([[[constraint_SubtrMin[n, d, t] for t in timesteps] for d in days] for n in gridnodes])
+    res_constraint_InjMax = np.array([[[constraint_InjMax[n, d, t] for t in timesteps] for d in days] for n in gridnodes])
+    res_constraint_SubtrMax = np.array([[[constraint_SubtrMax[n, d, t] for t in timesteps] for d in days] for n in gridnodes])
 
     # retrieve apc results
     if options["allow_apc_opti"]:
@@ -940,8 +955,10 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
         pickle.dump(res_powerDis, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_SOC, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_SOC_init, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_constraint_Inj, fout, pickle.HIGHEST_PROTOCOL)
-        pickle.dump(res_constraint_Subtr, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_constraint_InjMin, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_constraint_SubtrMin, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_constraint_InjMax, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(res_constraint_SubtrMax, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_exBat, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_actBat, fout, pickle.HIGHEST_PROTOCOL)
 
@@ -1002,8 +1019,8 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     if options["hp_mode"] == "grid_opt":
         powSubtrRet= np.array([[[(((powerSubtr[n,d,t].X) + (powerHPNet[n,d,t].X))/1000) for t in timesteps] for n in gridnodes] for d in days])
     else:
-        powSubtrRet = np.array([[[((powerSubtr[n, d, t].X) / 1000) for t in timesteps] for n in gridnodes] for d in days])
-    powInjRet = np.array([[[((powerInj[n, d, t].X) / 1000) for t in timesteps] for n in gridnodes] for d in days])
+        powSubtrRet = np.array([[[((powerSubtr[n, d, t].X)/1000) for t in timesteps] for n in gridnodes] for d in days])
+    powInjRet = np.array([[[((powerInj[n, d, t].X)/1000) for t in timesteps] for n in gridnodes] for d in days])
 
 
     """BatCharge = np.array([[[(powerCh[n,d,t].X) for t in timesteps] for d in days] for n in gridnodes])
@@ -1040,7 +1057,4 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
     print("optimization successfull")
 
-    return (res_c_total_grid, res_emission_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, res_powerInj, res_powerSubtr, res_emission_nodes, res_c_total_nodes, emissions_added)
-
-
-
+    return (res_c_total_grid, res_emission_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, res_powerInj, res_powerSubtrTotal, res_emission_nodes, res_c_total_nodes, emissions_added)

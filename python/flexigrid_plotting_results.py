@@ -45,6 +45,17 @@ def plot_results(outputs, days, gridnodes, timesteps):
         plt.grid()
         plt.show()"""
 
+        # load results
+        load_file = os.path.join(output_dir_pp, "res_load", "p_mw.json")
+        load = pd.read_json(load_file)
+        # sort dataframe to get timesteps(rows) in the correct order
+        load = load.sort_index(axis=0)
+        load.plot(label="load")
+        plt.xlabel("time step")
+        plt.ylabel("P [MW]")
+        plt.grid()
+        plt.show()
+
         # state of charge battery results
         res_soc_bat = outputs["res_SOC"]
         res_soc_bat_2d = np.zeros((len(gridnodes),len(timesteps)))
