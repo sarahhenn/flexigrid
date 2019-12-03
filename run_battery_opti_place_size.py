@@ -8,6 +8,7 @@ Created on Wed Jun 26 15:34:57 2019
 
 
 # import extern functions
+import shutil
 import numpy as np
 import pickle
 import pandas as pd
@@ -45,22 +46,22 @@ emission_year = "2017"      # 2017, 2030, 2050
 # set options
 options =   {"static_emissions": False,  # True: calculation with static emissions,
                                         # False: calculation with timevariant emissions
-            "rev_emissions": False,      # True: emissions revenues for feed-in
+            "rev_emissions": True,      # True: emissions revenues for feed-in
                                         # False: no emissions revenues for feed-in
-            "dhw_electric": False,       # define if dhw is provided decentrally by electricity
-            "P_pv": 5.00,              # installed peak PV power
+            "dhw_electric": True,       # define if dhw is provided decentrally by electricity
+            "P_pv": 10.00,              # installed peak PV power
             "with_hp": True,            # usage of heat pumps
             "hp_mode": "grid_opt",    # choose between "energy_opt" and "grid_opt"
             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
-            "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
-            "beta_th": 0.2,             # relative size of thermal energy storage (between 0 and 1)
+            "alpha_th": 1,            # relative size of heat pump (between 0 and 1)
+            "beta_th": 0.417,             # relative size of thermal energy storage (between 0 and 1)
             "show_grid_plots": False,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
                                                    building_age + "Typtage_30.pkl",
             "filename_inputs": "results/inputs_" + building_type + "_" + \
                                                    building_age + "Typtage_30.pkl",
-            "apc_while_voltage_violation": True,    #True: uses apc, when voltage violations occur
+            "apc_while_voltage_violation": False,    #True: uses apc, when voltage violations occur
                                                     #False: does not use apc, when voltage violations occur
             "cut_Inj/Subtr_while_voltage_violation": True, #True: cuts Inj or Subtr, when voltage violations occur
                                                     #depends automatically on the fact, whether voltage is too high or too low
@@ -68,8 +69,9 @@ options =   {"static_emissions": False,  # True: calculation with static emissio
              #select your cost function calculation through objective function in grid_optimization
             "heatpump_seperated_costs": True,       #True: Heatpumps power costs: 18.56 ct/kWh (apart from other power users)
                                                     #False: Heatpump power costs: 27.8 ct/kWh (equal to other power users)
-             "allow_apc_opti": True                #True: Curtailment allowed to be set in optimization
+             "allow_apc_opti": True,               #True: Curtailment allowed to be set in optimization
                                                     #False: Curtailment only through additional constraint
+             "change_value_node_violation_abs": 2   #specify, for how much the absolute values of inj and subtr should change in case of voltage violations
             }
                      
 #%% data import
@@ -79,12 +81,13 @@ operationFolder="C:\\users\\flori\\pycharmprojects\\flexigrid"
 #the input data is always in this source folder
 sourceFolder=operationFolder+"\\input"
 
-raw_inputs = {} 
+raw_inputs = {}
+# TODO: MAL 1000 WIEDER BEI ALLEN AUßER DER TEMPERATUR
 
-raw_inputs["heat"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\heat.csv") / 1000) 
-raw_inputs["dhw"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\dhw.csv") / 1000) 
-raw_inputs["electricity"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\electricity.csv") / 1000) 
-raw_inputs["solar_roof"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\solar_roof.csv") / 1000)       
+raw_inputs["heat"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\heat.csv")/1000)
+raw_inputs["dhw"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\dhw.csv")/1000)
+raw_inputs["electricity"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\electricity.csv")/1000)
+raw_inputs["solar_roof"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\solar_roof.csv")/1000)
 raw_inputs["temperature"] = np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\temperature.csv")
 
 emi_input = pd.read_csv(sourceFolder+"\\emission_factor_"+emission_year+".csv", header=0, usecols=[2])
@@ -154,10 +157,6 @@ net = nw.create_kerber_landnetz_freileitung_2()
 #net = nw.create_kerber_vorstadtnetz_kabel_2()
 #net = nw.create_kerber_landnetz_kabel_2()
 
-#define sgens for net in order for timeloop to work properly
-net.sgen = net.load
-net.sgen.p_mw = 0
-
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
     plot.simple_plot(net, show_plot=True)
@@ -175,6 +174,11 @@ nodes["grid"] = net.bus.index.to_numpy()
 nodes["trafo"] = net.trafo['lv_bus'].to_numpy()
 nodes["load"] = net.load['bus'].to_numpy()
 nodes["bat"] = net.load['bus'].to_numpy()
+
+# define sgens for net in order to be able to include gen values in timeloop
+nodesload = list(nodes["load"])
+for n in nodesload:
+    pp.create_sgen(net, n, p_mw=0)
 
 #define gridnodes, days and timesteps
 gridnodes = list(nodes["grid"])
@@ -200,6 +204,8 @@ iteration_counter = 0
 # introduce boolean to state infeasability
 infeasability = False
 
+change_value = options["change_value_node_violation_abs"]
+
 for n in gridnodes:
     for d in days:
         for t in timesteps:
@@ -210,19 +216,14 @@ for n in gridnodes:
             constraint_InjMax[n,d,t] = 10000
             constraint_SubtrMax[n, d, t] = 10000
 
-constraint_SubtrMin[7,24,0] = 20
-constraint_SubtrMin[6,24,0] = 20
-constraint_SubtrMin[5,24,0] = 20
-constraint_SubtrMin[4,24,0] = 20
-constraint_SubtrMin[7,3,23] = 20
-constraint_SubtrMin[6,3,23] = 20
-
-
 while boolean_loop:
-
     print("")
     print("!!! Iteration counter is currently at " +str(iteration_counter) + "!!!")
     print("")
+    """for d in days:
+            output_dir = os.path.join(tempfile.gettempdir(), "time_series_example" + str(d))
+            shutil.rmtree(output_dir)"""
+
     #run DC-optimization
     (costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev, emissions_nodes, costs_nodes, objective_function) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered,params, options, constraint_apc, constraint_InjMin, constraint_SubtrMin, constraint_InjMax, constraint_SubtrMax,critical_flag)
 
@@ -266,27 +267,27 @@ while boolean_loop:
                                 if(critical_flag[n,d,t] == 1):
                                     if (vm_pu_total[n,d,t] < 0.96):
                                         # relative Lösung wirft Problem der Spannungsweiterleitung auf
-                                        #constraint_Subtr[n,d,t] = 0.90 * powSubtrPrev[n,d,t]
+                                        constraint_SubtrMax[n,d,t] = 0.90 * powSubtrPrev[n,d,t]
                                         """# absolute Regelung:
-                                        if (powSubtrPrev[n, d, t] < 3):
+                                        if (powSubtrPrev[n, d, t] < change_value):
                                             constraint_SubtrMax[n, d, t] = 0
                                             print("Subtraction already set to 0 for node" +str(n) + " and timestep" +str(t))
                                             print("Raising Injection now!")
-                                            constraint_InjMin[n,d,t] += 3
+                                            constraint_InjMin[n,d,t] += change_value
                                         else:
-                                            constraint_SubtrMax[n,d,t] = powSubtrPrev[n,d,t] - 3"""
-                                        constraint_SubtrMax[n,d,t] = 0
-                                        constraint_InjMin[n,d,t] += 15
+                                            constraint_SubtrMax[n,d,t] = powSubtrPrev[n,d,t] - change_value"""
 
                                     elif (vm_pu_total[n,d,t] > 1.04):
-                                        #constraint_Inj[n, d, t] = 0.90 * powInjPrev[n,d,t]
-                                        if (powInjPrev[n,d,t] < 3):
+                                        constraint_InjMax[n, d, t] = 0.90 * powInjPrev[n,d,t]
+                                        """
+                                        #absolute änderung
+                                        if (powInjPrev[n,d,t] < change_value):
                                             constraint_InjMax[n,d,t] = 0
                                             print("Injection already set to 0 for node" +str(n) + " and timestep" +str(t))
                                             print("Raising Subtraction now!")
-                                            constraint_SubtrMin[n,d,t] += 15
+                                            constraint_SubtrMin[n,d,t] += change_value
                                         else:
-                                            constraint_InjMax[n,d,t] = powInjPrev[n,d,t] - 3
+                                            constraint_InjMax[n,d,t] = powInjPrev[n,d,t] - change_value"""
 
                 else:
                     print("You selected only apc in case of voltage violations.")
@@ -310,30 +311,31 @@ while boolean_loop:
                     for t in timesteps:
                         if (critical_flag[n, d, t] == 1):
                             if (vm_pu_total[n, d, t] < 0.96):
+                                constraint_SubtrMax[n, d, t] = 0.90 * powSubtrPrev[n, d, t]
                                 """# absolute Regelung:
-                                if (powSubtrPrev[n, d, t] < 3):
+                                if (powSubtrPrev[n, d, t] < change_value):
                                     constraint_SubtrMax[n, d, t] = 0
                                     print("Subtraction already set to 0 for node" +str(n) + " and timestep" +str(t))
                                     print("Raising Injection now!")
-                                    constraint_InjMin[n,d,t] += 3
+                                    constraint_InjMin[n,d,t] += change_value
                                 else:
-                                    constraint_SubtrMax[n,d,t] = powSubtrPrev[n,d,t] - 3"""
-                                constraint_SubtrMax[n,d,t] = 0
-                                constraint_InjMin[n, d, t] += 2
+                                    constraint_SubtrMax[n,d,t] = powSubtrPrev[n,d,t] - change_value"""
+
                             elif (vm_pu_total[n, d, t] > 1.04):
-                                # constraint_Inj[n, d, t] = 0.90 * powInjPrev[n,d,t]
-                                if (powInjPrev[n, d, t] < 3):
+                                constraint_InjMax[n, d, t] = 0.90 * powInjPrev[n,d,t]
+                                """
+                                #absolute Regelung
+                                if (powInjPrev[n, d, t] < change_value):
                                     constraint_InjMax[n, d, t] = 0
                                     print("Injection already set to 0 for node" + str(n) + " and timestep" + str(t))
                                     print("Raising Subtraction now!")
-                                    constraint_SubtrMin[n, d, t] += 3
+                                    constraint_SubtrMin[n, d, t] += change_value
                                 else:
-                                    constraint_InjMax[n, d, t] = powInjPrev[n, d, t] - 3
+                                    constraint_InjMax[n, d, t] = powInjPrev[n, d, t] - change_value"""
 
             elif (options["cut_Inj/Subtr_while_voltage_violation"] == False and options["apc_while_voltage_violation"] == False):
                 print("Error: You did not select any measure in case of voltage violations!")
                 infeasability = True
-
 
         if(solution_found[d] == True):
                 print("Solution was successfully found for day" + str(d))
@@ -345,7 +347,6 @@ while boolean_loop:
 
     iteration_counter += 1
 
-
     if all(solution_found[d] == True for d in days):
         print("Congratulations! Your optimization and loadflow calculation has been successfully finished after " + str(iteration_counter - 1) + " iteration steps!")
         break
@@ -354,7 +355,7 @@ t2 = int(time.time())
 duration_program = t1 - t2
 
 print("this is the end")
-plot_res.plot_results(outputs, days, gridnodes, timesteps)
+#plot_res.plot_results(outputs, days, gridnodes, timesteps)
 print("")
 print("")
 print("objective value für 30 Typtage:")

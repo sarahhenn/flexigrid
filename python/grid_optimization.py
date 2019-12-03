@@ -1052,9 +1052,6 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     emissions_added = sum(res_emission_nodes)
     costs_added = res_c_total_nodes
 
-
-
-
     print("optimization successfull")
 
     return (res_c_total_grid, res_emission_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, res_powerInj, res_powerSubtrTotal, res_emission_nodes, res_c_total_nodes, emissions_added)

@@ -209,8 +209,7 @@ while boolean_loop:
     print("!!! Iteration counter is currently at " + str(iteration_counter) + "!!!")
     print("")
     # run DC-optimization
-    (
-    costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev,
+    (costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev,
     emissions_nodes, costs_nodes, objective_function) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs,
                                                                      clustered, params, options, constraint_apc,
                                                                      constraint_Inj, constraint_Subtr, critical_flag)

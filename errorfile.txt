@@ -1,6 +1,3 @@
 
 The following constraint(s) cannot be satisfied:
-total_apc_constr98
-R9168
-R9169
-R9170
+R3017

@@ -13,7 +13,11 @@ from pandapower.control.controller.const_control import ConstControl
 def timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, gridnodes):
 
     #create new variable, because pandapower only uses time_steps in stead of timesteps
-    time_steps = timesteps
+    time_steps = range(0,24)
+
+    # nicht sicher, ob das hier rein mus oder nicht
+    pp.set_user_pf_options(net, init_vm_pu= "flat", init_va_degree = "dc", calculate_voltage_angles = True)
+
 
     #retrieve data source
     profilesInj, profilesSubtr, dsInj, dsSubtr, dsTotal = retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes, net)
@@ -25,10 +29,12 @@ def timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, g
     create_controllers(net,dsInj,dsSubtr,dsTotal,gridnodes,profilesInj, profilesSubtr)
 
     #the output writer with the desired results to be stored to files
-    ow = create_output_writer(net, timesteps, output_dir=output_dir)
+    ow = create_output_writer(net, time_steps, output_dir=output_dir)
 
     #the main time series function
     run_timeseries(net, time_steps, continue_on_divergence=True, output_writer=ow)
+
+    return ow
 
 def retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes, net):
 
@@ -71,37 +77,23 @@ def retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes, net):
 
 def create_controllers(net, dsInj, dsSubtr, dsTotal,gridnodes, profilesInj, profilesSubtr):
 
-    gridnodes_index = []
-    for n in gridnodes:
-        if n > 1:
-            gridnodes_index.append(n)
-    gridnodes_index_minus_two = []
-    for n in gridnodes:
-        if n > 1:
-            gridnodes_index_minus_two.append(n - 2)
-    a = dsSubtr.df.columns
-    b = net.load.index
-    c = net.sgen.index
-    d = dsSubtr.df.columns
-
     #Listenlösung, geht sehr schnell, aber die voltages variieren nicht mehr...
-    ConstControl(net, element= 'load', variable= 'p_mw', element_index=net.load.index, data_source=dsSubtr, profile_name=dsSubtr.df.columns)
-    ConstControl(net, element= 'sgen', variable= 'p_mw', element_index=net.sgen.index, data_source=dsInj, profile_name=dsInj.df.columns)
-
-    """# here i created a loop of const control, voltages variieren auch hier nicht
-    for n in gridnodes_index_minus_two:
-        ConstControl(net, element='load', variable='p_mw', element_index=[n],data_source=dsSubtr, profile_name=[n + 2])
-        ConstControl(net, element='sgen', variable='p_mw', element_index=[n],data_source=dsInj, profile_name=[n + 2])"""
+    #ConstControl(net, element= 'load', variable= 'p_mw', element_index=net.load.index, data_source=dsSubtr, profile_name=dsSubtr.df.columns)
+    ConstControl(net, element= 'load', variable= 'p_mw', element_index=net.load.index, data_source=dsSubtr, profile_name=net.load.index)
+    #ConstControl(net, element= 'sgen', variable= 'p_mw', element_index=net.sgen.index, data_source=dsInj, profile_name=dsInj.df.columns)
+    ConstControl(net, element= 'sgen', variable= 'p_mw', element_index=net.sgen.index, data_source=dsInj, profile_name=net.sgen.index)
 
 
-def create_output_writer(net, timesteps, output_dir):
-    time_steps = timesteps
+def create_output_writer(net, time_steps, output_dir):
+
     ow = OutputWriter(net, time_steps, output_path=output_dir, output_file_type=".json")
     #these variables are saved to the harddisk after / during the time series loop
     ow.log_variable('res_load', 'p_mw')
     ow.log_variable('res_bus', 'vm_pu')
     ow.log_variable('res_line', 'loading_percent')
-    #ow.log_variable('res_line', 'i_ka')
+    ow.log_variable('res_line', 'i_ka')
+    ow.log_variable('res_sgen', 'p_mw')
+
     return ow
 
     #execution follows:
@@ -126,7 +118,7 @@ def run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
         print("Results can be found in your local temp folder: {}".format(output_dir))
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
-        timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, gridnodes)
+        ow = timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, gridnodes)
 
         # read out json files for voltages and return time and place of violation
         vm_pu_file = os.path.join(output_dir, "res_bus", "vm_pu.json")
@@ -135,7 +127,6 @@ def run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
         vm_pu = vm_pu.sort_index(axis=0)
         # vm_pu was creating keyerror, so changed into array
         vm_pu_final = vm_pu.values
-        print("")
 
         for n in gridnodes:
             for t in timesteps:
@@ -146,7 +137,7 @@ def run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
                         solution_found[d] = False
                         print("voltage violation found for node "+str(n)+" and timestep "+str(t))
                 else:
-                    pass
+                    critical_flag[n,d,t] = 0
 
         if(all((vm_pu_final[t,n] >= 0.96 and vm_pu_final[t,n] <= 1.04) for n in gridnodes for t in timesteps)) == True:
             solution_found[d] = True
@@ -157,7 +148,10 @@ def run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
                 vm_pu_total[n,d,t] = vm_pu_final[t,n]
 
     vm_pu_total = np.array([[[vm_pu_total[n,d,t] for t in timesteps] for d in days] for n in gridnodes])
-        #pp.diagnostic(net)
-
+    ow.remove_output_variable('res_load', 'p_mw')
+    ow.remove_output_variable('res_bus', 'vm_pu')
+    ow.remove_output_variable('res_line', 'loading_percent')
+    ow.remove_output_variable('res_line', 'i_ka')
+    ow.remove_output_variable('res_sgen', 'p_mw')
 
     return output_dir,critical_flag,solution_found, vm_pu_total
