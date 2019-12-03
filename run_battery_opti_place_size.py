@@ -46,7 +46,7 @@ emission_year = "2017"      # 2017, 2030, 2050
 # set options
 options =   {"static_emissions": False,  # True: calculation with static emissions,
                                         # False: calculation with timevariant emissions
-            "rev_emissions": True,      # True: emissions revenues for feed-in
+            "rev_emissions": False,      # True: emissions revenues for feed-in
                                         # False: no emissions revenues for feed-in
             "dhw_electric": True,       # define if dhw is provided decentrally by electricity
             "P_pv": 10.00,              # installed peak PV power
@@ -82,7 +82,6 @@ operationFolder="C:\\users\\flori\\pycharmprojects\\flexigrid"
 sourceFolder=operationFolder+"\\input"
 
 raw_inputs = {}
-# TODO: MAL 1000 WIEDER BEI ALLEN AUßER DER TEMPERATUR
 
 raw_inputs["heat"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\heat.csv")/1000)
 raw_inputs["dhw"]  = np.maximum(0, np.loadtxt(sourceFolder+"\\Typgebäude\\"+building_type+"\\"+building_age+"\\dhw.csv")/1000)
@@ -153,7 +152,11 @@ extreme kerber grids:   landnetz_freileitung(), landnetz_kabel(), landnetz_freil
     -> create network with nw.kb_extrem_name   
             
 '''
-net = nw.create_kerber_landnetz_freileitung_2()
+net_name = "landnetz_freileitung_2"
+#net = nw.create_kerber_+net_name
+fkt_name = "create_kerber_" + net_name
+fkt = getattr(nw, fkt_name)
+net= fkt()
 #net = nw.create_kerber_vorstadtnetz_kabel_2()
 #net = nw.create_kerber_landnetz_kabel_2()
 
@@ -241,7 +244,7 @@ while boolean_loop:
         simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
 
     # run AC-Powerflow-Solver
-    (output_dir, critical_flag, solution_found,vm_pu_total) = loop.run_timeloop(net, timesteps, days, powInjRet, powSubtrRet,gridnodes, critical_flag, solution_found)
+    (output_dir, critical_flag, solution_found,vm_pu_total) = loop.run_timeloop(fkt, timesteps, days, powInjRet, powSubtrRet,gridnodes, critical_flag, solution_found)
     #vm_pu_total_array = np.array([[[vm_pu_total[n, d, t] for t in timesteps] for d in days] for n in gridnodes])
     print("zwischenstop")
     for d in days:

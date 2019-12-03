@@ -4,6 +4,7 @@ import tempfile
 import pandapower as pp
 import pandas as pd
 import numpy as np
+import pandapower.networks as nw
 
 from pandapower.timeseries.data_sources.frame_data import DFData
 from pandapower.timeseries.output_writer import OutputWriter
@@ -98,14 +99,20 @@ def create_output_writer(net, time_steps, output_dir):
 
     #execution follows:
 
-def run_timeloop(net, timesteps, days, powInjRet, powSubtrRet, gridnodes,critical_flag,solution_found):
+def run_timeloop(fkt, timesteps, days, powInjRet, powSubtrRet, gridnodes,critical_flag,solution_found):
 
+    net = fkt()
     nodes = {}
 
     nodes["grid"] = net.bus.index.to_numpy()
     nodes["trafo"] = net.trafo['lv_bus'].to_numpy()
     nodes["load"] = net.load['bus'].to_numpy()
     nodes["bat"] = net.load['bus'].to_numpy()
+
+    # define sgens for net in order to be able to include gen values in timeloop
+    nodesload = list(nodes["load"])
+    for n in nodesload:
+        pp.create_sgen(net, n, p_mw=0)
 
     vm_pu_total = {}
     for n in gridnodes:
