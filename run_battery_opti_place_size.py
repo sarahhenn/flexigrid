@@ -16,8 +16,8 @@ import pandapower.plotting as plot
 #from pandapower.plotting.plotly import simple_plotly
 #import pandapower.plotting.plotly.simple_plotly 
 #from pandapower.plotting import *
-#from pandapower.plotting.simple_plot_bat import simple_plot_bat
-from pandapower.plotting.simple_plot import simple_plot
+from pandapower.plotting.simple_plot_bat import simple_plot_bat
+#from pandapower.plotting.simple_plot import simple_plot
 
 
 # import own function
@@ -39,29 +39,14 @@ emission_year = "2017"      # 2017, 2030, 2050
 # second "option" for district coices, as floats
 district_options = {"net_type" : "KerberTest",     # from list of Kerber-net-names
                     "mfh" : 0.33,                  # ratio of MFH to EFH in %
-                    "pv" : 0.8,                    # ratio in %
+                    "pv" : 0.5,                    # ratio in %
                     "hp" : 0.5,                    # ratio in %
-                    "ev" : 0.,                    # ratio in %
-                    "case" : "best"  
+                    "ev" : 0.3,                    # ratio in %
+                    "case" : "random"  
                     }
 
-net_type = district_options["net_type"]             # from list of Kerber-net-names
-mfh = str(math.floor(district_options["mfh"]*100))  # ratio of MFH to EFH in %
-pv = str(math.floor(district_options["pv"]*100))    # ratio in %
-hp = str(math.floor(district_options["hp"]*100))    # ratio in %
-ev = str(math.floor(district_options["ev"]*100))    # ratio in %
-case = district_options["case"]                     # Case: best, worst, random
-
-# TODO: implement mixed shares of buildings
-# TODO: adjust emission factors regarding to national weather conditions
- 
-# TODO: load data for useable roofarea per building type
-# TODO: PV area as MILP-variable??     
-# useable_roofarea  = 0.30    #Default value: 0.25
-
 # set options
-options =   {#"case": "random",            # best, worst, random     
-             "static_emissions": True,   # True: calculation with static emissions, 
+options =   {"static_emissions": True,   # True: calculation with static emissions, 
                                          # False: calculation with timevariant emissions
              "rev_emissions": True,      # True: emissions revenues for feed-in
                                          # False: no emissions revenues for feed-in
@@ -72,13 +57,21 @@ options =   {#"case": "random",            # best, worst, random
              "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
              "beta_th": 0.5,             # relative size of thermal energy storage (between 0 and 1)
              "EV_mode": "off",         # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi-directional"
-             "show_grid_plots": False,   # show gridplots before and after optimization
-            
-             "filename_results": "results/" + building_type + "_" + \
-                                                   building_age + ".pkl",
-             "building_results": "results/" + net_type + "_" + pv + ".pkl"   #b,w,r ans ende
+             "show_grid_plots" : True,   # show gridplots before and after optimization
+             "phi" : 25.842
+             #"filename_results": "results/" + building_type + "_" + \
+             #                                      building_age + ".pkl",
+             #"building_results": "results/" + net_type + "_" + pv + ".pkl"   #b,w,r ans ende
              
             }
+
+net_type = district_options["net_type"]             # from list of Kerber-net-names
+mfh = str(math.floor(district_options["mfh"]*100))  # ratio of MFH to EFH in %
+pv = str(math.floor(district_options["pv"]*100))    # ratio in %
+hp = str(math.floor(district_options["hp"]*100))    # ratio in %
+ev = str(math.floor(district_options["ev"]*100))    # ratio in %
+case = district_options["case"]                     # Case: best, worst, random
+tes = str(options["beta_th"])                            # TES-size
 
 #%% data import
 
@@ -114,59 +107,72 @@ for t in range (0, 8760):
 
 #%% data clustering 
     
-inputs_clustering = np.array([raw_inputs["heat"], 
-                              raw_inputs["dhw"],
-                              raw_inputs["electricity"],
-                              raw_inputs["solar_roof"],
-                              raw_inputs["temperature"],
-                              raw_inputs["co2_dyn"]])
+#inputs_clustering = np.array([raw_inputs["heat"], 
+#                              raw_inputs["dhw"],
+#                              raw_inputs["electricity"],
+#                              raw_inputs["solar_roof"],
+#                              raw_inputs["temperature"],
+#                              raw_inputs["co2_dyn"]])
+
+inputs_clustering = np.array([raw_inputs["heat"],                     #0 
+                                   raw_inputs["heat2"],                    #1
+                                   raw_inputs["dhw"],                      #2
+                                   raw_inputs["dhw2"],                     #3
+                                   raw_inputs["electricity"],              #4
+                                   raw_inputs["electricity2"],             #5
+                                   raw_inputs["solar_roof"],               #6
+                                   raw_inputs["solar_roof2"],              #7
+                                   raw_inputs["temperature"],              #8
+                                   raw_inputs["temperature2"],             #9
+                                   raw_inputs["co2_dyn"]])                 #10
     
-inputs_clustering2 = np.array([raw_inputs["heat2"], 
-                              raw_inputs["dhw2"],
-                              raw_inputs["electricity2"],
-                              raw_inputs["solar_roof2"],
-                              raw_inputs["temperature2"],
-                              raw_inputs["co2_dyn"]])
-
 number_clusters = 12
-(inputs, nc, z) = clustering.cluster(inputs_clustering, 
-                                     number_clusters=number_clusters,
-                                     norm=2,
-                                     mip_gap=0.0,
-                                     weights=[1,1,1,1,0,1,1])
+#(inputs, nc, z) = clustering.cluster(inputs_clustering, 
+#                                     number_clusters=number_clusters,
+#                                     norm=2,
+#                                     mip_gap=0.0,
+#                                     weights=[1,1,1,1,0,1,1])
 
-(inputs2, nc2, z2) = clustering.cluster(inputs_clustering2, 
+(inputs, nc, z) = clustering.cluster(inputs_clustering, 
                                         number_clusters=number_clusters,
                                         norm=2,
                                         mip_gap=0.0,
-                                        weights=[1,1,1,1,0,1,1])
+                                        weights=[1,1,2,2,2,2,2,2,1,1,2]) 
 
 
 # Determine time steps per day
 len_day = int(inputs_clustering.shape[1] / 365)
 
 clustered = {}
+#clustered["heat"]           = inputs[0]
+#clustered["dhw"]            = inputs[1]
+#clustered["electricity"]    = inputs[2]
+#clustered["solar_irrad"]    = inputs[3]
+#clustered["temperature"]    = inputs[4]
+#clustered["co2_dyn"]        = inputs[5]
+#clustered["co2_stat"]       = np.zeros_like(clustered["co2_dyn"])
+#clustered["co2_stat"][:,:]  = np.mean(raw_inputs["co2_dyn"])
+#clustered["weights"]        = nc
+#clustered["z"]              = z
+
+clustered = {}
 clustered["heat"]           = inputs[0]
-clustered["dhw"]            = inputs[1]
-clustered["electricity"]    = inputs[2]
-clustered["solar_irrad"]    = inputs[3]
-clustered["temperature"]    = inputs[4]
-clustered["co2_dyn"]        = inputs[5]
+clustered["dhw"]            = inputs[2]
+clustered["electricity"]    = inputs[4]
+clustered["solar_irrad"]    = inputs[6]
+clustered["temperature"]    = inputs[8]
+
+clustered["heat2"]           = inputs[1]
+clustered["dhw2"]            = inputs[3]
+clustered["electricity2"]    = inputs[5]
+clustered["solar_irrad2"]    = inputs[7]
+clustered["temperature2"]    = inputs[9]
+
+clustered["co2_dyn"]        = inputs[10]
 clustered["co2_stat"]       = np.zeros_like(clustered["co2_dyn"])
 clustered["co2_stat"][:,:]  = np.mean(raw_inputs["co2_dyn"])
 clustered["weights"]        = nc
 clustered["z"]              = z
-
-clustered["heat2"]           = inputs2[0]
-clustered["dhw2"]            = inputs2[1]
-clustered["electricity2"]    = inputs2[2]
-clustered["solar_irrad2"]    = inputs2[3]
-clustered["temperature2"]    = inputs2[4]
-clustered["co2_dyn"]         = inputs2[5]
-clustered["co2_stat"]        = np.zeros_like(clustered["co2_dyn"])
-clustered["co2_stat"][:,:]   = np.mean(raw_inputs["co2_dyn"])
-clustered["weights2"]        = nc2
-clustered["z2"]              = z2
 
 #%% load devices, econmoics, etc.
    
@@ -243,13 +249,15 @@ net.name = "landnetz_kabel_1"
 #net.name = "ex_vorstadtnetz_trafo_2"
 
 if options["dhw_electric"]:
-    filename = net.name + "_" + building_type + "_" + building_age + "_" + building_type2 + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_dhwe" + "_ev" + ev + "_" + case
+    filename = net.name + "_" + building_type + "_" + building_age + "_" + building_type2 + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "tes" + tes + "_dhwe" + "_ev" + ev + "_" + case
+    ev_file = net.name + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "tes" + tes + "_dhwe" + ".xlsx"
 else:
-    filename = net.name + "_" + building_type + "_" + building_age + "_" + building_type2 + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_ev" + ev + "_" + case
+    filename = net.name + "_" + building_type + "_" + building_age + "_" + building_type2 + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "tes" + tes + "_ev" + ev + "_" + case
+    ev_file = net.name + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "tes" + tes + ".xlsx"
 
 randomfile = net.name + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_ev" + ev + ".xlsx" 
 
-ev_file = net.name + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + ".xlsx"
+#ev_file = net.name + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "tes" + tes + ".xlsx"
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
@@ -275,7 +283,7 @@ with open(filename_input, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
 
-(costs, emission, U_nominal, bool_bat) = opti.compute(net, eco, devs, clustered, params, options, names, load_with, randomfile, ev_file, distributionFolder)
+(costs, emission, bool_bat) = opti.compute(net, eco, devs, clustered, params, options, names, load_with, randomfile, ev_file, distributionFolder)
 
 ### TO DO : second variable for building results for "reader" filename_dist, filename_results
 outputs = reader.read_results("results/" + filename, "results/" + "dist_" + filename)
@@ -289,14 +297,14 @@ if options["show_grid_plots"]:
         if outputs["res_capacity"][n] > 0:
             bat_ex[n] = 1
     
-#    netx=net
-#    netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
-#    simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
-    
     netx=net
     netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
-
-    simple_plot(netx, show_plot=True, bus_color='b', bat_color='r')
+    simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
+    
+#    netx=net
+#    netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
+#
+#    simple_plot(netx, show_plot=True, bus_color='b', bat_color='r')
 
 
 #test = 0

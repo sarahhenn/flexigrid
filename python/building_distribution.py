@@ -110,7 +110,7 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
     loads_with["mfh"] = dict(line_to_load)
     loads_with["hp"] = dict(line_to_load)
     #loads_with["tes"] = dict(line_to_load)
-    loads_with["ev"] = {} #dict(line_to_load)
+    loads_with["ev"] = dict(line_to_load)
     
     #sorted_lineLength = sorted(line_to.items(), key=operator.itemgetter(1))
     #sorted_lineLength = np.delete(sorted_lineLength,[0,0])
@@ -127,7 +127,6 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
         remove_n_minimums(loads_with["pv"], l_pv)
         remove_n_minimums(loads_with["mfh"], l_mfh) ## ???
         remove_n_minimums(loads_with["hp"], l_hp)   ## aus pv auswählen????
-        #remove_n_minimums(loads_with["tes"], l_tes) ## raus?
         if l_ev == 0:
             pass
         elif l_ev == num_of_loads:
@@ -135,21 +134,19 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
         else:
             #remove_n_minimums(loads_with["ev"], l_ev) ### nur platzhalter!!
             try:    # checks if random distribution for selected composition exists
-                f = open(distributionFolder + "\\" + "ev_best_" + randomfile)
+                f = open(distributionFolder + "\\" + "ev_best_" + ev_file)
                 f.close()
-                ev_book  = xlrd.open_workbook(distributionFolder + "\\" + "ev_best_" + randomfile) # directory?
+                ev_book  = xlrd.open_workbook(distributionFolder + "\\" + "ev_best_" + ev_file) # directory?
                 sheet = ev_book.sheet_by_name("Sheet1")
                 for row in [1,sheet.nrows]:
                     loads_with["ev"] = sheet.cell_value(row, 0)
             except FileNotFoundError:
                 print("Optimal bat placement for selected distribution not generated. Please load distribution without EV first.")
-            #pass
     elif district_options["case"] == "worst":
         print("Worst case grid")
         remove_n_maximums(loads_with["pv"], l_pv)
         remove_n_minimums(loads_with["mfh"], l_mfh)
         remove_n_minimums(loads_with["hp"], l_hp)
-        #remove_n_minimums(loads_with["tes"], l_tes)  ## raus?
         remove_n_minimums(loads_with["ev"], l_ev)
     elif district_options["case"] == "random":
         try:    # checks if random distribution for selected composition exists
@@ -162,7 +159,6 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
                 loads_with["pv"] = sheet.cell_value(row, 0)
                 loads_with["mfh"] = sheet.cell_value(row, 0)
                 loads_with["hp"] = sheet.cell_value(row, 0)
-                #loads_with["tes"] = sheet.cell_value(row, 0)
                 loads_with["ev"] = sheet.cell_value(row, 0)
               # if distribution doesn't exist, it is being created      
         except FileNotFoundError:
@@ -170,7 +166,6 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
             remove_n_randoms(loads_with["pv"], l_pv)
             remove_n_randoms(loads_with["mfh"], l_mfh)
             remove_n_randoms(loads_with["hp"], l_hp)
-            #remove_n_randoms(loads_with["tes"], l_tes)
             remove_n_randoms(loads_with["ev"], l_ev)
             random_book = xlsxwriter.Workbook(distributionFolder + "\\" + randomfile)
             sheet = random_book.add_worksheet()
@@ -190,10 +185,7 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
     for n in gridnodes:
         if n in loads_with["mfh"]:
                del loads_with["efh"][n]     
-        #max_key = max(loads_with["efh"].keys(), key=lambda k: loads_with["efh"][k])
-#        del loads_with["efh"][key]
-    
-#    loads_with["efh"] = np.delete(list(loads_with["efh"]), list(loads_with["mfh"]))
+
     
     #%% return results
     with open(names["building_results"], "wb") as fout:

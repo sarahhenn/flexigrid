@@ -76,6 +76,9 @@ def read_results(name_results, name_dist):
         results["res_powerEHBat"] = pickle.load(fin)                    #50
         results["res_exBat"] = pickle.load(fin)                         #51
         results["res_actBat"] = pickle.load(fin)                        #52
+        results["res_ev_load"] = pickle.load(fin)
+        results["res_ev_inj"] = pickle.load(fin)
+
 
 #    with open ("results/"+ name + '.pkl', "rb") as fin:
 #        results["1_ObjVal"] = pickle.load(fin) 
