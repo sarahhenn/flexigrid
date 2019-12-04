@@ -152,13 +152,11 @@ extreme kerber grids:   landnetz_freileitung(), landnetz_kabel(), landnetz_freil
     -> create network with nw.kb_extrem_name   
             
 '''
-net_name = "landnetz_freileitung_2"
+net_name = "landnetz_kabel_1"
 #net = nw.create_kerber_+net_name
 fkt_name = "create_kerber_" + net_name
 fkt = getattr(nw, fkt_name)
 net= fkt()
-#net = nw.create_kerber_vorstadtnetz_kabel_2()
-#net = nw.create_kerber_landnetz_kabel_2()
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates

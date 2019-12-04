@@ -75,7 +75,7 @@ def plot_results(outputs, days, gridnodes, timesteps):
         else:
             pass
         if plotting_options["safe plots as tex"] == True:
-            tikz.save(tex_folder + "soc_bat.tex")
+            tikz.save(figure = fig, filepath = tex_folder + "\\soc_bat.tex")
         else:
             pass
 
@@ -99,7 +99,7 @@ def plot_results(outputs, days, gridnodes, timesteps):
         else:
             pass
         if plotting_options["safe plots as tex"] == True:
-            tikz.save(tex_folder + "pow_Inj.tex")
+            tikz.save(figure = fig, filepath = tex_folder + "\\pow_Inj.tex")
         else:
             pass
 
@@ -121,5 +121,5 @@ def plot_results(outputs, days, gridnodes, timesteps):
         else:
             pass
         if plotting_options["safe plots as tex"] == True:
-            tikz.save(tex_folder + "pow_Subtr.tex")
+            tikz.save(figure = fig, filepath = tex_folder + "\\pow_Subtr.tex")
 

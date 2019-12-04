@@ -11,7 +11,7 @@ from pandapower.timeseries.output_writer import OutputWriter
 from pandapower.timeseries.run_time_series import run_timeseries
 from pandapower.control.controller.const_control import ConstControl
 
-def timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, gridnodes):
+def timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, gridnodes, nodesload):
 
     #create new variable, because pandapower only uses time_steps in stead of timesteps
     time_steps = range(0,24)
@@ -21,13 +21,13 @@ def timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, g
 
 
     #retrieve data source
-    profilesInj, profilesSubtr, dsInj, dsSubtr, dsTotal = retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes, net)
+    profilesInj, profilesSubtr, dsInj, dsSubtr = retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes, nodesload)
 
     """#create controllers (to control P values of the load and the gen, which are now combined as positive and negative values in one dataframe)
     #create one controller for every node.
     create_controllers(net, dsInj, dsSubtr, dsTotal, gridnodes)"""
 
-    create_controllers(net,dsInj,dsSubtr,dsTotal,gridnodes,profilesInj, profilesSubtr)
+    create_controllers(net,dsInj,dsSubtr, profilesInj, profilesSubtr)
 
     #the output writer with the desired results to be stored to files
     ow = create_output_writer(net, time_steps, output_dir=output_dir)
@@ -37,7 +37,7 @@ def timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, g
 
     return ow
 
-def retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes, net):
+def retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes, nodesload):
 
     #initialize new arrays the size of wanted array
     powInjDay = np.zeros((len(gridnodes),len(timesteps)))
@@ -49,41 +49,37 @@ def retrieve_data_source(timesteps, d, powInjRet, powSubtrRet, gridnodes, net):
             powInjDay[n,t] = powInjRet[d,n,t]
             powSubtrDay[n,t] = powSubtrRet[d,n,t]
 
-    powTotalDay = powSubtrDay - powInjDay
-
     profilesPreInj = pd.DataFrame(powInjDay)
     profilesPreSubtr = pd.DataFrame(powSubtrDay)
-    profilesPreTotal = pd.DataFrame(powTotalDay)
 
     #transpose DataFrame to fit the standard layout of given DataFrame. Afterwards columns are nodes, rows are timesteps
     profilesInj = profilesPreInj.transpose()
     profilesSubtr = profilesPreSubtr.transpose()
-    profilesTotal = profilesPreTotal.transpose()
 
-    #delete first two columns
-    profilesInj = profilesInj.drop(0,axis=1)
-    profilesInj= profilesInj.drop(1,axis=1)
-    profilesSubtr = profilesSubtr.drop(0, axis=1)
-    profilesSubtr= profilesSubtr.drop(1,axis=1)
-    profilesSubtr.columns = net.load.index
-    profilesInj.columns = net.sgen.index
+    # remove columns if no load or gen is connected, to be synced to net.load and net.sgen (so controller works properly)
+    for n in profilesSubtr.columns:
+        if n in nodesload:
+            pass
+        else:
+            profilesSubtr = profilesSubtr.drop(n, axis=1)
 
+    for n in profilesInj.columns:
+        if n in nodesload:
+            pass
+        else:
+            profilesInj = profilesInj.drop(n, axis=1)
 
     #split up profiles in gen(injection) and load(subtraction) profiles, to properly insert them in 2 const_controllers
     dsInj = DFData(profilesInj)
     dsSubtr = DFData(profilesSubtr)
-    dsTotal = DFData(profilesTotal)
 
-    return profilesInj, profilesSubtr, dsInj, dsSubtr, dsTotal
+    return profilesInj, profilesSubtr, dsInj, dsSubtr
 
-def create_controllers(net, dsInj, dsSubtr, dsTotal,gridnodes, profilesInj, profilesSubtr):
+def create_controllers(net, dsInj, dsSubtr, profilesInj, profilesSubtr):
 
     #Listenlösung, geht sehr schnell, aber die voltages variieren nicht mehr...
-    #ConstControl(net, element= 'load', variable= 'p_mw', element_index=net.load.index, data_source=dsSubtr, profile_name=dsSubtr.df.columns)
-    ConstControl(net, element= 'load', variable= 'p_mw', element_index=net.load.index, data_source=dsSubtr, profile_name=net.load.index)
-    #ConstControl(net, element= 'sgen', variable= 'p_mw', element_index=net.sgen.index, data_source=dsInj, profile_name=dsInj.df.columns)
-    ConstControl(net, element= 'sgen', variable= 'p_mw', element_index=net.sgen.index, data_source=dsInj, profile_name=net.sgen.index)
-
+    ConstControl(net, element= 'load', variable= 'p_mw', element_index=net.load.index, data_source=dsSubtr, profile_name=dsSubtr.df.columns)
+    ConstControl(net, element= 'sgen', variable= 'p_mw', element_index=net.sgen.index, data_source=dsInj, profile_name=dsInj.df.columns)
 
 def create_output_writer(net, time_steps, output_dir):
 
@@ -125,7 +121,7 @@ def run_timeloop(fkt, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
         print("Results can be found in your local temp folder: {}".format(output_dir))
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
-        ow = timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, gridnodes)
+        ow = timeseries_each_day(output_dir, net, timesteps, d, powInjRet, powSubtrRet, gridnodes, nodesload)
 
         # read out json files for voltages and return time and place of violation
         vm_pu_file = os.path.join(output_dir, "res_bus", "vm_pu.json")
