@@ -37,12 +37,11 @@ building_age  = "2005"      # 1960, 1980, 2005
 emission_year = "2017"      # 2017, 2030, 2050 
 # District parameters
 # second "option" for district coices, as floats
-district_options = {"net_type" : "KerberTest",     # from list of Kerber-net-names
-                    "mfh" : 0.33,                  # ratio of MFH to EFH in %
-                    "pv" : 0.5,                    # ratio in %
-                    "hp" : 0.5,                    # ratio in %
-                    "ev" : 0.3,                    # ratio in %
-                    "case" : "random"  
+district_options = {"mfh" : 0.53,                  # ratio of MFH to EFH in %
+                    "pv" : 0.2,                    # ratio in %
+                    "hp" : 0.6,                    # ratio in %
+                    "ev" : 0.5,                    # ratio in %
+                    "case" : "worst"  
                     }
 
 # set options
@@ -56,16 +55,11 @@ options =   {"static_emissions": True,   # True: calculation with static emissio
              "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
              "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
              "beta_th": 0.5,             # relative size of thermal energy storage (between 0 and 1)
-             "EV_mode": "off",         # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi-directional"
+             "EV_mode": "on_demand",         # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi_directional"
              "show_grid_plots" : True,   # show gridplots before and after optimization
-             "phi" : 25.842
-             #"filename_results": "results/" + building_type + "_" + \
-             #                                      building_age + ".pkl",
-             #"building_results": "results/" + net_type + "_" + pv + ".pkl"   #b,w,r ans ende
-             
+             "phi" : 25.842              # 
             }
 
-net_type = district_options["net_type"]             # from list of Kerber-net-names
 mfh = str(math.floor(district_options["mfh"]*100))  # ratio of MFH to EFH in %
 pv = str(math.floor(district_options["pv"]*100))    # ratio in %
 hp = str(math.floor(district_options["hp"]*100))    # ratio in %
@@ -115,16 +109,16 @@ for t in range (0, 8760):
 #                              raw_inputs["co2_dyn"]])
 
 inputs_clustering = np.array([raw_inputs["heat"],                     #0 
-                                   raw_inputs["heat2"],                    #1
-                                   raw_inputs["dhw"],                      #2
-                                   raw_inputs["dhw2"],                     #3
-                                   raw_inputs["electricity"],              #4
-                                   raw_inputs["electricity2"],             #5
-                                   raw_inputs["solar_roof"],               #6
-                                   raw_inputs["solar_roof2"],              #7
-                                   raw_inputs["temperature"],              #8
-                                   raw_inputs["temperature2"],             #9
-                                   raw_inputs["co2_dyn"]])                 #10
+                              raw_inputs["heat2"],                    #1
+                              raw_inputs["dhw"],                      #2
+                              raw_inputs["dhw2"],                     #3
+                              raw_inputs["electricity"],              #4
+                              raw_inputs["electricity2"],             #5
+                              raw_inputs["solar_roof"],               #6
+                              raw_inputs["solar_roof2"],              #7
+                              raw_inputs["temperature"],              #8
+                              raw_inputs["temperature2"],             #9
+                              raw_inputs["co2_dyn"]])                 #10
     
 number_clusters = 12
 #(inputs, nc, z) = clustering.cluster(inputs_clustering, 
@@ -270,7 +264,6 @@ names =   {"filename_results": "results/" + filename + ".pkl",
              
             }
 
-
 #%% find distribution for various building types
 
 (load_with) = dist.allocate(net, options, names, district_options, distributionFolder, randomfile, ev_file)
@@ -283,7 +276,7 @@ with open(filename_input, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
 
-(costs, emission, bool_bat) = opti.compute(net, eco, devs, clustered, params, options, names, load_with, randomfile, ev_file, distributionFolder)
+(costs, emission, bool_bat) = opti.compute(net, eco, devs, clustered, params, options, district_options, names, load_with, randomfile, ev_file, distributionFolder)
 
 ### TO DO : second variable for building results for "reader" filename_dist, filename_results
 outputs = reader.read_results("results/" + filename, "results/" + "dist_" + filename)

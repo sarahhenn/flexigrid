@@ -12,7 +12,7 @@ def read_results(name_results, name_dist):
         
     
     with open ( name_dist + '.pkl', "rb") as fin:
-        results["loads_with"] = pickle.load(fin)                        #01
+        #results["loads_with"] = pickle.load(fin)                        #01
         results["line_to_loads"] = pickle.load(fin)                     #02
         results["loads_per_branch"] = pickle.load(fin)                  #03
         results["loads_per_net_with"] = pickle.load(fin)                #04
@@ -76,9 +76,10 @@ def read_results(name_results, name_dist):
         results["res_powerEHBat"] = pickle.load(fin)                    #50
         results["res_exBat"] = pickle.load(fin)                         #51
         results["res_actBat"] = pickle.load(fin)                        #52
+        results["res_demEV"] = pickle.load(fin)
         results["res_ev_load"] = pickle.load(fin)
         results["res_ev_inj"] = pickle.load(fin)
-
+        results["loads_with"] = pickle.load(fin)
 
 #    with open ("results/"+ name + '.pkl', "rb") as fin:
 #        results["1_ObjVal"] = pickle.load(fin) 

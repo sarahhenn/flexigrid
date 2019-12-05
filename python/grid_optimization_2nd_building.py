@@ -20,7 +20,7 @@ import python.hpopt_energy as hpopt
 
 #%% Start:
 
-def compute(net, eco, devs, clustered, params, options, names, loads_with, randomfile, ev_file, distributionFolder):
+def compute(net, eco, devs, clustered, params, options, district_options, names, loads_with, randomfile, ev_file, distributionFolder):
     """
     Compute the optimal building energy system consisting of pre-defined 
     devices (devs) for a given building. Furthermore the program can choose
@@ -123,7 +123,7 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
     # calculate thermal nominal hp capacity according to (Stinner, 2017)
     for n in nodes["load"]:
         if n in loads_with["efh"]:
-            if options ["dhw_electric"]: ###changer
+            if options ["dhw_electric"]: 
                 capa_hp_th = options["alpha_th"] * np.max(clustered["heat"] + clustered["dhw"]) 
             else: 
                 capa_hp_th = options["alpha_th"] * np.max(clustered["heat"]) 
@@ -141,7 +141,7 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
         
     # calculate tes capacity according to (Stinner, 2017)
     for n in nodes["load"]:
-        if n in loads_with["efh"]: ###changer
+        if n in loads_with["efh"]: 
             if options ["dhw_electric"]: 
                 capa_tes = options["beta_th"] * sum(clustered["weights"][d] * sum((clustered["heat"][d,t] + clustered["dhw"][d,t]) for t in timesteps) for d in days) * dt / sum(clustered["weights"])
             else: 
@@ -164,7 +164,7 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
         res_powerEHBat = {}
         
         for n in nodes["load"]:
-            if n in loads_with["efh"]:  ###changer
+            if n in loads_with["efh"]:  
                 if options ["dhw_electric"]:
                     powerElec = clustered["electricity"] + clustered["dhw"] + res_powerHP + res_powerEH
                 else: 
@@ -194,7 +194,7 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
         res_powerEHBat = {}
         
         for n in nodes["load"]:
-            if n in loads_with["efh"]: ###changer
+            if n in loads_with["efh"]: 
                 if options ["dhw_electric"]: 
                     powerElec = clustered["electricity"] + clustered["dhw"] 
                 else:
@@ -250,13 +250,17 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
         pass
     else:
         # build realistic random daily demands in kWh
-        demEV = {}
+        demEV = {} 
+        demTime = {}
         for n in gridnodes:
             for d in days:
                 if n in loads_with["ev"]:
-                    demEV[n,d] = random.uniform(2.5,4.7)
+                    #demEV[n,d] = random.uniform(2.5,4.7) #statistical probability
+                    demEV[n,d] = random.uniform(6.5,7.7)  #bad case for on_demand
+                    demTime[n,d] = math.ceil(demEV[n,d]/ev_max)
                 else: 
                     demEV[n,d] = 0
+                    demTime[n,d] = 0
         
         # build random availability matrix
         availEVday = {}
@@ -272,8 +276,29 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
                         availEV[n,d,t] = 1
                     else:
                        availEV[n,d,t] = 0 
-
-    
+        
+        
+        # define period for EV charging (charging allowed when "loadNow" = 1)
+        loadNow = {} 
+        for n in gridnodes:
+            for d in days:
+                for t in timesteps:
+                    loadNow[n,d,t] = 0 
+                    if options["EV_mode"] == "off":
+                        pass                    
+                    elif options["EV_mode"] == "on_demand": 
+                        for t in range(availEVday[n,d], (availEVday[n,d] + demTime[n,d])):
+                            loadNow[n,d,t] = 1
+                    
+                    elif options["EV_mode"] == "grid_reactive":
+                        for t in range(availEVday[n,d],23):
+                            loadNow[n,d,t] = 1
+                    
+                    elif options["EV_mode"] == "bi_directional":
+                        for t in range(availEVday[n,d],23):
+                            loadNow[n,d,t] = 1                
+                
+                
 #%% define battery settings, final gens and loads    
         
     # extract battery nodes and define technical data for them
@@ -291,25 +316,6 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
     
     # attach plug-in loads and PV generatrion to building nodes
     # TODO: do the same with EV loads!?
-    
-    ##former: selected systems for every load
-#    powerPlug = {}
-#    powerPV = {}
-#    heatload = {}
-#    dhwload = {}
-#    for n in gridnodes:
-#        for d in days:
-#            for t in timesteps:
-#                if n in nodes["load"]:                        
-#                    heatload[n,d,t] = clustered["heat"][d,t]
-#                    dhwload[n,d,t] = clustered["dhw"][d,t]
-#                    powerPlug[n,d,t] = powerElec[d,t]
-#                    powerPV[n,d,t] = powerGen[d,t]
-#                else:
-#                    heatload[n,d,t] = np.zeros_like(clustered["heat"][d,t])
-#                    dhwload[n,d,t] = np.zeros_like(clustered["dhw"][d,t])
-#                    powerPlug[n,d,t] = np.zeros_like(powerElec[d,t])
-#                    powerPV[n,d,t] = np.zeros_like(powerGen[d,t])
 
      ## system distribution with efh/mfh
     powerPlug = {}
@@ -463,14 +469,14 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
     # compute annual demand related costs load node
     Load_total_node = {}
     for n in gridnodes:
-        Load_total_node[n] = (sum(clustered["weights"][d] * sum(powerLoad[n,d,t]  ###changer
+        Load_total_node[n] = (sum(clustered["weights"][d] * sum(powerLoad[n,d,t]  
                             for t in timesteps) for d in days) * dt)
         
     model.addConstrs((c_dem[n] == eco["crf"] * eco["b"]["el"] * Load_total_node[n] * eco["el"]["el_sta"]["var"][0]
                         for n in gridnodes), name="demand_costs"+str(n))
     
     # compute annual demand related costs per grid
-    Load_total_grid = (sum(clustered["weights"][d] * sum(powerTrafoLoad[d,t]  ###changer
+    Load_total_grid = (sum(clustered["weights"][d] * sum(powerTrafoLoad[d,t]  
                             for t in timesteps) for d in days) * dt)
         
     model.addConstr(c_dem_grid == 
@@ -481,11 +487,11 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
     # here: it's assumed that revenues are generated only for PV power
     InjPV_total_node = {}
     for n in gridnodes:
-        InjPV_total_node[n] = (sum(clustered["weights"][d] * sum(powerInjPV[n,d,t]  ###changer
+        InjPV_total_node[n] = (sum(clustered["weights"][d] * sum(powerInjPV[n,d,t]  
                             for t in timesteps) for d in days) * dt)
     
     Inj_total_node = {}
-    for n in gridnodes: ###changer
+    for n in gridnodes: 
         Inj_total_node[n] = (sum(clustered["weights"][d] * sum(powerInjPV[n,d,t] + powerInjBat[n,d,t] 
                             for t in timesteps) for d in days) * dt)
     
@@ -494,7 +500,7 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
     
     # compute annual revenues for electricity feed-in per node
     # here: it's assumed that revenues are generated for all injections to the higher level grid
-    Inj_total_grid = (sum(clustered["weights"][d] * sum(powerTrafoInj[d,t] ###changer
+    Inj_total_grid = (sum(clustered["weights"][d] * sum(powerTrafoInj[d,t] 
                             for t in timesteps) for d in days) * dt)
     
     model.addConstr(revenues_grid == 
@@ -508,17 +514,17 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
         # for single nodes
         emissions_Load_nodes = {}
         emissions_Inj_nodes = {}
-        for n in gridnodes: ###changer 
+        for n in gridnodes:  
             emissions_Load_nodes[n] = (sum(clustered["weights"][d] * sum((powerLoad[n,d,t] *clustered["co2_stat"][d,t]) 
                                         for t in timesteps) for d in days) * dt)
-                        ###changer
+                        
             emissions_Inj_nodes[n] = (sum(clustered["weights"][d] * sum((powerInj[n,d,t] *clustered["co2_stat"][d,t]) 
                                         for t in timesteps) for d in days) * dt)
             
-        # for total grid     ###changer
+        # for total grid     
         emissions_Load_grid = (sum(clustered["weights"][d] * sum((powerTrafoLoad[d,t] *clustered["co2_stat"][d,t]) 
                                     for t in timesteps) for d in days) * dt)
-                            ###changer
+                            
         emissions_Inj_grid = (sum(clustered["weights"][d] * sum((powerTrafoInj[d,t] *clustered["co2_stat"][d,t]) 
                                     for t in timesteps) for d in days) * dt)
         
@@ -541,17 +547,17 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
         # for single nodes
         emissions_Load_nodes = {}
         emissions_Inj_nodes = {}
-        for n in gridnodes:   ###changer
+        for n in gridnodes:   
             emissions_Load_nodes[n] = (sum(clustered["weights"][d] * sum((powerLoad[n,d,t] *clustered["co2_dyn"][d,t]) 
                                         for t in timesteps) for d in days) * dt)
-                            ###changer
+                            
             emissions_Inj_nodes[n] = (sum(clustered["weights"][d] * sum((powerInj[n,d,t] *clustered["co2_dyn"][d,t]) 
                                         for t in timesteps) for d in days) * dt)
             
-        # for total grid        ###changer
+        # for total grid        
         emissions_Load_grid = (sum(clustered["weights"][d] * sum((powerTrafoLoad[d,t] *clustered["co2_dyn"][d,t]) 
                                     for t in timesteps) for d in days) * dt)
-                                ###changer
+                                
         emissions_Inj_grid = (sum(clustered["weights"][d] * sum((powerTrafoInj[d,t] *clustered["co2_dyn"][d,t]) 
                                     for t in timesteps) for d in days) * dt)
         
@@ -621,7 +627,6 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
     #%% EV Constraints 
     
     if options["EV_mode"] == "off":
-#        pass  # infeasable when demEV and load/inj set = 0
         for n in gridnodes:
             for d in days:
                 for t in timesteps: 
@@ -631,33 +636,37 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
         for n in gridnodes:
             for d in days:
                 if n in loads_with["ev"]:
-                        model.addConstr(demEV[n,d] == sum(ev_load[n,d,'*'] - ev_inj[n,d,'*']))
+                        model.addConstr(ev_inj.sum(n,d,'*') + demEV[n,d] <= ev_load.sum(n,d,'*'))
                 else:
                     model.addConstr(demEV[n,d] == 0)
                     for t in timesteps: 
                         model.addConstr(ev_load[n,d,t] == 0)
                         model.addConstr(ev_inj[n,d,t] == 0)
         
+        # max Load.sum constraint on/off to check effect on battery size?
         for n in gridnodes:
             for d in days:
                 for t in timesteps:
-                    # on demand loading
+                    if loadNow[n,d,t] == 0:
+                        model.addConstr(ev_load[n,d,t] == 0)
+                        model.addConstr(ev_inj[n,d,t] == 0)
                     if options["EV_mode"] == "on_demand":
-                        
-                        pass
-                    # grid reactive loading
+                        model.addConstr(ev_load.sum(n,d,'*') <= 2*demEV[n,d])
+                        if loadNow[n,d,t] == 1:
+                            model.addConstr(ev_load[n,d,t+1] <= ev_load[n,d,t])
+
                     if options["EV_mode"] == "grid_reactive":
-                        
-                        pass
-                    # bi-directional loading
-                    if options["EV_mode"] == "bi-directional":
+                         model.addConstr(ev_load.sum(n,d,'*') <= 2*demEV[n,d])
+                    if options["EV_mode"] == "bi_directional":
+                        model.addConstr(ev_load.sum(n,d,'*') <= 2*demEV[n,d])
+                        model.addConstr(ev_inj.sum(n,d,'*') <= 2*demEV[n,d])
                         if not n in loads_with["ev"]:
                             model.addConstr(ev_inj[n,d,t] == 0)
                     else:
                         model.addConstr(ev_inj[n,d,t] == 0)  
     
                     
-                    #if options["EV_mode"] == "bi-directional":
+                    #if options["EV_mode"] == "bi_directional":
                     #    pass
                     
                 
@@ -775,13 +784,9 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
                           for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))
 
         # node energy balance   ##EV added
-#        model.addConstrs((powerPlug[n,d,t] + powerCh[n,d,t] + powerHPGrid[n,d,t] + powerEHGrid[n,d,t] == 
-#                          powerLoad[n,d,t] + powerUsePV[n,d,t] + powerUseBat[n,d,t] 
-#                          + powerHPPV[n,d,t] + powerHPBat[n,d,t] + powerEHPV[n,d,t] + powerEHBat[n,d,t]
-#                          for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))         
         model.addConstrs((powerPlug[n,d,t] + powerCh[n,d,t] + powerHPGrid[n,d,t] + powerEHGrid[n,d,t] + ev_load[n,d,t] == 
                           powerLoad[n,d,t] + powerUsePV[n,d,t] + powerUseBat[n,d,t] 
-                          + powerHPPV[n,d,t] + powerHPBat[n,d,t] + powerEHPV[n,d,t] + powerEHBat[n,d,t] #+ ev_inj[n,d,t]
+                          + powerHPPV[n,d,t] + powerHPBat[n,d,t] + powerEHPV[n,d,t] + powerEHBat[n,d,t] + ev_inj[n,d,t]
                           for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))         
 
         model.addConstrs((power_hp[n,d,t] == 
@@ -802,11 +807,8 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
                           for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))
     
         # node energy balance ##EV added
-#        model.addConstrs((powerPlug[n,d,t] + powerCh[n,d,t] == 
-#                          powerLoad[n,d,t] + powerUsePV[n,d,t] + powerUseBat[n,d,t] 
-#                          for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))         
         model.addConstrs((powerPlug[n,d,t] + powerCh[n,d,t] + ev_load[n,d,t] == 
-                          powerLoad[n,d,t] + powerUsePV[n,d,t] + powerUseBat[n,d,t] #+ ev_inj[n,d,t]
+                          powerLoad[n,d,t] + powerUsePV[n,d,t] + powerUseBat[n,d,t] + ev_inj[n,d,t]
                           for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))         
 
 
@@ -827,10 +829,10 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
 #    model.setObjective(-sum(c_inv[n] for n in gridnodes) + rbf * (revenues_grid - c_total_grid), gp.GRB.MAXIMIZE)
     
     # Minimize costs per year
-    model.setObjective(c_total_grid, gp.GRB.MINIMIZE)
+    #model.setObjective(c_total_grid, gp.GRB.MINIMIZE)
     
     # Minimize emissions
-    #model.setObjective(sum(emission_nodes[n] for n in gridnodes), gp.GRB.MINIMIZE)
+    model.setObjective(sum(emission_nodes[n] for n in gridnodes), gp.GRB.MINIMIZE)
     
     # Minimize power over Trafo (both directions)
     #model.setObjective(sum((powerTrafoLoad[d,t] - powerTrafoInj[d,t]) for d in days for t in timesteps), gp.GRB.MINIMIZE)
@@ -840,7 +842,7 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
 #    powerInj[n,d,t] - powerLoad[n,d,t]
     
     # adgust gurobi settings
-    model.Params.TimeLimit = 50    
+    model.Params.TimeLimit = 150    
     model.Params.MIPGap = 0.00
     model.Params.NumericFocus = 3
     model.Params.MIPFocus = 3
@@ -884,7 +886,9 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
     #EV results
     res_ev_load = {}
     res_ev_inj = {}
+    res_demEV = {}
     for n in gridnodes:
+        res_demEV[n] = np.array([demEV[n,d] for d in days])
         res_ev_load[n] = np.array([[ev_load[n,d,t].X for t in timesteps] for d in days])
         res_ev_inj[n] = np.array([[ev_inj[n,d,t].X for t in timesteps] for d in days])
 
@@ -974,28 +978,37 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
     for n in gridnodes:           
         res_exBat[n] = x_bat[n].X
         res_actBat[n] = np.array([[y_bat[n,d,t].X for t in timesteps] for d in days])
+        
 
-    # writing the nodes with a battery into an xlsx file
+    # writing the nodes with a battery into an xlsx file for the best case
     bool_bat = {}
-    i = 0
-    for n in gridnodes:
-        if res_capacity[n] >0:
-            bool_bat[i] = n
-            i += 1        
-    ev_book = xlsxwriter.Workbook(distributionFolder + "\\" + "ev_best_" +  ev_file)
-    sheet = ev_book.add_worksheet()
-    row = 0    
-    for b in bool_bat:
-        sheet.write(row, 0, bool_bat[b])
-        row += 1
-    ev_book.close()
+    if district_options["ev"] == 0:
+        if district_options["case"] == "best":
+            i = 0
+            for n in gridnodes:
+                if res_capacity[n] >0:
+                    bool_bat[i] = n
+                    i += 1        
+            ev_book = xlsxwriter.Workbook(distributionFolder + "\\" + "ev_best_" +  ev_file)
+            sheet = ev_book.add_worksheet()
+            row = 0    
+            for b in bool_bat:
+                sheet.write(row, 0, bool_bat[b])
+                row += 1
+            ev_book.close()
+            print("The optimal bat placement for the selected distribution is found. You can now run the optimal EV distribution.")
+    elif district_options["case"] == "best":
+        try:
+            f = open(distributionFolder + "\\" + "ev_best_" + ev_file)
+            f.close()
+        except FileNotFoundError:
+            print("Optimal bat placement for selected distribution not generated. Please load distribution without EV first.")
+            
     
-#    i = 0
-#    for n in gridnodes:
-#        if res_capacity[n] >0:
-#            bool_bat[i] = [n, res_capacity[n]]
-#            i += 1        
-
+    loads_with["bat"] = {}
+    for n in gridnodes:
+        if res_capacity[n] > 0:
+            loads_with["bat"][n] = res_capacity[n]
             
     # save results 
     with open(names["filename_results"], "wb") as fout:
@@ -1051,7 +1064,10 @@ def compute(net, eco, devs, clustered, params, options, names, loads_with, rando
         pickle.dump(res_powerEHBat, fout, pickle.HIGHEST_PROTOCOL)          #49
         pickle.dump(res_exBat, fout, pickle.HIGHEST_PROTOCOL)               #50
         pickle.dump(res_actBat, fout, pickle.HIGHEST_PROTOCOL)              #51
+        pickle.dump(res_demEV, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_ev_load, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_ev_inj, fout, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(loads_with, fout, pickle.HIGHEST_PROTOCOL)
+
         
         return (res_c_total_grid, res_emission_grid, bool_bat)

@@ -42,7 +42,6 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
     ratio["pv"] = district_options["pv"]
     ratio["mfh"] = district_options["mfh"]
     ratio["hp"] = district_options["hp"]
-    #ratio["tes"] = district_options["tes"]
     ratio["ev"] = district_options["ev"]
     
     nodes = {}
@@ -72,7 +71,6 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
     loads_per_net_with["pv"] = round_to_int (ratio["pv"]* num_of_loads)
     loads_per_net_with["mfh"] = round_to_int (ratio["mfh"]* num_of_loads)
     loads_per_net_with["hp"] = round_to_int (ratio["hp"]* num_of_loads)
-    #loads_per_net_with["tes"] = round_to_int (ratio["tes"]* num_of_loads)
     loads_per_net_with["ev"] = round_to_int (ratio["ev"]* num_of_loads)
             
     j=0
@@ -87,12 +85,6 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
     lineLength = {}
     for [n,m] in nodeLines:
         lineLength[n,m] = net.line.length_km[m-2]
-
-#    line_to = {}
-#    line_to["loads"] = [0]
-#    line_to["nodes"] = [0]
-#    for [n,m] in nodeLines:
-#        line_to["nodes"][m] = lineLength[n,m] + line_to["nodes"][n]
     
     
     line_to_node = {}
@@ -109,17 +101,12 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
     loads_with["pv"] = dict(line_to_load)
     loads_with["mfh"] = dict(line_to_load)
     loads_with["hp"] = dict(line_to_load)
-    #loads_with["tes"] = dict(line_to_load)
     loads_with["ev"] = dict(line_to_load)
-    
-    #sorted_lineLength = sorted(line_to.items(), key=operator.itemgetter(1))
-    #sorted_lineLength = np.delete(sorted_lineLength,[0,0])
     
     #%% system allocation
     l_pv = num_of_loads - loads_per_net_with["pv"]
     l_mfh = num_of_loads - loads_per_net_with["mfh"]
     l_hp = num_of_loads - loads_per_net_with["hp"]
-    #l_tes = num_of_loads - loads_per_net_with["tes"]
     l_ev = num_of_loads - loads_per_net_with["ev"]
     
     if district_options["case"] == "best":
@@ -132,16 +119,17 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
         elif l_ev == num_of_loads:
             loads_with["ev"] = {}
         else:
-            #remove_n_minimums(loads_with["ev"], l_ev) ### nur platzhalter!!
             try:    # checks if random distribution for selected composition exists
                 f = open(distributionFolder + "\\" + "ev_best_" + ev_file)
                 f.close()
                 ev_book  = xlrd.open_workbook(distributionFolder + "\\" + "ev_best_" + ev_file) # directory?
                 sheet = ev_book.sheet_by_name("Sheet1")
-                for row in [1,sheet.nrows]:
-                    loads_with["ev"] = sheet.cell_value(row, 0)
+                loads_with["ev"].clear()
+                for row in range(0,sheet.nrows):
+                    loads_with["ev"][sheet.cell_value(row, 0)] = line_to_load[sheet.cell_value(row, 0)]
             except FileNotFoundError:
                 print("Optimal bat placement for selected distribution not generated. Please load distribution without EV first.")
+                loads_with["ev"].clear()
     elif district_options["case"] == "worst":
         print("Worst case grid")
         remove_n_maximums(loads_with["pv"], l_pv)
@@ -150,17 +138,35 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
         remove_n_minimums(loads_with["ev"], l_ev)
     elif district_options["case"] == "random":
         try:    # checks if random distribution for selected composition exists
-            f = open(distributionFolder + "\\" + randomfile + ".xlsx")
+            f = open(distributionFolder + "\\" + randomfile)
             f.close()
             print("Loading random distribution")            
-            random_book  = xlrd.open_workbook(distributionFolder + "\\" + randomfile) # directory?
+            random_book  = xlrd.open_workbook(distributionFolder + "\\" + randomfile) 
             sheet = random_book.sheet_by_name("Sheet1")
-            for row in [1,sheet.nrows]:
-                loads_with["pv"] = sheet.cell_value(row, 0)
-                loads_with["mfh"] = sheet.cell_value(row, 0)
-                loads_with["hp"] = sheet.cell_value(row, 0)
-                loads_with["ev"] = sheet.cell_value(row, 0)
-              # if distribution doesn't exist, it is being created      
+            loads_with.clear()
+            loads_with["pv"] = {}
+            loads_with["mfh"] = {}
+            loads_with["hp"] = {}
+            loads_with["ev"] = {}
+            row = 1
+            for row in range(1,sheet.nrows): 
+                try: 
+                    loads_with["pv"][sheet.cell_value(row, 0)] = line_to_load[sheet.cell_value(row, 0)]
+                except KeyError:
+                    pass
+                try: 
+                    loads_with["mfh"][sheet.cell_value(row, 1)] = line_to_load[sheet.cell_value(row, 1)]
+                except KeyError:
+                    pass
+                try: 
+                    loads_with["hp"][sheet.cell_value(row, 2)] = line_to_load[sheet.cell_value(row, 2)]
+                except KeyError:
+                    pass
+                try:
+                    loads_with["ev"][sheet.cell_value(row, 3)] = line_to_load[sheet.cell_value(row, 3)]
+                except KeyError:
+                    pass                
+        # if distribution doesn't exist, it is being created      
         except FileNotFoundError:
             print('Random district is generated')
             remove_n_randoms(loads_with["pv"], l_pv)
@@ -189,7 +195,7 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
     
     #%% return results
     with open(names["building_results"], "wb") as fout:
-        pickle.dump(loads_with, fout, pickle.HIGHEST_PROTOCOL)              #01
+        #pickle.dump(loads_with, fout, pickle.HIGHEST_PROTOCOL)              #01
         pickle.dump(line_to_load, fout, pickle.HIGHEST_PROTOCOL)            #02
         pickle.dump(loads_per_branch, fout, pickle.HIGHEST_PROTOCOL)        #03
         pickle.dump(loads_per_net_with, fout, pickle.HIGHEST_PROTOCOL)      #04
