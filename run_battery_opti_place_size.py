@@ -4,8 +4,6 @@ Created on Wed Jun 26 15:34:57 2019
 
 @author: she
 """
-        
-
 
 # import extern functions
 import shutil
@@ -58,9 +56,9 @@ options =   {"static_emissions": False,  # True: calculation with static emissio
             "show_grid_plots": False,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
-                                                   building_age + "Typtage_30.pkl",
+                                                   building_age + "Extremnetz_Vorstadt.pkl",
             "filename_inputs": "results/inputs_" + building_type + "_" + \
-                                                   building_age + "Typtage_30.pkl",
+                                                   building_age + "Extremnetz_Vorstadt.pkl",
             "apc_while_voltage_violation": False,    #True: uses apc, when voltage violations occur
                                                     #False: does not use apc, when voltage violations occur
             "cut_Inj/Subtr_while_voltage_violation": True, #True: cuts Inj or Subtr, when voltage violations occur
@@ -71,7 +69,11 @@ options =   {"static_emissions": False,  # True: calculation with static emissio
                                                     #False: Heatpump power costs: 27.8 ct/kWh (equal to other power users)
              "allow_apc_opti": True,               #True: Curtailment allowed to be set in optimization
                                                     #False: Curtailment only through additional constraint
-             "change_value_node_violation_abs": 2   #specify, for how much the absolute values of inj and subtr should change in case of voltage violations
+             "change_value_node_violation_abs": 1,   #specify, for how much the absolute values of inj and subtr should change in case of voltage violations
+
+             "rel1_or_abs0_violation_change": False,    #If false, use absolute power constraint generation
+                                                        #If True use relative power constraint generation
+             "change_relative_node_violation_rel": 0.9 #specify what the new value should be relative to the previous value of inj or subtr in case of voltage violations
             }
                      
 #%% data import
@@ -104,7 +106,7 @@ inputs_clustering = np.array([raw_inputs["heat"],
                               raw_inputs["temperature"],
                               raw_inputs["co2_dyn"]])
 
-number_clusters = 12
+number_clusters = 3
 (inputs, nc, z) = clustering.cluster(inputs_clustering, 
                                      number_clusters=number_clusters,
                                      norm=2,
@@ -152,9 +154,8 @@ extreme kerber grids:   landnetz_freileitung(), landnetz_kabel(), landnetz_freil
     -> create network with nw.kb_extrem_name   
             
 '''
-net_name = "landnetz_kabel_1"
-#net = nw.create_kerber_+net_name
-fkt_name = "create_kerber_" + net_name
+net_name = "vorstadtnetz_trafo2"
+fkt_name = "kb_extrem_" + net_name
 fkt = getattr(nw, fkt_name)
 net= fkt()
 
@@ -205,6 +206,7 @@ iteration_counter = 0
 # introduce boolean to state infeasability
 infeasability = False
 
+change_relative = options["change_relative_node_violation_rel"]
 change_value = options["change_value_node_violation_abs"]
 
 for n in gridnodes:
@@ -259,7 +261,7 @@ while boolean_loop:
                             elif(any(vm_pu_total[n,d,t] > 1.04 for t in timesteps)):
                                 constraint_apc[n,d] += 0.1
                                 if(constraint_apc[n,d] >= 1):
-                                    print("You have reached the maximal amount of curtailment!")
+                                    print("You have reached the maximum amount of curtailment!")
                                     print("Will set curtailment to 100 Percent automatically.")
                                     constraint_apc[n,d] = 1
                             else:
@@ -267,28 +269,31 @@ while boolean_loop:
                             for t in timesteps:
                                 if(critical_flag[n,d,t] == 1):
                                     if (vm_pu_total[n,d,t] < 0.96):
-                                        # relative Lösung wirft Problem der Spannungsweiterleitung auf
-                                        constraint_SubtrMax[n,d,t] = 0.90 * powSubtrPrev[n,d,t]
-                                        """# absolute Regelung:
-                                        if (powSubtrPrev[n, d, t] < change_value):
-                                            constraint_SubtrMax[n, d, t] = 0
-                                            print("Subtraction already set to 0 for node" +str(n) + " and timestep" +str(t))
-                                            print("Raising Injection now!")
-                                            constraint_InjMin[n,d,t] += change_value
+                                        if options["rel1_or_abs0_violation_change"]:
+                                            # relative Lösung wirft Problem der Spannungsweiterleitung auf
+                                            constraint_SubtrMax[n,d,t] = change_relative * powSubtrPrev[n,d,t]
                                         else:
-                                            constraint_SubtrMax[n,d,t] = powSubtrPrev[n,d,t] - change_value"""
+                                            # absolute Regelung:
+                                            if (powSubtrPrev[n, d, t] < change_value):
+                                                constraint_SubtrMax[n, d, t] = 0
+                                                print("Subtraction already set to 0 for node" +str(n) + " and timestep" +str(t))
+                                                print("Raising Injection now!")
+                                                constraint_InjMin[n,d,t] += change_value - powSubtrPrev[n,d,t]
+                                            else:
+                                                constraint_SubtrMax[n,d,t] = powSubtrPrev[n,d,t] - change_value
 
                                     elif (vm_pu_total[n,d,t] > 1.04):
-                                        constraint_InjMax[n, d, t] = 0.90 * powInjPrev[n,d,t]
-                                        """
-                                        #absolute änderung
-                                        if (powInjPrev[n,d,t] < change_value):
-                                            constraint_InjMax[n,d,t] = 0
-                                            print("Injection already set to 0 for node" +str(n) + " and timestep" +str(t))
-                                            print("Raising Subtraction now!")
-                                            constraint_SubtrMin[n,d,t] += change_value
+                                        if options["rel1_or_abs0_violation_change"]:
+                                            constraint_InjMax[n, d, t] = change_relative * powInjPrev[n,d,t]
                                         else:
-                                            constraint_InjMax[n,d,t] = powInjPrev[n,d,t] - change_value"""
+                                            #absolute änderung
+                                            if (powInjPrev[n,d,t] < change_value):
+                                                constraint_InjMax[n,d,t] = 0
+                                                print("Injection already set to 0 for node" +str(n) + " and timestep" +str(t))
+                                                print("Raising Subtraction now!")
+                                                constraint_SubtrMin[n,d,t] += change_value -  powInjPrev[n,d,t]
+                                            else:
+                                                constraint_InjMax[n,d,t] = powInjPrev[n,d,t] - change_value
 
                 else:
                     print("You selected only apc in case of voltage violations.")
@@ -312,27 +317,30 @@ while boolean_loop:
                     for t in timesteps:
                         if (critical_flag[n, d, t] == 1):
                             if (vm_pu_total[n, d, t] < 0.96):
-                                constraint_SubtrMax[n, d, t] = 0.90 * powSubtrPrev[n, d, t]
-                                """# absolute Regelung:
-                                if (powSubtrPrev[n, d, t] < change_value):
-                                    constraint_SubtrMax[n, d, t] = 0
-                                    print("Subtraction already set to 0 for node" +str(n) + " and timestep" +str(t))
-                                    print("Raising Injection now!")
-                                    constraint_InjMin[n,d,t] += change_value
+                                if options["rel1_or_abs0_violation_change"]:
+                                    constraint_SubtrMax[n, d, t] = change_relative * powSubtrPrev[n, d, t]
                                 else:
-                                    constraint_SubtrMax[n,d,t] = powSubtrPrev[n,d,t] - change_value"""
+                                    # absolute Regelung:
+                                    if (powSubtrPrev[n, d, t] < change_value):
+                                        constraint_SubtrMax[n, d, t] = 0
+                                        print("Subtraction already set to 0 for node" +str(n) + " and timestep" +str(t))
+                                        print("Raising Injection now!")
+                                        constraint_InjMin[n,d,t] += change_value - powSubtrPrev[n,d,t]
+                                    else:
+                                        constraint_SubtrMax[n,d,t] = powSubtrPrev[n,d,t] - change_value
 
                             elif (vm_pu_total[n, d, t] > 1.04):
-                                constraint_InjMax[n, d, t] = 0.90 * powInjPrev[n,d,t]
-                                """
-                                #absolute Regelung
-                                if (powInjPrev[n, d, t] < change_value):
-                                    constraint_InjMax[n, d, t] = 0
-                                    print("Injection already set to 0 for node" + str(n) + " and timestep" + str(t))
-                                    print("Raising Subtraction now!")
-                                    constraint_SubtrMin[n, d, t] += change_value
+                                if options["rel1_or_abs0_violation_change"]:
+                                    constraint_InjMax[n, d, t] = change_relative * powInjPrev[n,d,t]
                                 else:
-                                    constraint_InjMax[n, d, t] = powInjPrev[n, d, t] - change_value"""
+                                    #absolute Regelung
+                                    if (powInjPrev[n, d, t] < change_value):
+                                        constraint_InjMax[n, d, t] = 0
+                                        print("Injection already set to 0 for node" + str(n) + " and timestep" + str(t))
+                                        print("Raising Subtraction now!")
+                                        constraint_SubtrMin[n, d, t] += change_value - powInjPrev[n,d,t]
+                                    else:
+                                        constraint_InjMax[n, d, t] = powInjPrev[n, d, t] - change_value
 
             elif (options["cut_Inj/Subtr_while_voltage_violation"] == False and options["apc_while_voltage_violation"] == False):
                 print("Error: You did not select any measure in case of voltage violations!")
@@ -356,7 +364,7 @@ t2 = int(time.time())
 duration_program = t1 - t2
 
 print("this is the end")
-#plot_res.plot_results(outputs, days, gridnodes, timesteps)
+plot_res.plot_results(outputs, days, gridnodes, timesteps)
 print("")
 print("")
 print("objective value für 30 Typtage:")

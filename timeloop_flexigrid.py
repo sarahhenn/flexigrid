@@ -151,10 +151,10 @@ def run_timeloop(fkt, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
                 vm_pu_total[n,d,t] = vm_pu_final[t,n]
 
     vm_pu_total = np.array([[[vm_pu_total[n,d,t] for t in timesteps] for d in days] for n in gridnodes])
-    ow.remove_output_variable('res_load', 'p_mw')
+    """ow.remove_output_variable('res_load', 'p_mw')
     ow.remove_output_variable('res_bus', 'vm_pu')
     ow.remove_output_variable('res_line', 'loading_percent')
     ow.remove_output_variable('res_line', 'i_ka')
-    ow.remove_output_variable('res_sgen', 'p_mw')
+    ow.remove_output_variable('res_sgen', 'p_mw')"""
 
     return output_dir,critical_flag,solution_found, vm_pu_total
