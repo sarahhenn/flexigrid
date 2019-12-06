@@ -16,7 +16,7 @@ import python.hpopt_energy as hpopt
 
 #%% Start:
 
-def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params, options, constraint_apc, constraint_InjMin, constraint_SubtrMin,constraint_InjMax,constraint_SubtrMax, critical_flag):
+def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params, options, constraint_apc, constraint_InjMin, constraint_SubtrMin,constraint_InjMax,constraint_SubtrMax, critical_flag, emissions_max, costs_max):
     """
     Compute the optimal building energy system consisting of pre-defined 
     devices (devs) for a given building. Furthermore the program can choose
@@ -787,15 +787,22 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                     model.addConstr(powerSubtr[n, d, t] <= constraint_SubtrMax[n, d, t])
                     model.addConstr(powerSubtr[n,d,t] >= constraint_SubtrMin[n,d,t])
 
+    # introduce constraints for pareto evaluation
+    model.addConstr(c_total_nodes <= costs_max)
+    model.addConstr(sum(emission_nodes[n] for n in gridnodes) <= emissions_max)
+
     #%% start optimization
     
     # set objective function
-    
-    model.setObjective(sum((emission_nodes[n])for n in gridnodes), gp.GRB.MINIMIZE)
 
-    """model.setObjective(sum(sum(sum((powerSubtr[n, d, t] - powerInj[n, d, t])for n in gridnodes) * clustered["co2_stat"][d,t]
-                               for t in timesteps) for d in days), gp.GRB.MINIMIZE)"""
-    #model.setObjective(c_total_nodes, gp.GRB.MINIMIZE)
+    if options["opt_costs"]:
+        model.setObjective(c_total_nodes, gp.GRB.MINIMIZE)
+    elif options["opt_emissions"]:
+        model.setObjective(sum((emission_nodes[n]) for n in gridnodes), gp.GRB.MINIMIZE)
+    else:
+        model.setObjective(
+            sum(sum(sum((powerSubtr[n, d, t] - powerInj[n, d, t]) for n in gridnodes) * clustered["co2_stat"][d, t]
+                    for t in timesteps) for d in days), gp.GRB.MINIMIZE)
 
     # adgust gurobi settings
     #model.Params.TimeLimit = 60
@@ -1051,6 +1058,7 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
     emissions_added = sum(res_emission_nodes)
     costs_added = res_c_total_nodes
+
 
     print("optimization successfull")
 

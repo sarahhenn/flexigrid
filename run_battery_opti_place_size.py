@@ -73,7 +73,9 @@ options =   {"static_emissions": False,  # True: calculation with static emissio
 
              "rel1_or_abs0_violation_change": False,    #If false, use absolute power constraint generation
                                                         #If True use relative power constraint generation
-             "change_relative_node_violation_rel": 0.9 #specify what the new value should be relative to the previous value of inj or subtr in case of voltage violations
+             "change_relative_node_violation_rel": 0.9, #specify what the new value should be relative to the previous value of inj or subtr in case of voltage violations
+            "opt_costs": True,                  # If true, minimize cost function (can be specified in opti script)
+           "opt_emissions": False             # If true, minimize emissions (can be specified in opti script)
             }
                      
 #%% data import
@@ -187,6 +189,9 @@ gridnodes = list(nodes["grid"])
 days        = [i for i in range(params["days"])]
 timesteps   = [i for i in range(params["time_steps"])]
 
+# values for pareto opti, not relevant for other analysis
+emissions_max = 1000000000
+costs_max = 1000000000
 
 # solution_found as continuos variable for while loop
 solution_found = []
@@ -228,7 +233,7 @@ while boolean_loop:
             shutil.rmtree(output_dir)"""
 
     #run DC-optimization
-    (costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev, emissions_nodes, costs_nodes, objective_function) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered,params, options, constraint_apc, constraint_InjMin, constraint_SubtrMin, constraint_InjMax, constraint_SubtrMax,critical_flag)
+    (costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev, emissions_nodes, costs_nodes, objective_function)=opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered,params, options, constraint_apc, constraint_InjMin, constraint_SubtrMin, constraint_InjMax, constraint_SubtrMax,critical_flag,emissions_max, costs_max)
 
     outputs = reader.read_results(options)
     # %% plot grid with batteries highlighted
