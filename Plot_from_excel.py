@@ -4,7 +4,7 @@ import tikzplotlib as tikz
 
 tex_folder = "C:\\users\\flori\\pycharmprojects\\flexigrid\\results\\LaTeX_results"
 
-efile = pd.read_excel("D:\\studium_neu\\sciebo_synchro\\Bachelorarbeit\\Graphiken_Modellentwicklung\\Typtageauswertung_Landnetz.xlsx",skiprows=2, usecols = {0,1,3})
+efile = pd.read_excel("D:\\studium_neu\\sciebo_synchro\\Bachelorarbeit\\Graphiken_Modellentwicklung\\Typtageauswertung_Dorfnetz.xlsx",skiprows=2, usecols = {0,1,3})
 
 fig, ax1 = plt.subplots()
 
@@ -23,4 +23,4 @@ ax2.tick_params(axis='y', labelcolor = color)
 
 fig.tight_layout()
 plt.show()
-tikz.save(figure = fig, filepath= tex_folder + "\\Typtageauswertung.tex")
+tikz.save(figure = fig, filepath= tex_folder + "\\Typtageauswertung_Dorfnetz.tex")

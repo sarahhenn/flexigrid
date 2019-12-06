@@ -17,6 +17,8 @@ import pandapower as pp
 import pandapower.networks as nw
 import pandapower.plotting as plot
 from pandapower.plotting.simple_plot_bat import simple_plot_bat
+from pandapower.plotting import pf_res_plotly
+#just give net to this function and it will plot the voltages as well!
 
 # import own function
 import python.clustering_medoid as clustering
@@ -108,7 +110,7 @@ inputs_clustering = np.array([raw_inputs["heat"],
                               raw_inputs["temperature"],
                               raw_inputs["co2_dyn"]])
 
-number_clusters = 3
+number_clusters = 8
 (inputs, nc, z) = clustering.cluster(inputs_clustering, 
                                      number_clusters=number_clusters,
                                      norm=2,
@@ -156,7 +158,7 @@ extreme kerber grids:   landnetz_freileitung(), landnetz_kabel(), landnetz_freil
     -> create network with nw.kb_extrem_name   
             
 '''
-net_name = "vorstadtnetz_trafo2"
+net_name = "vorstadtnetz_trafo_2"
 fkt_name = "kb_extrem_" + net_name
 fkt = getattr(nw, fkt_name)
 net= fkt()
@@ -170,6 +172,7 @@ if options["show_grid_plots"]:
 with open(options["filename_inputs"], "wb") as f_in:
     pickle.dump(clustered, f_in, pickle.HIGHEST_PROTOCOL)
 
+pf_res_plotly(net)
 # specify grid nodes for whole grid and trafo; choose and allocate load, injection and battery nodes
 # draw parameters from pandapower network
 nodes = {}

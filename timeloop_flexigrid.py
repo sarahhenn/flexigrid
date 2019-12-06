@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import pandapower.networks as nw
 
+from pandapower.plotting import pf_res_plotly
 from pandapower.timeseries.data_sources.frame_data import DFData
 from pandapower.timeseries.output_writer import OutputWriter
 from pandapower.timeseries.run_time_series import run_timeseries
@@ -149,6 +150,9 @@ def run_timeloop(fkt, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
         for n in gridnodes:
             for t in timesteps:
                 vm_pu_total[n,d,t] = vm_pu_final[t,n]
+
+        pf_res_plotly(net)
+        print("haha")
 
     vm_pu_total = np.array([[[vm_pu_total[n,d,t] for t in timesteps] for d in days] for n in gridnodes])
     """ow.remove_output_variable('res_load', 'p_mw')
