@@ -43,8 +43,8 @@ def _parse_tariffs(fixed, variable):
     
     return (lb, ub, fix, var)
     
-    
-def read_economics(devices, filename="input/economics.xlsx"):
+###changer    
+def read_economics(devices, filename="input/economics.xlsx", filename2="input/economics2.xlsx"):
     """
     Read in economic parameters and update residual values of devices.
     
@@ -64,7 +64,8 @@ def read_economics(devices, filename="input/economics.xlsx"):
     devices : dictionary
         All device specific characteristics.
     """
-    book = xlrd.open_workbook(filename)
+    ###changer  
+    book = xlrd.open_workbook(filename2)
     
     sheet_eco  = book.sheet_by_name("gen_economics")    
     sheet_gas  = book.sheet_by_name("gas_economics")
@@ -227,10 +228,10 @@ def compute_parameters(par, number_clusters, len_day):
     par["dt"] = 24 / len_day
     
     return par
-    
+###changer      
 def read_devices(timesteps, days, 
                  temperature_ambient, solar_irradiation, 
-                 days_per_cluster, filename="input/devices.xlsx"):
+                 days_per_cluster, filename="input/devices.xlsx", filename2="input/devices10.xlsx"):
     """
     Read all devices from a given file.
     
@@ -259,7 +260,8 @@ def read_devices(timesteps, days,
     results = {}
     
     # Open work book
-    book = xlrd.open_workbook(filename)
+    ###changer  
+    book = xlrd.open_workbook(filename2)
     
     # Get all available sheets
     available_sheets = book.sheet_names()

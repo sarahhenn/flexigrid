@@ -28,7 +28,7 @@ def remove_n_maximums(d, n):
         max_key = max(d.keys(), key=lambda k: d[k])
         del d[max_key]
 
-def remove_n_randoms(d, n):         ## TO DO? change to choose_n_randoms and add writing in excel
+def remove_n_randoms(d, n):
     for i in range(n):
         random_key = random.choice(list(d))
         del d[random_key]

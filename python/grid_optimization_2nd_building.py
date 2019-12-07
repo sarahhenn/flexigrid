@@ -255,8 +255,8 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
         for n in gridnodes:
             for d in days:
                 if n in loads_with["ev"]:
-                    #demEV[n,d] = random.uniform(2.5,4.7) #statistical probability
-                    demEV[n,d] = random.uniform(6.5,7.7)  #bad case for on_demand
+                    demEV[n,d] = random.uniform(2.5,4.7) #statistical probability
+                    #demEV[n,d] = random.uniform(6.5,7.7)  #bad case for on_demand
                     demTime[n,d] = math.ceil(demEV[n,d]/ev_max)
                 else: 
                     demEV[n,d] = 0
@@ -368,10 +368,10 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
     revenues_grid = model.addVar(vtype="C", name="revenue_grid")
     
     # variables for total node costs, total costs and total emissions
-    c_total_nodes = model.addVar(vtype="C", name="c_total", lb= -gp.GRB.INFINITY)
-    c_total_grid = model.addVar(vtype="C", name="c_total", lb= -gp.GRB.INFINITY)
+    c_total_nodes = model.addVar(vtype="C", name="c_total_nodes", lb= -gp.GRB.INFINITY)
+    c_total_grid = model.addVar(vtype="C", name="c_total_grid", lb= -gp.GRB.INFINITY)
     emission_nodes = model.addVars(gridnodes, vtype="C", name= "CO2_emission", lb= -gp.GRB.INFINITY) 
-    emission_grid = model.addVar(vtype="C", name= "CO2_emission", lb= -gp.GRB.INFINITY)  
+    emission_grid = model.addVar(vtype="C", name= "CO2_emission_grid", lb= -gp.GRB.INFINITY)  
     
     #%% technical variables
     
@@ -379,8 +379,8 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
     
     # set trafo bounds due to technichal limits
     trafo_max = float(net.trafo.sn_mva*1000.)
-    powerTrafoLoad = model.addVars(days,timesteps, vtype="C", lb=0, ub=trafo_max, name="powerTrafo_"+str(t))
-    powerTrafoInj = model.addVars(days,timesteps, vtype="C", lb=0, ub=trafo_max, name="powerTrafo_"+str(t))
+    powerTrafoLoad = model.addVars(days,timesteps, vtype="C", lb=0, ub=trafo_max, name="powerTrafoL_"+str(t))
+    powerTrafoInj = model.addVars(days,timesteps, vtype="C", lb=0, ub=trafo_max, name="powerTrafoI_"+str(t))
     
     # activation variable for trafo load
     yTrafo = model.addVars(days,timesteps, vtype="B", name="yTrafo_"+str(t))
@@ -408,7 +408,7 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
     powerInj = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerInj_"+str(n)+str(t))
     powerInjPV = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerInjPV_"+str(n)+str(t))
     powerInjBat = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerInjBat_"+str(n)+str(t))
-    powerUsePV = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerUseBat_"+str(n)+str(t))
+    powerUsePV = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerUsePV_"+str(n)+str(t))
     powerUseBat = model.addVars(gridnodes, days, timesteps, vtype="C", name="powerUseBat_"+str(n)+str(t))
     
     if options["hp_mode"] == "grid_opt":
@@ -591,7 +591,7 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
                 if n in nodes["trafo"]:
                 
                     model.addConstr(powerLine.sum(n,'*',d,t) - powerLine.sum('*',n,d,t) == 
-                                    powerTrafoLoad[d,t] - powerTrafoInj[d,t], name="node balance_"+str(n))
+                                    powerTrafoLoad[d,t] - powerTrafoInj[d,t], name="node_balance_"+str(n))
                     
                     model.addConstr(powerInj[n,d,t] == 0)
                     model.addConstr(powerLoad[n,d,t] == 0)
@@ -610,7 +610,6 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
                 
                     model.addConstr(powerLine[n,m,d,t] <= powerLine_max[n,m], name="line power max_"+str(n)+str(m)+str(t))
                     model.addConstr(powerLine[n,m,d,t] >= (-1)*powerLine_max[n,m], name="line power min_"+str(n)+str(m)+str(t))
-                    #model.addConstr(voltLine[n,m,d,t] == (powerLine[n,m,d,t] * lineLength[n,m] * specRes_ap[n,m] / U_nominal))
   
     for d in days:
         for t in timesteps:
@@ -811,8 +810,17 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
                           powerLoad[n,d,t] + powerUsePV[n,d,t] + powerUseBat[n,d,t] + ev_inj[n,d,t]
                           for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))         
 
+    #U_diff = {}
+    #U_diff = model.addVars(gridnodes,days,timesteps, vtype="C", lb=0, ub=U_nominal*0.04, name="U_diff")
+    U_diff = model.addVars(gridnodes,days,timesteps, vtype="C", lb=0, name="U_diff")
+    for n in gridnodes: 
+            for d in days:
+                for t in timesteps:
+                    #model.addGenConstrAbs(U_diff[n,d,t], (U_nominal - voltNode[n,d,t]))
+                    #model.addConstr(U_diff[n,d,t] == gp.abs_(U_nominal - voltNode[n,d,t]))
+                    model.addConstr(U_diff[n,d,t] == (U_nominal - voltNode[n,d,t]))
 
-        
+                        
     #%% start optimization
     
     # set objective function             
@@ -828,6 +836,9 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
 #    rbf = ((eco["q"]**a)-1)/((eco["q"]**a)*(eco["q"]-1))
 #    model.setObjective(-sum(c_inv[n] for n in gridnodes) + rbf * (revenues_grid - c_total_grid), gp.GRB.MAXIMIZE)
     
+    # Minimize voltage drop
+    #model.setObjective(sum(U_diff[n,d,t] for n in gridnodes), gp.GRB.MINIMIZE)
+    
     # Minimize costs per year
     #model.setObjective(c_total_grid, gp.GRB.MINIMIZE)
     
@@ -842,7 +853,7 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
 #    powerInj[n,d,t] - powerLoad[n,d,t]
     
     # adgust gurobi settings
-    model.Params.TimeLimit = 150    
+    model.Params.TimeLimit = 200    
     model.Params.MIPGap = 0.00
     model.Params.NumericFocus = 3
     model.Params.MIPFocus = 3
@@ -1070,4 +1081,4 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
         pickle.dump(loads_with, fout, pickle.HIGHEST_PROTOCOL)
 
         
-        return (res_c_total_grid, res_emission_grid, bool_bat)
+        return (res_c_total_grid, res_emission_grid)

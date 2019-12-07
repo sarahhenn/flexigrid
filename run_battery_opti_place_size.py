@@ -37,11 +37,11 @@ building_age  = "2005"      # 1960, 1980, 2005
 emission_year = "2017"      # 2017, 2030, 2050 
 # District parameters
 # second "option" for district coices, as floats
-district_options = {"mfh" : 0.53,                  # ratio of MFH to EFH in %
+district_options = {"mfh" : 0.33,                  # ratio of MFH to EFH in %
                     "pv" : 0.2,                    # ratio in %
-                    "hp" : 0.6,                    # ratio in %
-                    "ev" : 0.5,                    # ratio in %
-                    "case" : "worst"  
+                    "hp" : 0.2,                    # ratio in %
+                    "ev" : 0.1,                    # ratio in %
+                    "case" : "random"               # "best", "worst" and "random"
                     }
 
 # set options
@@ -50,7 +50,7 @@ options =   {"static_emissions": True,   # True: calculation with static emissio
              "rev_emissions": True,      # True: emissions revenues for feed-in
                                          # False: no emissions revenues for feed-in
              "dhw_electric": True,       # define if dhw is provided decentrally by electricity
-             "P_pv": 10.0,               # installed peak PV power
+             "P_pv": 20.0,               # installed peak PV power
              "hp_mode": "energy_opt",    # choose between "off" (no hp) and "energy_opt" and "grid_opt"
              "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
              "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
@@ -210,12 +210,12 @@ extreme kerber grids:   landnetz_freileitung(),
 #net.name = "landnetz_freileitungl_1"
 #net = nw.create_kerber_landnetz_freileitung_2()
 #net.name = "landnetz_freileitung_2"
-net = nw.create_kerber_landnetz_kabel_1()
-net.name = "landnetz_kabel_1"
+#net = nw.create_kerber_landnetz_kabel_1()
+#net.name = "landnetz_kabel_1"
 #net = nw.create_kerber_landnetz_kabel_2()
 #net.name = "landnetz_kabel_2"
-#net = nw.create_kerber_dorfnetz()
-#net.name = "dorfnetz"
+net = nw.create_kerber_dorfnetz()
+net.name = "dorfnetz"
 #net = nw.create_kerber_vorstadtnetz_kabel_1()
 #net.name = "vorstadtnetz_kabel_1"
 #net = nw.create_kerber_vorstadtnetz_kabel_2()
@@ -251,23 +251,20 @@ else:
 
 randomfile = net.name + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "_ev" + ev + ".xlsx" 
 
-#ev_file = net.name + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "tes" + tes + ".xlsx"
 
 if options["show_grid_plots"]:
 # simple plot of net with existing geocoordinates or generated artificial geocoordinates
     plot.simple_plot(net, show_plot=True)
-#    simple_plotly(net)  
 
 
 names =   {"filename_results": "results/" + filename + ".pkl",
-            "building_results": "results/" + "dist_" + filename + ".pkl"   #b,w,r ans ende
-             
+            "building_results": "results/" + "dist_" + filename + ".pkl"
             }
 
 #%% find distribution for various building types
 
 (load_with) = dist.allocate(net, options, names, district_options, distributionFolder, randomfile, ev_file)
-#load_with = 1
+
 #%% Store clustered input parameters
     
 filename_input = "results/inputs_" + building_type + "_" + building_age + ".pkl"
@@ -276,9 +273,8 @@ with open(filename_input, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
 
-(costs, emission, bool_bat) = opti.compute(net, eco, devs, clustered, params, options, district_options, names, load_with, randomfile, ev_file, distributionFolder)
+(costs, emission) = opti.compute(net, eco, devs, clustered, params, options, district_options, names, load_with, randomfile, ev_file, distributionFolder)
 
-### TO DO : second variable for building results for "reader" filename_dist, filename_results
 outputs = reader.read_results("results/" + filename, "results/" + "dist_" + filename)
 
 #%% plot grid with batteries highlighted
@@ -294,11 +290,5 @@ if options["show_grid_plots"]:
     netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
     simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
     
-#    netx=net
-#    netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
-#
-#    simple_plot(netx, show_plot=True, bus_color='b', bat_color='r')
 
-
-#test = 0
 
