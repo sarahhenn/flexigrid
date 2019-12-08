@@ -151,8 +151,7 @@ def run_timeloop(fkt, timesteps, days, powInjRet, powSubtrRet, gridnodes,critica
             for t in timesteps:
                 vm_pu_total[n,d,t] = vm_pu_final[t,n]
 
-        pf_res_plotly(net)
-        print("haha")
+        #pf_res_plotly(net)
 
     vm_pu_total = np.array([[[vm_pu_total[n,d,t] for t in timesteps] for d in days] for n in gridnodes])
     """ow.remove_output_variable('res_load', 'p_mw')

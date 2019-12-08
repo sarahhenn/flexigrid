@@ -52,8 +52,9 @@ options = {"static_emissions": False,  # True: calculation with static emissions
            "with_hp": True,  # usage of heat pumps
            "hp_mode": "grid_opt",  # choose between "energy_opt" and "grid_opt"
            "T_VL": 35,  # choose between 35 and 55 "Vorlauftemperatur"
-           "alpha_th": 1,  # relative size of heat pump (between 0 and 1)
+           "alpha_th": 0.8,  # relative size of heat pump (between 0 and 1)
            "beta_th": 0.417,  # relative size of thermal energy storage (between 0 and 1)
+            "k_loss": 0.00569,         # selbstberechneter Wert für k_loss
            "show_grid_plots": False,  # show gridplots before and after optimization
 
            "filename_results": "results/pareto_results/" + building_type + "_" + \
@@ -70,9 +71,8 @@ options = {"static_emissions": False,  # True: calculation with static emissions
            # False: Heatpump power costs: 27.8 ct/kWh (equal to other power users)
            "allow_apc_opti": True,  # True: Curtailment allowed to be set in optimization
            # False: Curtailment only through additional constraint
-           "change_value_node_violation_abs": 2,
+           "change_value_node_violation_abs": 1,
            # specify, for how much the absolute values of inj and subtr should change in case of voltage violations
-
            "rel1_or_abs0_violation_change": False,  # If false, use absolute power constraint generation
            # If True use relative power constraint generation
            "change_relative_node_violation_rel": 0.9,
@@ -163,7 +163,7 @@ extreme kerber grids:   landnetz_freileitung(), landnetz_kabel(), landnetz_freil
     -> create network with nw.kb_extrem_name   
 
 '''
-net_name = "dorfnetz_trafo"
+net_name = "landnetz_kabel_trafo"
 fkt_name = "kb_extrem_" + net_name
 fkt = getattr(nw, fkt_name)
 net = fkt()
@@ -193,8 +193,8 @@ days = [i for i in range(params["days"])]
 timesteps = [i for i in range(params["time_steps"])]
 
 # define starting values of emissions and cost max for pareto loop
-emissions_max = 1000000000
-costs_max = 1000000000
+emissions_max_global = 1000000000
+costs_max_global = 1000000000
 
 #!!!!!!!!!!! COPY FROM HERE FOR PARETO LOOOOOOOP !!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -237,11 +237,11 @@ while boolean_loop:
     # run DC-optimization
     (
     costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev,
-    emissions_nodes, costs_min, emissions_max) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs,
+    emissions_nodes, costs_min, emissions_max_global) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs,
                                                                      clustered, params, options, constraint_apc,
                                                                      constraint_InjMin, constraint_SubtrMin,
                                                                      constraint_InjMax, constraint_SubtrMax,
-                                                                     critical_flag, emissions_max, costs_max)
+                                                                     critical_flag, emissions_max_global, costs_max_global)
 
     # run AC-Powerflow-Solver
     (output_dir, critical_flag, solution_found, vm_pu_total) = loop.run_timeloop(fkt, timesteps, days, powInjRet,
@@ -380,7 +380,7 @@ print("")
 print("costs minimized are:")
 print(costs_min)
 print("emissions max are:")
-print(emissions_max)
+print(emissions_max_global)
 print("duration_program")
 print(duration_program)
 print("")
@@ -392,8 +392,8 @@ print("")
 print("hier ist das originalprogramm ")
 
 results_pareto = {}
-results_pareto["costs_min"] = costs_min
-results_pareto["emissions_max"] = emissions_max
+results_pareto["Minimale Kosten"] = costs_min
+results_pareto["Maximale Emissionen"] = emissions_max_global
 costlist = []
 emissionslist = []
 simulationslist = []
@@ -455,11 +455,11 @@ while boolean_loop:
     # run DC-optimization
     (
     costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev,
-    emissions_nodes, costs_max, emissions_min) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs,
+    emissions_nodes, costs_max_global, emissions_min) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs,
                                                                      clustered, params, options, constraint_apc,
                                                                      constraint_InjMin, constraint_SubtrMin,
                                                                      constraint_InjMax, constraint_SubtrMax,
-                                                                     critical_flag, emissions_max, costs_max)
+                                                                     critical_flag, emissions_max_global, costs_max_global)
 
     # run AC-Powerflow-Solver
     (output_dir, critical_flag, solution_found, vm_pu_total) = loop.run_timeloop(fkt, timesteps, days, powInjRet,
@@ -598,15 +598,15 @@ print("")
 print("emissions minimized are:")
 print(emissions_min)
 print("costs max are:")
-print(costs_max)
+print(costs_max_global)
 print("duration_program")
 print(duration_program)
 print("")
 print("")
 print("")
 
-results_pareto["costs_max"] = costs_max
-results_pareto["emissions_min"] = emissions_min
+results_pareto["Maximale Kosten"] = costs_max_global
+results_pareto["Minimale Emissionen"] = emissions_min
 
 options["opt_costs"] = True
 options["opt_emissions"] = False
@@ -617,12 +617,17 @@ for i in range(1, 1 + number_simulations):
     #!!!!!!!!!!! COPY FROM HERE FOR PARETO LOOOOOOOP !!!!!!!!!!!!!!!!!!!!!!!!
 
     options["filename_results"] = "results/pareto_results/" + building_type + "_" + \
-                                  building_age + "pareto_CostsMin" +str(i /number_simulations +1) + ".pkl"
+                                  building_age + "pareto_CostsMin" +str(i /(number_simulations +1)) + ".pkl"
 
     options["filename_inputs"] = "results/pareto_results/inputs_" + building_type + "_" + \
-                                 building_age + "pareto_CostsMin" +str(i /number_simulations +1) + ".pkl"
+                                 building_age + "pareto_CostsMin" +str(i /(number_simulations +1)) + ".pkl"
 
-    emissions_max = emissions_max - (emissions_max - emissions_min) * i * (1/(number_simulations + 1))
+    emissions_max = emissions_min + (emissions_max_global - emissions_min) * i * (1/(number_simulations + 1))
+
+    # %% Store clustered input parameters
+
+    with open(options["filename_inputs"], "wb") as f_in:
+        pickle.dump(clustered, f_in, pickle.HIGHEST_PROTOCOL)
 
     # solution_found as continuos variable for while loop
     solution_found = []
@@ -659,9 +664,7 @@ for i in range(1, 1 + number_simulations):
         print("")
         print("!!! Iteration counter is currently at " + str(iteration_counter) + "!!!")
         print("")
-        """for d in days:
-                output_dir = os.path.join(tempfile.gettempdir(), "time_series_example" + str(d))
-                shutil.rmtree(output_dir)"""
+
 
         # run DC-optimization
         (
@@ -670,20 +673,8 @@ for i in range(1, 1 + number_simulations):
                                                                          clustered, params, options, constraint_apc,
                                                                          constraint_InjMin, constraint_SubtrMin,
                                                                          constraint_InjMax, constraint_SubtrMax,
-                                                                         critical_flag, emissions_max, costs_max)
+                                                                         critical_flag, emissions_max, costs_max_global)
 
-        outputs = reader.read_results(options)
-        # %% plot grid with batteries highlighted
-        if options["show_grid_plots"]:
-
-            bat_ex = np.zeros(len(outputs["nodes"]["grid"]))
-            for n in outputs["nodes"]["grid"]:
-                if outputs["res_capacity"][n] > 0:
-                    bat_ex[n] = 1
-
-            netx = net
-            netx['bat'] = pd.DataFrame(bat_ex, columns=['ex'])
-            simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
 
         # run AC-Powerflow-Solver
         (output_dir, critical_flag, solution_found, vm_pu_total) = loop.run_timeloop(fkt, timesteps, days, powInjRet,
@@ -836,16 +827,9 @@ for i in range(1, 1 + number_simulations):
 
 print("")
 print("")
-print("emissions max")
-print(results_pareto["emissions_max"])
-print("emissions min:")
-print(results_pareto["emissions_min"])
-print("costs max")
-print(results_pareto["costs_max"])
-print("costs min:")
-print(results_pareto["costs_min"])
-print("costlist:")
+print("Extremwerte:")
 print(results_pareto)
+print("costlist:")
 print(costlist)
 print("emissionslist:")
 print(emissionslist)
@@ -853,7 +837,3 @@ print("simulationspercentage:")
 print(simulationslist)
 
 print("strpo")
-
-
-
-#TODO: Für Ausgabe der Daten ein dict machen, damit ich nachher in der Codeausgabe nicht so unglaublich weit hoch scrollen muss

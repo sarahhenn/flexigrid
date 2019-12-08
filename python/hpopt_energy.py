@@ -9,7 +9,6 @@ from __future__ import division
 
 import gurobipy as gp
 import numpy as np
-
 def optimize(options, params, clustered, devs, capa_hp, capa_tes):
     """
     Parameters

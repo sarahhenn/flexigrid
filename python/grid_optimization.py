@@ -418,12 +418,12 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     # plus the curtailed energy of every node needs to be considered aswell
     Inj_total_grid = (sum(clustered["weights"][d] * sum(powerTrafoInj[d,t]
                             for t in timesteps) for d in days) * dt)
-    Curt_total_grid = sum(Curt_total_node[n] for n in gridnodes)
+    Curt_total_grid = (sum(Curt_total_node[n] for n in gridnodes) * dt)
 
     #fpo: TODO: price sell eeg has to be changed aswell, if possibility of charging bat out of net is open
     model.addConstr(revenues_grid == 
                      eco["crf"] * eco["b"]["infl"] * (Inj_total_grid + Curt_total_grid)* eco["price_sell_eeg"],
-                     name="revenues"+str(n))            
+                     name="revenues_grid")
     
     #%% ecological constraints
 
@@ -671,7 +671,8 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                               for d in days), name="repetitions_tes")
 
         # k_loss = devs["tes"]["k_loss"]
-        k_loss = 0
+        k_loss = options["k_loss"]
+
         for n in gridnodes:
             for d in days:
                 for t in timesteps:
@@ -797,8 +798,10 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
     if options["opt_costs"]:
         model.setObjective(c_total_nodes, gp.GRB.MINIMIZE)
+        #model.setObjective(c_total_grid, gp.GRB.MINIMIZE)
     elif options["opt_emissions"]:
         model.setObjective(sum((emission_nodes[n]) for n in gridnodes), gp.GRB.MINIMIZE)
+        #model.setObjective(emission_grid, gp.GRB.MINIMIZE)
     else:
         model.setObjective(
             sum(sum(sum((powerSubtr[n, d, t] - powerInj[n, d, t]) for n in gridnodes) * clustered["co2_stat"][d, t]

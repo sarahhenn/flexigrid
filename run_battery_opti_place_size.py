@@ -55,6 +55,7 @@ options =   {"static_emissions": False,  # True: calculation with static emissio
             "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
             "alpha_th": 1,            # relative size of heat pump (between 0 and 1)
             "beta_th": 0.417,             # relative size of thermal energy storage (between 0 and 1)
+             "k_loss": 0.00569,         # selbstberechneter Wert für k_loss
             "show_grid_plots": False,   # show gridplots before and after optimization
             
             "filename_results": "results/" + building_type + "_" + \
