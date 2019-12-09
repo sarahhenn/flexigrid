@@ -20,7 +20,7 @@ import python.hpopt_energy as hpopt
 
 #%% Start:
 
-def compute(net, eco, devs, clustered, params, options, district_options, names, loads_with, randomfile, ev_file, distributionFolder):
+def compute(emi_max, net, eco, devs, clustered, params, options, district_options, names, loads_with, randomfile, ev_file, distributionFolder):
     """
     Compute the optimal building energy system consisting of pre-defined 
     devices (devs) for a given building. Furthermore the program can choose
@@ -246,12 +246,15 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
     # set maximal power for ev charge and discharge
     ev_max = 3.6 
     
+    # build realistic random daily demands in kWh
+    demEV = {} 
+    demTime = {}
     if options["EV_mode"] == "off":
-        pass
+        for n in gridnodes:
+            for d in days:
+                demEV[n,d] = 0
+        #pass
     else:
-        # build realistic random daily demands in kWh
-        demEV = {} 
-        demTime = {}
         for n in gridnodes:
             for d in days:
                 if n in loads_with["ev"]:
@@ -508,6 +511,8 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
                      name="revenues"+str(n))            
     
     #%% ecological constraints
+    
+    model.addConstr(emission_grid <= emi_max)
     
     if options["static_emissions"]:
         # compute annual emissions and emission revenues
@@ -840,7 +845,7 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
 #    powerInj[n,d,t] - powerLoad[n,d,t]
     
     # adgust gurobi settings
-    model.Params.TimeLimit = 150    
+    model.Params.TimeLimit = 1200    
     model.Params.MIPGap = 0.00
     model.Params.NumericFocus = 3
     model.Params.MIPFocus = 3
@@ -1068,4 +1073,4 @@ def compute(net, eco, devs, clustered, params, options, district_options, names,
         pickle.dump(loads_with, fout, pickle.HIGHEST_PROTOCOL)
 
         
-        return (res_c_total_grid, res_emission_grid)
+        return (res_c_total_grid, res_emission_grid, gridnodes)
