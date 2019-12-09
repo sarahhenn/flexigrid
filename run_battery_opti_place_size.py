@@ -24,7 +24,7 @@ from pandapower.plotting.simple_plot_bat import simple_plot_bat
 import python.clustering_medoid as clustering
 import python.parse_inputs as pik
 #import python.grid_optimization_2nd_building as opti
-import python.opti_backup as opti
+import python.grid_optimization as opti
 #import python.grid_optimization_master as opti2
 import python.building_distribution as dist 
 import python.read_basic as reader
@@ -206,10 +206,10 @@ extreme kerber grids:   landnetz_freileitung(),
             
 '''
 
-net = nw.create_kerber_landnetz_freileitung_1()
-net.name = "landnetz_freileitungl_1"
-#net = nw.create_kerber_landnetz_freileitung_2()
-#net.name = "landnetz_freileitung_2"
+#net = nw.create_kerber_landnetz_freileitung_1()
+#net.name = "landnetz_freileitungl_1"
+net = nw.create_kerber_landnetz_freileitung_2()
+net.name = "landnetz_freileitung_2"
 #net = nw.create_kerber_landnetz_kabel_1()
 #net.name = "landnetz_kabel_1"
 #net = nw.create_kerber_landnetz_kabel_2()
@@ -272,8 +272,8 @@ with open(filename_input, "wb") as f_in:
     pickle.dump(clustered, f_in, pickle.HIGHEST_PROTOCOL)
 
 #%% Define dummy parameters, options and start optimization
-
-(costs, emission) = opti.compute(net, eco, devs, clustered, params, options, district_options, names, load_with, randomfile, ev_file, distributionFolder)
+emi_max = 1000000000
+(costs, emission, gridnodes) = opti.compute(emi_max, net, eco, devs, clustered, params, options, district_options, names, load_with, randomfile, ev_file, distributionFolder)
 
 outputs = reader.read_results("results/" + filename, "results/" + "dist_" + filename)
 
