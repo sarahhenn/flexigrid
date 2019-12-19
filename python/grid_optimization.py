@@ -103,6 +103,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
     nodes["supply"] = np.delete(nodes["supply"],[0,1])           #Reihenfolge wichtig !
     
     nodes["bat"] = net.load['bus'].to_numpy()   #Batterien an Loads zugelassen    
+  #  nodes["bat"] = [] # keine Batterien zugelassen
   #  nodes["bat"] = nodes["supply"]   #Batterien an Verzweigungen zugelassen
   #  nodes["bat"] = nodes["each"]     #Batterien an allen Knoten nach dem Trafo zugelassen
     
@@ -209,9 +210,11 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
 
     
     # set nominal Voltage for grid and Voltage bounds for nodes
-    U_nominal = net.trafo.vn_lv_kv[0]*1000 
-    voltNode_max         = U_nominal*1.04
-    voltNode_min         = U_nominal*0.96
+    U_nominal = net.trafo.vn_lv_kv[0]*1000
+    #voltNode_max         = U_nominal*1.04
+    #voltNode_min         = U_nominal*0.96
+    voltNode_sq_max         = (U_nominal*1.04)**2
+    voltNode_sq_min         = (U_nominal*0.96)**2
     
     
     # extract existing lines 
@@ -233,6 +236,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
     specRes_ap = {}
     res_r = {}
     res_x = {}
+    lineResistance = {}
     
     for [n,m] in nodeLines:
         lineLength[n,m]     = net.line['length_km'][nodeLines.index((n,m))]
@@ -241,7 +245,9 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
         specRes_ap[n,m]     = (specRes_r[n,m] * specRes_x[n,m]) 
         res_r[n,m]          = specRes_r[n,m]*lineLength[n,m]
         res_x[n,m]          = specRes_x[n,m]*lineLength[n,m]
-   
+        lineResistance[n,m] = (res_r[n,m]**2+res_x[n,m]**2)**(1/2)
+        
+        
 #%% insert EVs
     # set maximal power for ev charge and discharge
     ev_max = 3.6 
@@ -258,8 +264,8 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
         for n in gridnodes:
             for d in days:
                 if n in loads_with["ev"]:
-                    #demEV[n,d] = random.uniform(2.5,4.7) #statistical probability
-                    demEV[n,d] = random.uniform(6.5,7.7)  #bad case for on_demand
+                    demEV[n,d] = random.uniform(2.5,4.7) #statistical probability
+                    #demEV[n,d] = random.uniform(6.5,7.7)  #bad case for on_demand
                     demTime[n,d] = math.ceil(demEV[n,d]/ev_max)
                 else: 
                     demEV[n,d] = 0
@@ -391,7 +397,9 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
     # set line bounds due to technical limits                             
     powerLine = model.addVars(nodeLines,days,timesteps, vtype="C", lb=-10000, name="powerLine_")
     voltLine = model.addVars(nodeLines,days,timesteps, vtype="C", lb=-10000, name="voltLine_")
-    voltNode = model.addVars(gridnodes, days, timesteps, vtype="C", lb=voltNode_min, ub=voltNode_max, name="voltNode_")
+    voltNode_sq = model.addVars(gridnodes, days, timesteps, vtype="C", lb=voltNode_sq_min, ub=voltNode_sq_max, name="voltNode_sq_")
+    # Voltage calculation without constraints
+    #voltNode_sq = model.addVars(gridnodes, days, timesteps, vtype="C", lb=-10000, name="voltNode_sq_")
 
     # EV variables
     ev_load = model.addVars(gridnodes, days, timesteps, vtype="C", lb=0, ub=ev_max, name="ev_Load_"+str(n)+str(t))
@@ -512,7 +520,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
     
     #%% ecological constraints
     
-    model.addConstr(emission_grid <= emi_max)
+    model.addConstr(emission_grid <= emi_max, name = "emission_max")
     
     if options["static_emissions"]:
         # compute annual emissions and emission revenues
@@ -605,8 +613,8 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
                     model.addConstr(powerLine.sum(n,'*',d,t) - powerLine.sum('*',n,d,t) == 
                                     powerInj[n,d,t] - powerLoad[n,d,t], name="node balance_"+str(n))
     
-    # set Load over Trafo = 0 to simulate autarky
-#    model.addConstrs(powerTrafoLoad[d,t] == 0 for d in days for t in timesteps)   
+    # set Load over Trafo = 0 to simulate complete autarky
+    #model.addConstrs(powerTrafoLoad[d,t] == 0 for d in days for t in timesteps)   
             
     # set line limits    
     for [n,m] in nodeLines:
@@ -615,17 +623,19 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
                 
                     model.addConstr(powerLine[n,m,d,t] <= powerLine_max[n,m], name="line power max_"+str(n)+str(m)+str(t))
                     model.addConstr(powerLine[n,m,d,t] >= (-1)*powerLine_max[n,m], name="line power min_"+str(n)+str(m)+str(t))
-                    
+    
+    # Voltage Restriction according to (Liu, 2016)          
     for d in days:
         for t in timesteps:
-            model.addConstr(voltNode[1,d,t] == U_nominal)  
+            model.addConstr(voltNode_sq[0,d,t] == U_nominal**2)
+            model.addConstr(voltNode_sq[1,d,t] == U_nominal**2)  
     
     sin_phi = math.sin(options["phi"]) 
     cos_phi = math.cos(options["phi"])        
     for [n,m] in nodeLines:
         for d in days:
             for t in timesteps:
-                    model.addConstr(voltNode[m,d,t] == voltNode[n,d,t] - 2*(res_r[n,m]*powerLine[n,m,d,t] * cos_phi + res_x[n,m] * powerLine[n,m,d,t] * sin_phi), name="node voltage_")
+                    model.addConstr(voltNode_sq[m,d,t] == voltNode_sq[n,d,t] - 2*(res_r[n,m]*powerLine[n,m,d,t] * cos_phi + res_x[n,m] * powerLine[n,m,d,t] * sin_phi), name="node voltage_"+str(n))
                     
     #%% EV Constraints 
     
@@ -639,7 +649,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
         for n in gridnodes:
             for d in days:
                 if n in loads_with["ev"]:
-                        model.addConstr(ev_inj.sum(n,d,'*') + demEV[n,d] <= ev_load.sum(n,d,'*'))
+                        model.addConstr(ev_inj.sum(n,d,'*') * dt + demEV[n,d] <= ev_load.sum(n,d,'*') * dt)
                 else:
                     model.addConstr(demEV[n,d] == 0)
                     for t in timesteps: 
@@ -654,15 +664,15 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
                         model.addConstr(ev_load[n,d,t] == 0)
                         model.addConstr(ev_inj[n,d,t] == 0)
                     if options["EV_mode"] == "on_demand":
-                        model.addConstr(ev_load.sum(n,d,'*') <= 2*demEV[n,d])
+                        model.addConstr(ev_load.sum(n,d,'*') * dt <= 2*demEV[n,d])
                         if loadNow[n,d,t] == 1:
                             model.addConstr(ev_load[n,d,t+1] <= ev_load[n,d,t])
 
                     if options["EV_mode"] == "grid_reactive":
-                         model.addConstr(ev_load.sum(n,d,'*') <= 2*demEV[n,d])
+                         model.addConstr(ev_load.sum(n,d,'*') * dt <= 2*demEV[n,d])
                     if options["EV_mode"] == "bi_directional":
-                        model.addConstr(ev_load.sum(n,d,'*') <= 2*demEV[n,d])
-                        model.addConstr(ev_inj.sum(n,d,'*') <= 2*demEV[n,d])
+                        model.addConstr(ev_load.sum(n,d,'*') * dt <= 2*demEV[n,d])
+                        model.addConstr(ev_inj.sum(n,d,'*') * dt <= 2*demEV[n,d])
                         if not n in loads_with["ev"]:
                             model.addConstr(ev_inj[n,d,t] == 0)
                     else:
@@ -700,7 +710,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
             model.addConstr(capacity[n] >= x_bat[n]*capBat_min[n], name="Battery_capacity_min")
             
             model.addConstrs((capacity[n] >= SOC_init[n,d] for d in days), name="Battery_capacity_SOC_init")
-            model.addConstrs((capacity[n] >= SOC[n,d,t] for d in days for t in timesteps), name="Battery_capacity_SOC")
+            model.addConstrs((capacity[n] >= SOC[n,d,t] for d in days for t in timesteps), name="Battery_capacity_SOC"+str(n))
             
         else:
             
@@ -826,16 +836,18 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
         #     model.setObjective(sum(sum((powerTrafoLoad[d,t]-powerTrafoInj[d,t])*clustered["co2_dyn"][d,t] 
         #                                 for t in timesteps) for d in days), gp.GRB.MINIMIZE)    
         # =============================================================================
-    # Maximize net present Value
-#    a = 50 
-#    rbf = ((eco["q"]**a)-1)/((eco["q"]**a)*(eco["q"]-1))
-#    model.setObjective(-sum(c_inv[n] for n in gridnodes) + rbf * (revenues_grid - c_total_grid), gp.GRB.MAXIMIZE)
+   
+    # Pareto Optimizer
+    if options["opt_costs"]:
+        model.setObjective(c_total_grid, gp.GRB.MINIMIZE)
+    else:
+        model.setObjective(sum(emission_nodes[n] for n in gridnodes), gp.GRB.MINIMIZE)
     
     # Minimize costs per year
     #model.setObjective(c_total_grid, gp.GRB.MINIMIZE)
     
     # Minimize emissions
-    model.setObjective(sum(emission_nodes[n] for n in gridnodes), gp.GRB.MINIMIZE)
+    #model.setObjective(sum(emission_nodes[n] for n in gridnodes), gp.GRB.MINIMIZE)
     
     # Minimize power over Trafo (both directions)
     #model.setObjective(sum((powerTrafoLoad[d,t] - powerTrafoInj[d,t]) for d in days for t in timesteps), gp.GRB.MINIMIZE)
@@ -845,7 +857,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
 #    powerInj[n,d,t] - powerLoad[n,d,t]
     
     # adgust gurobi settings
-    model.Params.TimeLimit = 1200    
+    model.Params.TimeLimit = 1200
     model.Params.MIPGap = 0.00
     model.Params.NumericFocus = 3
     model.Params.MIPFocus = 3
@@ -882,9 +894,11 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
     for [n,m] in nodeLines:
         res_voltLine[n,m] = np.array([[voltLine[n,m,d,t].X for t in timesteps] for d in days])
                 
+    res_voltNode_sq = {}
     res_voltNode = {}
     for n in gridnodes:
-        res_voltNode[n] = np.array([[voltNode[n,d,t].X for t in timesteps] for d in days])
+        res_voltNode_sq[n] = np.array([[voltNode_sq[n,d,t].X for t in timesteps] for d in days])
+        res_voltNode[n] = (res_voltNode_sq[n])**(1/2)
     
     #EV results
     res_ev_load = {}
@@ -981,8 +995,22 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
     for n in gridnodes:           
         res_exBat[n] = x_bat[n].X
         res_actBat[n] = np.array([[y_bat[n,d,t].X for t in timesteps] for d in days])
-        
+    
+    
+#    res_voltline_sq = {}
+#    res_voltNode_sq = {}
+#    
+#    for d in days:
+#        for t in timesteps:
+#            res_voltNode_sq[0] = 400**2
+#            res_voltNode_sq[1] = 400**2
+#            
+#    for n,m in nodeLines:
+#        res_voltline_sq[n,m] = np.array([[powerLine[n,m,d,t].X for t in timesteps] for d in days]) * lineResistance[n,m]
+#        res_voltNode_sq[m] = res_voltNode_sq[n] - res_voltline_sq[n,m]
 
+        
+    
     # writing the nodes with a battery into an xlsx file for the best case
     bool_bat = {}
     if district_options["ev"] == 0:
@@ -1057,8 +1085,8 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
         pickle.dump(res_dch_tes, fout, pickle.HIGHEST_PROTOCOL)             #39
         pickle.dump(res_heatHP, fout, pickle.HIGHEST_PROTOCOL)              #40
         pickle.dump(res_heatEH, fout, pickle.HIGHEST_PROTOCOL)              #41
-        pickle.dump(res_voltLine, fout, pickle.HIGHEST_PROTOCOL)            #42
-        pickle.dump(res_voltNode, fout, pickle.HIGHEST_PROTOCOL)            #43
+        pickle.dump(res_voltNode, fout, pickle.HIGHEST_PROTOCOL)            #42
+        pickle.dump(res_voltNode_sq, fout, pickle.HIGHEST_PROTOCOL)         #43
         pickle.dump(res_powerHPGrid, fout, pickle.HIGHEST_PROTOCOL)         #44
         pickle.dump(res_powerHPPV, fout, pickle.HIGHEST_PROTOCOL)           #45
         pickle.dump(res_powerHPBat, fout, pickle.HIGHEST_PROTOCOL)          #46
@@ -1071,6 +1099,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
         pickle.dump(res_ev_load, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(res_ev_inj, fout, pickle.HIGHEST_PROTOCOL)
         pickle.dump(loads_with, fout, pickle.HIGHEST_PROTOCOL)
+        #pickle.dump(res_voltline_sq, fout, pickle.HIGHEST_PROTOCOL)
 
         
         return (res_c_total_grid, res_emission_grid, gridnodes)

@@ -23,9 +23,10 @@ from pandapower.plotting.simple_plot_bat import simple_plot_bat
 # import own function
 import python.clustering_medoid as clustering
 import python.parse_inputs as pik
-#import python.grid_optimization_2nd_building as opti
+
 import python.grid_optimization as opti
-#import python.grid_optimization_master as opti2
+#import python.grid_optimization_Q as opti
+
 import python.building_distribution as dist 
 import python.read_basic as reader
 
@@ -36,7 +37,7 @@ building_type2 = "MFH_6WE"  # second building type, query "mfh"
 building_age  = "2005"      # 1960, 1980, 2005 
 emission_year = "2017"      # 2017, 2030, 2050 
 # District parameters
-# second "option" for district coices, as floats
+# second "option" for district choices, as floats
 district_options = {"mfh" : 0.33,                  # ratio of MFH to EFH in %
                     "pv" : 0.2,                    # ratio in %
                     "hp" : 0.2,                    # ratio in %
@@ -57,7 +58,8 @@ options =   {"static_emissions": True,   # True: calculation with static emissio
              "beta_th": 0.5,             # relative size of thermal energy storage (between 0 and 1)
              "EV_mode": "on_demand",         # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi_directional"
              "show_grid_plots" : True,   # show gridplots before and after optimization
-             "phi" : 25.842              # 
+             "phi" : 25.842,              # 
+             "opt_costs": False
             }
 
 mfh = str(math.floor(district_options["mfh"]*100))  # ratio of MFH to EFH in %
@@ -115,10 +117,8 @@ inputs_clustering = np.array([raw_inputs["heat"],                     #0
                               raw_inputs["electricity"],              #4
                               raw_inputs["electricity2"],             #5
                               raw_inputs["solar_roof"],               #6
-                              raw_inputs["solar_roof2"],              #7
-                              raw_inputs["temperature"],              #8
-                              raw_inputs["temperature2"],             #9
-                              raw_inputs["co2_dyn"]])                 #10
+                              raw_inputs["temperature"],              #7
+                              raw_inputs["co2_dyn"]])                 #8
     
 number_clusters = 12
 #(inputs, nc, z) = clustering.cluster(inputs_clustering, 
@@ -131,7 +131,7 @@ number_clusters = 12
                                         number_clusters=number_clusters,
                                         norm=2,
                                         mip_gap=0.0,
-                                        weights=[1,1,2,2,2,2,2,2,1,1,2]) 
+                                        weights=[1,1,2,2,2,2,2,1,2]) 
 
 
 # Determine time steps per day
@@ -153,16 +153,14 @@ clustered = {}
 clustered["heat"]           = inputs[0]
 clustered["dhw"]            = inputs[2]
 clustered["electricity"]    = inputs[4]
-clustered["solar_irrad"]    = inputs[6]
-clustered["temperature"]    = inputs[8]
 
 clustered["heat2"]           = inputs[1]
 clustered["dhw2"]            = inputs[3]
 clustered["electricity2"]    = inputs[5]
-clustered["solar_irrad2"]    = inputs[7]
-clustered["temperature2"]    = inputs[9]
 
-clustered["co2_dyn"]        = inputs[10]
+clustered["solar_irrad"]    = inputs[6]
+clustered["temperature"]    = inputs[7]
+clustered["co2_dyn"]        = inputs[8]
 clustered["co2_stat"]       = np.zeros_like(clustered["co2_dyn"])
 clustered["co2_stat"][:,:]  = np.mean(raw_inputs["co2_dyn"])
 clustered["weights"]        = nc
@@ -208,12 +206,12 @@ extreme kerber grids:   landnetz_freileitung(),
 
 #net = nw.create_kerber_landnetz_freileitung_1()
 #net.name = "landnetz_freileitungl_1"
-net = nw.create_kerber_landnetz_freileitung_2()
-net.name = "landnetz_freileitung_2"
+#net = nw.create_kerber_landnetz_freileitung_2()
+#net.name = "landnetz_freileitung_2"
 #net = nw.create_kerber_landnetz_kabel_1()
 #net.name = "landnetz_kabel_1"
-#net = nw.create_kerber_landnetz_kabel_2()
-#net.name = "landnetz_kabel_2"
+net = nw.create_kerber_landnetz_kabel_2()
+net.name = "landnetz_kabel_2"
 #net = nw.create_kerber_dorfnetz()
 #net.name = "dorfnetz"
 #net = nw.create_kerber_vorstadtnetz_kabel_1()

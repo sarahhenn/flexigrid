@@ -65,7 +65,7 @@ def read_economics(devices, filename="input/economics.xlsx", filename2="input/ec
         All device specific characteristics.
     """
     ###changer  
-    book = xlrd.open_workbook(filename2)
+    book = xlrd.open_workbook(filename)
     
     sheet_eco  = book.sheet_by_name("gen_economics")    
     sheet_gas  = book.sheet_by_name("gas_economics")
@@ -261,7 +261,7 @@ def read_devices(timesteps, days,
     
     # Open work book
     ###changer  
-    book = xlrd.open_workbook(filename2)
+    book = xlrd.open_workbook(filename)
     
     # Get all available sheets
     available_sheets = book.sheet_names()
