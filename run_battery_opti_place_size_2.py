@@ -87,8 +87,15 @@ def run(building_type, building_type2, building_age, emission_year, district_opt
                                   raw_inputs["electricity"],              #4
                                   raw_inputs["electricity2"],             #5
                                   raw_inputs["solar_roof"],               #6
+<<<<<<< HEAD
                                   raw_inputs["temperature"],              #7
                                   raw_inputs["co2_dyn"]])                 #8
+=======
+                                  raw_inputs["solar_roof2"],              #7
+                                  raw_inputs["temperature"],              #8
+                                  raw_inputs["temperature2"],             #9
+                                  raw_inputs["co2_dyn"]])                 #10
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
         
     number_clusters = 12
     #(inputs, nc, z) = clustering.cluster(inputs_clustering, 
@@ -101,7 +108,11 @@ def run(building_type, building_type2, building_age, emission_year, district_opt
                                             number_clusters=number_clusters,
                                             norm=2,
                                             mip_gap=0.0,
+<<<<<<< HEAD
                                             weights=[1,1,2,2,2,2,2,1,2]) 
+=======
+                                            weights=[1,1,2,2,2,2,2,2,1,1,2]) 
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
     
     
     # Determine time steps per day
@@ -123,14 +134,26 @@ def run(building_type, building_type2, building_age, emission_year, district_opt
     clustered["heat"]           = inputs[0]
     clustered["dhw"]            = inputs[2]
     clustered["electricity"]    = inputs[4]
+<<<<<<< HEAD
+=======
+    clustered["solar_irrad"]    = inputs[6]
+    clustered["temperature"]    = inputs[8]
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
     
     clustered["heat2"]           = inputs[1]
     clustered["dhw2"]            = inputs[3]
     clustered["electricity2"]    = inputs[5]
+<<<<<<< HEAD
     
     clustered["solar_irrad"]    = inputs[6]
     clustered["temperature"]    = inputs[7]
     clustered["co2_dyn"]        = inputs[8]
+=======
+    clustered["solar_irrad2"]    = inputs[7]
+    clustered["temperature2"]    = inputs[9]
+    
+    clustered["co2_dyn"]        = inputs[10]
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
     clustered["co2_stat"]       = np.zeros_like(clustered["co2_dyn"])
     clustered["co2_stat"][:,:]  = np.mean(raw_inputs["co2_dyn"])
     clustered["weights"]        = nc
@@ -176,6 +199,7 @@ def run(building_type, building_type2, building_age, emission_year, district_opt
     
     #net = nw.create_kerber_landnetz_freileitung_1()
     #net.name = "landnetz_freileitungl_1"
+<<<<<<< HEAD
 #    net = nw.create_kerber_landnetz_freileitung_2()
 #    net.name = "landnetz_freileitung_2"
 #    net = nw.create_kerber_landnetz_kabel_1()
@@ -184,13 +208,28 @@ def run(building_type, building_type2, building_age, emission_year, district_opt
 #    net.name = "landnetz_kabel_2"
     net = nw.create_kerber_dorfnetz()
     net.name = "dorfnetz"
+=======
+    net = nw.create_kerber_landnetz_freileitung_2()
+    net.name = "landnetz_freileitung_2"
+    #net = nw.create_kerber_landnetz_kabel_1()
+    #net.name = "landnetz_kabel_1"
+    #net = nw.create_kerber_landnetz_kabel_2()
+    #net.name = "landnetz_kabel_2"
+    #net = nw.create_kerber_dorfnetz()
+    #net.name = "dorfnetz"
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
     #net = nw.create_kerber_vorstadtnetz_kabel_1()
     #net.name = "vorstadtnetz_kabel_1"
     #net = nw.create_kerber_vorstadtnetz_kabel_2()
     #net.name = "vorstadtnetz_kabel_2"
     #
+<<<<<<< HEAD
 #    net = nw.kb_extrem_landnetz_freileitung()
 #    net.name = "ex_landnetz_freileitung"
+=======
+    #net = nw.kb_extrem_landnetz_freileitung()
+    #net.name = "ex_landnetz_freileitung"
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
     #net = nw.kb_extrem_landnetz_kabel()
     #net.name = "ex_landnetz_kabel_"
     #net = nw.kb_extrem_landnetz_freileitung_trafo()
@@ -240,7 +279,11 @@ def run(building_type, building_type2, building_age, emission_year, district_opt
         pickle.dump(clustered, f_in, pickle.HIGHEST_PROTOCOL)
     
     #%% Define dummy parameters, options and start optimization
+<<<<<<< HEAD
     emi_max = 1000000000 
+=======
+    emi_max = 1000000000
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
     (costs, emission, gridnodes) = opti.compute(emi_max, net, eco, devs, clustered, params, options, district_options, names, load_with, randomfile, ev_file, distributionFolder)
     
     outputs = reader.read_results("results/" + filename, "results/" + "dist_" + filename)

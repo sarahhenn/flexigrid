@@ -520,7 +520,11 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
     
     #%% ecological constraints
     
+<<<<<<< HEAD
     model.addConstr(emission_grid <= emi_max, name = "emission_max")
+=======
+    model.addConstr(emission_grid <= emi_max)
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
     
     if options["static_emissions"]:
         # compute annual emissions and emission revenues
@@ -857,7 +861,11 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
 #    powerInj[n,d,t] - powerLoad[n,d,t]
     
     # adgust gurobi settings
+<<<<<<< HEAD
     model.Params.TimeLimit = 1200
+=======
+    model.Params.TimeLimit = 1200    
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
     model.Params.MIPGap = 0.00
     model.Params.NumericFocus = 3
     model.Params.MIPFocus = 3

@@ -23,10 +23,16 @@ from pandapower.plotting.simple_plot_bat import simple_plot_bat
 # import own function
 import python.clustering_medoid as clustering
 import python.parse_inputs as pik
+<<<<<<< HEAD
 
 import python.grid_optimization as opti
 #import python.grid_optimization_Q as opti
 
+=======
+#import python.grid_optimization_2nd_building as opti
+import python.grid_optimization as opti
+#import python.grid_optimization_master as opti2
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 import python.building_distribution as dist 
 import python.read_basic as reader
 
@@ -206,8 +212,13 @@ extreme kerber grids:   landnetz_freileitung(),
 
 #net = nw.create_kerber_landnetz_freileitung_1()
 #net.name = "landnetz_freileitungl_1"
+<<<<<<< HEAD
 #net = nw.create_kerber_landnetz_freileitung_2()
 #net.name = "landnetz_freileitung_2"
+=======
+net = nw.create_kerber_landnetz_freileitung_2()
+net.name = "landnetz_freileitung_2"
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 #net = nw.create_kerber_landnetz_kabel_1()
 #net.name = "landnetz_kabel_1"
 net = nw.create_kerber_landnetz_kabel_2()

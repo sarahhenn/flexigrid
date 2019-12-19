@@ -112,8 +112,13 @@ def allocate (net, options, names, district_options, distributionFolder, randomf
     if district_options["case"] == "best":
         print("Best case grid")
         remove_n_minimums(loads_with['pv'], l_pv)
+<<<<<<< HEAD
         remove_n_maximums(loads_with['mfh'], l_mfh) ## ???
         remove_n_maximums(loads_with['hp'], l_hp)   ## aus pv auswählen????
+=======
+        remove_n_minimums(loads_with['mfh'], l_mfh) ## ???
+        remove_n_minimums(loads_with['hp'], l_hp)   ## aus pv auswählen????
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
         if l_ev == 0:
             pass
         elif l_ev == num_of_loads:

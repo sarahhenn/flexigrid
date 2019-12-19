@@ -18,7 +18,11 @@ import pandapower.plotting as plot
 #from pandapower.plotting import *
 from pandapower.plotting.simple_plot_bat import simple_plot_bat
 #from pandapower.plotting.simple_plot import simple_plot
+<<<<<<< HEAD
 #import tikzplotlib
+=======
+
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 
 # import own function
 import python.clustering_medoid as clustering
@@ -33,7 +37,11 @@ import python.read_basic as reader
 #%% set parameters 
 
 # Number of pareto simulations
+<<<<<<< HEAD
 number_simulations = 7 
+=======
+number_simulations = 5 
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 
 building_type = "EFH"       # EFH, ZFH, MFH_6WE, MFH_10WE, MFH_15WE
 building_type2 = "MFH_6WE"  # second building type, query "mfh"
@@ -41,28 +49,47 @@ building_age  = "2005"      # 1960, 1980, 2005
 emission_year = "2017"      # 2017, 2030, 2050 
 # District parameters
 # second "option" for district coices, as floats
+<<<<<<< HEAD
 district_options = {"mfh" : 0.3,                  # ratio of MFH to EFH in %
                     "pv" : 0.2,                    # ratio in %
                     "hp" : 0.,                    # ratio in %
                     "ev" : 0.,                    # ratio in %
+=======
+district_options = {"mfh" : 0.33,                  # ratio of MFH to EFH in %
+                    "pv" : 0.2,                    # ratio in %
+                    "hp" : 0.2,                    # ratio in %
+                    "ev" : 0.1,                    # ratio in %
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
                     "case" : "random"               # "best", "worst" and "random"
                     }
 
 # set options
+<<<<<<< HEAD
 options =   {"static_emissions": False,   # True: calculation with static emissions, 
+=======
+options =   {"static_emissions": True,   # True: calculation with static emissions, 
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
                                          # False: calculation with timevariant emissions
              "rev_emissions": True,      # True: emissions revenues for feed-in
                                          # False: no emissions revenues for feed-in
              "dhw_electric": True,       # define if dhw is provided decentrally by electricity
+<<<<<<< HEAD
              "P_pv": 10.0,               # installed peak PV power
+=======
+             "P_pv": 20.0,               # installed peak PV power
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
              "hp_mode": "energy_opt",    # choose between "off" (no hp) and "energy_opt" and "grid_opt"
              "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
              "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
              "beta_th": 0.5,             # relative size of thermal energy storage (between 0 and 1)
              "EV_mode": "on_demand",         # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi_directional"
              "show_grid_plots" : True,   # show gridplots before and after optimization
+<<<<<<< HEAD
              "phi" : 25.842,              # 
              "opt_costs": True
+=======
+             "phi" : 25.842              # 
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
             }
 
 mfh = str(math.floor(district_options["mfh"]*100))  # ratio of MFH to EFH in %
@@ -70,7 +97,11 @@ pv = str(math.floor(district_options["pv"]*100))    # ratio in %
 hp = str(math.floor(district_options["hp"]*100))    # ratio in %
 ev = str(math.floor(district_options["ev"]*100))    # ratio in %
 case = district_options["case"]                     # Case: best, worst, random
+<<<<<<< HEAD
 tes = str(options["beta_th"])                       # TES-size
+=======
+tes = str(options["beta_th"])                            # TES-size
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 
 #%% data import
 
@@ -114,8 +145,15 @@ inputs_clustering = np.array([raw_inputs["heat"],                     #0
                               raw_inputs["electricity"],              #4
                               raw_inputs["electricity2"],             #5
                               raw_inputs["solar_roof"],               #6
+<<<<<<< HEAD
                               raw_inputs["temperature"],              #7
                               raw_inputs["co2_dyn"]])                 #9
+=======
+                              raw_inputs["solar_roof2"],              #7
+                              raw_inputs["temperature"],              #8
+                              raw_inputs["temperature2"],             #9
+                              raw_inputs["co2_dyn"]])                 #10
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
     
 number_clusters = 12
 
@@ -135,14 +173,26 @@ clustered = {}
 clustered["heat"]           = inputs[0]
 clustered["dhw"]            = inputs[2]
 clustered["electricity"]    = inputs[4]
+<<<<<<< HEAD
+=======
+clustered["solar_irrad"]    = inputs[6]
+clustered["temperature"]    = inputs[8]
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 
 clustered["heat2"]           = inputs[1]
 clustered["dhw2"]            = inputs[3]
 clustered["electricity2"]    = inputs[5]
+<<<<<<< HEAD
 
 clustered["solar_irrad"]    = inputs[6]
 clustered["temperature"]    = inputs[7]
 clustered["co2_dyn"]        = inputs[8]
+=======
+clustered["solar_irrad2"]    = inputs[7]
+clustered["temperature2"]    = inputs[9]
+
+clustered["co2_dyn"]        = inputs[10]
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 clustered["co2_stat"]       = np.zeros_like(clustered["co2_dyn"])
 clustered["co2_stat"][:,:]  = np.mean(raw_inputs["co2_dyn"])
 clustered["weights"]        = nc
@@ -163,10 +213,17 @@ params    = pik.compute_parameters(params, number_clusters, len_day)
 
 #net = nw.create_kerber_landnetz_freileitung_1()
 #net.name = "landnetz_freileitungl_1"
+<<<<<<< HEAD
 #net = nw.create_kerber_landnetz_freileitung_2()
 #net.name = "landnetz_freileitung_2"
 net = nw.create_kerber_landnetz_kabel_1()
 net.name = "landnetz_kabel_1"
+=======
+net = nw.create_kerber_landnetz_freileitung_2()
+net.name = "landnetz_freileitung_2"
+#net = nw.create_kerber_landnetz_kabel_1()
+#net.name = "landnetz_kabel_1"
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 #net = nw.create_kerber_landnetz_kabel_2()
 #net.name = "landnetz_kabel_2"
 #net = nw.create_kerber_dorfnetz()
@@ -214,7 +271,11 @@ if options["show_grid_plots"]:
 
 names =   {"filename_results": "results/" + filename + ".pkl",
             "building_results": "results/" + "dist_" + filename + ".pkl"
+<<<<<<< HEAD
            }
+=======
+            }
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 
 #%% find distribution for various building types
 
@@ -228,6 +289,7 @@ with open(filename_input, "wb") as f_in:
 
 #%% Define dummy parameters, options and start optimization
 outputs = {}
+<<<<<<< HEAD
 pareto_results = {}
 pareto_results["costs"] = {}
 pareto_results["emissions"] = {}
@@ -250,6 +312,16 @@ options["opt_costs"] = True
 (max_costs, min_emissions, gridnodes) = opti.compute(min_emissions, net, eco, devs, clustered, params, options, district_options, names, load_with, randomfile, ev_file, distributionFolder)
 
 options["opt_costs"] = True
+=======
+emissions_max = 100000 # ton CO2 per year
+
+(min_costs, max_emissions, gridnodes) = opti.compute(emissions_max, net, eco, devs, clustered, params, options, district_options, names, load_with, randomfile, ev_file, distributionFolder)
+
+(max_costs, min_emissions, gridnodes) = opti.compute(emissions_max, net, eco, devs, clustered, params, options, district_options, names, load_with, randomfile, ev_file, distributionFolder)
+
+(max_costs, min_emissions, gridnodes) = opti.compute(min_emissions, net, eco, devs, clustered, params, options, district_options, names, load_with, randomfile, ev_file, distributionFolder)
+
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 prev_emissions = max_emissions
 for i in range(1, 1+number_simulations):
     # Emissions limit is the minimum of:
@@ -259,10 +331,14 @@ for i in range(1, 1+number_simulations):
                           prev_emissions * 0.999)
 
     (costs, prev_emissions, gridnodes) = opti.compute(limit_emissions, net, eco, devs, clustered, params, options, district_options, names, load_with, randomfile, ev_file, distributionFolder)
+<<<<<<< HEAD
     
     pareto_results["costs"][str(i)] = {costs} 
     pareto_results["emissions"][str(i)] = {prev_emissions}
     
+=======
+
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
     outputs["pareto_" + str(i)] = reader.read_results("results/" + filename, "results/" + "dist_" + filename)
 
 #%% plot grid with batteries highlighted
@@ -278,9 +354,12 @@ if options["show_grid_plots"]:
         netx=net
         netx['bat']=pd.DataFrame(bat_ex, columns=['ex'])
         simple_plot_bat(netx, show_plot=True, bus_color='b', bat_color='r')
+<<<<<<< HEAD
         
         
         #tikzplotlib.save(operationFolder + "\\test_" + str(i) + ".tex")
+=======
+>>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 
 # alternative plot for only one pareto     
 #    bat_ex = np.zeros(len(outputs["pareto_1"]["nodes"]["grid"]))
