@@ -49,47 +49,30 @@ building_age  = "2005"      # 1960, 1980, 2005
 emission_year = "2017"      # 2017, 2030, 2050 
 # District parameters
 # second "option" for district coices, as floats
-<<<<<<< HEAD
-district_options = {"mfh" : 0.3,                  # ratio of MFH to EFH in %
-                    "pv" : 0.2,                    # ratio in %
-                    "hp" : 0.,                    # ratio in %
-                    "ev" : 0.,                    # ratio in %
-=======
+
 district_options = {"mfh" : 0.33,                  # ratio of MFH to EFH in %
                     "pv" : 0.2,                    # ratio in %
                     "hp" : 0.2,                    # ratio in %
                     "ev" : 0.1,                    # ratio in %
->>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
                     "case" : "random"               # "best", "worst" and "random"
                     }
 
 # set options
-<<<<<<< HEAD
-options =   {"static_emissions": False,   # True: calculation with static emissions, 
-=======
+
 options =   {"static_emissions": True,   # True: calculation with static emissions, 
->>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
                                          # False: calculation with timevariant emissions
              "rev_emissions": True,      # True: emissions revenues for feed-in
                                          # False: no emissions revenues for feed-in
              "dhw_electric": True,       # define if dhw is provided decentrally by electricity
-<<<<<<< HEAD
-             "P_pv": 10.0,               # installed peak PV power
-=======
              "P_pv": 20.0,               # installed peak PV power
->>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
              "hp_mode": "energy_opt",    # choose between "off" (no hp) and "energy_opt" and "grid_opt"
              "T_VL": 35,                 # choose between 35 and 55 "Vorlauftemperatur" 
              "alpha_th": 0.8,            # relative size of heat pump (between 0 and 1)
              "beta_th": 0.5,             # relative size of thermal energy storage (between 0 and 1)
              "EV_mode": "on_demand",         # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi_directional"
              "show_grid_plots" : True,   # show gridplots before and after optimization
-<<<<<<< HEAD
              "phi" : 25.842,              # 
              "opt_costs": True
-=======
-             "phi" : 25.842              # 
->>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
             }
 
 mfh = str(math.floor(district_options["mfh"]*100))  # ratio of MFH to EFH in %
@@ -97,11 +80,7 @@ pv = str(math.floor(district_options["pv"]*100))    # ratio in %
 hp = str(math.floor(district_options["hp"]*100))    # ratio in %
 ev = str(math.floor(district_options["ev"]*100))    # ratio in %
 case = district_options["case"]                     # Case: best, worst, random
-<<<<<<< HEAD
 tes = str(options["beta_th"])                       # TES-size
-=======
-tes = str(options["beta_th"])                            # TES-size
->>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 
 #%% data import
 
@@ -145,15 +124,9 @@ inputs_clustering = np.array([raw_inputs["heat"],                     #0
                               raw_inputs["electricity"],              #4
                               raw_inputs["electricity2"],             #5
                               raw_inputs["solar_roof"],               #6
-<<<<<<< HEAD
                               raw_inputs["temperature"],              #7
-                              raw_inputs["co2_dyn"]])                 #9
-=======
-                              raw_inputs["solar_roof2"],              #7
-                              raw_inputs["temperature"],              #8
-                              raw_inputs["temperature2"],             #9
-                              raw_inputs["co2_dyn"]])                 #10
->>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
+                              raw_inputs["co2_dyn"]])                 #8
+
     
 number_clusters = 12
 

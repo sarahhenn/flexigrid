@@ -87,15 +87,9 @@ def run(building_type, building_type2, building_age, emission_year, district_opt
                                   raw_inputs["electricity"],              #4
                                   raw_inputs["electricity2"],             #5
                                   raw_inputs["solar_roof"],               #6
-<<<<<<< HEAD
                                   raw_inputs["temperature"],              #7
                                   raw_inputs["co2_dyn"]])                 #8
-=======
-                                  raw_inputs["solar_roof2"],              #7
-                                  raw_inputs["temperature"],              #8
-                                  raw_inputs["temperature2"],             #9
-                                  raw_inputs["co2_dyn"]])                 #10
->>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
+
         
     number_clusters = 12
     #(inputs, nc, z) = clustering.cluster(inputs_clustering, 

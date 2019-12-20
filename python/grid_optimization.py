@@ -520,11 +520,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
     
     #%% ecological constraints
     
-<<<<<<< HEAD
     model.addConstr(emission_grid <= emi_max, name = "emission_max")
-=======
-    model.addConstr(emission_grid <= emi_max)
->>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
     
     if options["static_emissions"]:
         # compute annual emissions and emission revenues
@@ -795,17 +791,17 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
         # split power from PV generation in injected and used power
         model.addConstrs((powerInjPV[n,d,t] == powerPV[n,d,t] - powerUsePV[n,d,t] - powerHPPV[n,d,t] - powerEHPV[n,d,t]
                             for n in gridnodes for d in days for t in timesteps), name="powerInjPV"+str(n)+str(d)+str(t))
-    
+        
         # split battery discharging power in injected and used power
         model.addConstrs((powerDis[n,d,t] == powerInjBat[n,d,t] + powerUseBat[n,d,t] + powerHPBat[n,d,t] + powerEHBat[n,d,t]
                           for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))
-
+        
         # node energy balance   ##EV added
         model.addConstrs((powerPlug[n,d,t] + powerCh[n,d,t] + powerHPGrid[n,d,t] + powerEHGrid[n,d,t] + ev_load[n,d,t] == 
                           powerLoad[n,d,t] + powerUsePV[n,d,t] + powerUseBat[n,d,t] 
                           + powerHPPV[n,d,t] + powerHPBat[n,d,t] + powerEHPV[n,d,t] + powerEHBat[n,d,t] + ev_inj[n,d,t]
                           for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))         
-
+        
         model.addConstrs((power_hp[n,d,t] == 
                           powerHPGrid[n,d,t] + powerHPPV[n,d,t] + powerHPBat[n,d,t] 
                           for n in gridnodes for d in days for t in timesteps), name="powerInj_UseBat"+str(n)+str(d)+str(t))       
@@ -861,11 +857,8 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
 #    powerInj[n,d,t] - powerLoad[n,d,t]
     
     # adgust gurobi settings
-<<<<<<< HEAD
-    model.Params.TimeLimit = 1200
-=======
-    model.Params.TimeLimit = 1200    
->>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
+
+    model.Params.TimeLimit = 1200  
     model.Params.MIPGap = 0.00
     model.Params.NumericFocus = 3
     model.Params.MIPFocus = 3
