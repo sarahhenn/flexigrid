@@ -229,19 +229,18 @@ for n in gridnodes:
             constraint_InjMax[n, d, t] = 1000000000000000000000
             constraint_SubtrMax[n, d, t] = 1000000000000000000000
 
-while boolean_loop:
-    print("")
-    print("!!! Iteration counter is currently at " + str(iteration_counter) + "!!!")
-    print("")
+print("")
+print("!!! Iteration counter is currently at " + str(iteration_counter) + "!!!")
+print("")
 
-    # run DC-optimization
-    (
-    costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev,
-    emissions_nodes, costs_min, emissions_max_global) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs,
-                                                                     clustered, params, options, constraint_apc,
-                                                                     constraint_InjMin, constraint_SubtrMin,
-                                                                     constraint_InjMax, constraint_SubtrMax,
-                                                                     critical_flag, emissions_max_global, costs_max_global)
+# run DC-optimization
+(
+costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev,
+emissions_nodes, costs_min, emissions_max_global) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs,
+                                                                 clustered, params, options, constraint_apc,
+                                                                 constraint_InjMin, constraint_SubtrMin,
+                                                                 constraint_InjMax, constraint_SubtrMax,
+                                                                 critical_flag, emissions_max_global, costs_max_global)
 
 
 t2 = int(time.time())
@@ -319,20 +318,19 @@ for n in gridnodes:
             constraint_InjMax[n, d, t] = 10000
             constraint_SubtrMax[n, d, t] = 10000
 
-while boolean_loop:
-    print("")
-    print("!!! Iteration counter is currently at " + str(iteration_counter) + "!!!")
-    print("")
+print("")
+print("!!! Iteration counter is currently at " + str(iteration_counter) + "!!!")
+print("")
 
 
-    # run DC-optimization
-    (
-    costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev,
-    emissions_nodes, costs_max_global, emissions_min) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs,
-                                                                     clustered, params, options, constraint_apc,
-                                                                     constraint_InjMin, constraint_SubtrMin,
-                                                                     constraint_InjMax, constraint_SubtrMax,
-                                                                     critical_flag, emissions_max_global, costs_max_global)
+# run DC-optimization
+(
+costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev,
+emissions_nodes, costs_max_global, emissions_min) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs,
+                                                                 clustered, params, options, constraint_apc,
+                                                                 constraint_InjMin, constraint_SubtrMin,
+                                                                 constraint_InjMax, constraint_SubtrMax,
+                                                                 critical_flag, emissions_max_global, costs_max_global)
 
 t2 = int(time.time())
 duration_program = t1 - t2
@@ -405,20 +403,20 @@ for i in range(1, 1 + number_simulations):
                 constraint_InjMax[n, d, t] = 1000000000000000000000
                 constraint_SubtrMax[n, d, t] = 1000000000000000000000
 
-    while boolean_loop:
-        print("")
-        print("!!! Iteration counter is currently at " + str(iteration_counter) + "!!!")
-        print("")
+
+    print("")
+    print("!!! Iteration counter is currently at " + str(iteration_counter) + "!!!")
+    print("")
 
 
-        # run DC-optimization
-        (
-        costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev,
-        emissions_nodes, costs, emissions) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs,
-                                                                         clustered, params, options, constraint_apc,
-                                                                         constraint_InjMin, constraint_SubtrMin,
-                                                                         constraint_InjMax, constraint_SubtrMax,
-                                                                         critical_flag, emissions_max, costs_max_global)
+    # run DC-optimization
+    (
+    costs_grid, emissions_grid, timesteps, days, powInjRet, powSubtrRet, gridnodes, res_exBat, powInjPrev, powSubtrPrev,
+    emissions_nodes, costs, emissions) = opti.compute(net, nodes, gridnodes, days, timesteps, eco, devs,
+                                                                     clustered, params, options, constraint_apc,
+                                                                     constraint_InjMin, constraint_SubtrMin,
+                                                                     constraint_InjMax, constraint_SubtrMax,
+                                                                     critical_flag, emissions_max, costs_max_global)
 
     t2 = int(time.time())
     duration_program = t1 - t2

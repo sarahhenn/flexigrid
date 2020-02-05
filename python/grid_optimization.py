@@ -788,9 +788,9 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                     model.addConstr(powerSubtr[n, d, t] <= constraint_SubtrMax[n, d, t])
                     model.addConstr(powerSubtr[n,d,t] >= constraint_SubtrMin[n,d,t])
 
-    # introduce constraints for pareto evaluation
+    """# introduce constraints for pareto evaluation
     model.addConstr(c_total_nodes <= costs_max)
-    model.addConstr(sum(emission_nodes[n] for n in gridnodes) <= emissions_max)
+    model.addConstr(sum(emission_nodes[n] for n in gridnodes) <= emissions_max)"""
 
     #%% start optimization
     
@@ -879,7 +879,8 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
 
     else:
-        res_powerGenRealMax = np.array([[[powerGenRealMax[n, d, t] for t in timesteps] for d in days]for n in gridnodes])
+        res_constraint_apc = np.array([[constraint_apc[n, d] for d in days] for n in gridnodes])
+        res_powerGenRealMax = np.array([[powerGenRealMax[n, d] for d in days]for n in gridnodes])
         res_powerGenReal = np.array([[[powerGenReal[n, d, t] for t in timesteps] for d in days]for n in gridnodes])
         res_powerGenCurt = np.array([[[powerGenCurt[n,d,t]for t in timesteps] for d in days]for n in gridnodes])
 
@@ -1046,7 +1047,7 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
 
     #test read-out:
 
-    apc_total_array = np.array([[apc_total[n,d].X for d in days] for n in gridnodes])
+    """apc_total_array = np.array([[apc_total[n,d].X for d in days] for n in gridnodes])
     apc_var_array = np.array([[apc_var[n,d].X for d in days] for n in gridnodes])
     powerGenReal_array = np.array([[[powerGenReal[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
     powerGenRealMax_array = np.array([[[powerGenRealMax[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
@@ -1055,9 +1056,9 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
     powerPVChBat_array = np.array([[[powerPVChBat[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
     powerInjPV_array = np.array([[[powerInjPV[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
     powerInj_array = np.array([[[powerInj[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
-    powerNetDisBat_array = np.array([[[powerNetDisBat[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
+    powerNetDisBat_array = np.array([[[powerNetDisBat[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])"""
 
-    powerGen_array = np.array([[[powerGen[n,d,t] for t in timesteps] for d in days] for n in gridnodes])
+    #powerGen_array = np.array([[[powerGen[n,d,t] for t in timesteps] for d in days] for n in gridnodes])
 
     emissions_added = sum(res_emission_nodes)
     costs_added = res_c_total_nodes
