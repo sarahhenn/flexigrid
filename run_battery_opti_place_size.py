@@ -19,20 +19,10 @@ import pandapower.plotting as plot
 from pandapower.plotting.simple_plot_bat import simple_plot_bat
 #from pandapower.plotting.simple_plot import simple_plot
 
-
 # import own function
 import python.clustering_medoid as clustering
 import python.parse_inputs as pik
-<<<<<<< HEAD
-
 import python.grid_optimization as opti
-#import python.grid_optimization_Q as opti
-
-=======
-#import python.grid_optimization_2nd_building as opti
-import python.grid_optimization as opti
-#import python.grid_optimization_master as opti2
->>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 import python.building_distribution as dist 
 import python.read_basic as reader
 
@@ -42,8 +32,8 @@ building_type = "EFH"       # EFH, ZFH, MFH_6WE, MFH_10WE, MFH_15WE
 building_type2 = "MFH_6WE"  # second building type, query "mfh"
 building_age  = "2005"      # 1960, 1980, 2005 
 emission_year = "2017"      # 2017, 2030, 2050 
+
 # District parameters
-# second "option" for district choices, as floats
 district_options = {"mfh" : 0.33,                  # ratio of MFH to EFH in %
                     "pv" : 0.2,                    # ratio in %
                     "hp" : 0.2,                    # ratio in %
@@ -64,7 +54,7 @@ options =   {"static_emissions": True,   # True: calculation with static emissio
              "beta_th": 0.5,             # relative size of thermal energy storage (between 0 and 1)
              "EV_mode": "on_demand",         # choose between "off" (no EVs), "on_demand", "grid_reactive" and "bi_directional"
              "show_grid_plots" : True,   # show gridplots before and after optimization
-             "phi" : 25.842,              # 
+             "phi" : 25.842,             # phase angle for voltage calculation
              "opt_costs": False
             }
 
@@ -108,30 +98,18 @@ for t in range (0, 8760):
     raw_inputs["co2_dyn"][t]= np.mean(emi_input[i:(i+4)])
 
 #%% data clustering 
-    
-#inputs_clustering = np.array([raw_inputs["heat"], 
-#                              raw_inputs["dhw"],
-#                              raw_inputs["electricity"],
-#                              raw_inputs["solar_roof"],
-#                              raw_inputs["temperature"],
-#                              raw_inputs["co2_dyn"]])
 
-inputs_clustering = np.array([raw_inputs["heat"],                     #0 
-                              raw_inputs["heat2"],                    #1
-                              raw_inputs["dhw"],                      #2
-                              raw_inputs["dhw2"],                     #3
-                              raw_inputs["electricity"],              #4
-                              raw_inputs["electricity2"],             #5
-                              raw_inputs["solar_roof"],               #6
-                              raw_inputs["temperature"],              #7
-                              raw_inputs["co2_dyn"]])                 #8
+inputs_clustering = np.array([raw_inputs["heat"],                      
+                              raw_inputs["heat2"],                    
+                              raw_inputs["dhw"],                      
+                              raw_inputs["dhw2"],                     
+                              raw_inputs["electricity"],              
+                              raw_inputs["electricity2"],             
+                              raw_inputs["solar_roof"],               
+                              raw_inputs["temperature"],              
+                              raw_inputs["co2_dyn"]])                 
     
 number_clusters = 12
-#(inputs, nc, z) = clustering.cluster(inputs_clustering, 
-#                                     number_clusters=number_clusters,
-#                                     norm=2,
-#                                     mip_gap=0.0,
-#                                     weights=[1,1,1,1,0,1,1])
 
 (inputs, nc, z) = clustering.cluster(inputs_clustering, 
                                         number_clusters=number_clusters,
@@ -142,18 +120,6 @@ number_clusters = 12
 
 # Determine time steps per day
 len_day = int(inputs_clustering.shape[1] / 365)
-
-clustered = {}
-#clustered["heat"]           = inputs[0]
-#clustered["dhw"]            = inputs[1]
-#clustered["electricity"]    = inputs[2]
-#clustered["solar_irrad"]    = inputs[3]
-#clustered["temperature"]    = inputs[4]
-#clustered["co2_dyn"]        = inputs[5]
-#clustered["co2_stat"]       = np.zeros_like(clustered["co2_dyn"])
-#clustered["co2_stat"][:,:]  = np.mean(raw_inputs["co2_dyn"])
-#clustered["weights"]        = nc
-#clustered["z"]              = z
 
 clustered = {}
 clustered["heat"]           = inputs[0]
@@ -212,13 +178,8 @@ extreme kerber grids:   landnetz_freileitung(),
 
 #net = nw.create_kerber_landnetz_freileitung_1()
 #net.name = "landnetz_freileitungl_1"
-<<<<<<< HEAD
 #net = nw.create_kerber_landnetz_freileitung_2()
 #net.name = "landnetz_freileitung_2"
-=======
-net = nw.create_kerber_landnetz_freileitung_2()
-net.name = "landnetz_freileitung_2"
->>>>>>> eea82d3593cb2cf14447edd603668a091d28651a
 #net = nw.create_kerber_landnetz_kabel_1()
 #net.name = "landnetz_kabel_1"
 net = nw.create_kerber_landnetz_kabel_2()
@@ -250,6 +211,8 @@ net.name = "landnetz_kabel_2"
 #net.name = "ex_vorstadtnetz_trafo_1"
 #net = nw.kb_extrem_vorstadtnetz_trafo_2()
 #net.name = "ex_vorstadtnetz_trafo_2"
+
+# set names for distribution files
 
 if options["dhw_electric"]:
     filename = net.name + "_" + building_type + "_" + building_age + "_" + building_type2 + "_mfh" + mfh + "_pv" + pv + "_hp"  + hp + "tes" + tes + "_dhwe" + "_ev" + ev + "_" + case

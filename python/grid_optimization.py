@@ -99,13 +99,13 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
     nodes["supply"] = nodes["grid"]
     nodes["each"] = nodes["grid"]
     nodes["each"] = np.delete(nodes["each"],[0,1])
-    nodes["supply"] = np.delete(nodes["supply"],nodes["load"])   #Reihenfolge wichtig !
-    nodes["supply"] = np.delete(nodes["supply"],[0,1])           #Reihenfolge wichtig !
+    nodes["supply"] = np.delete(nodes["supply"],nodes["load"])   
+    nodes["supply"] = np.delete(nodes["supply"],[0,1])           
     
-    nodes["bat"] = net.load['bus'].to_numpy()   #Batterien an Loads zugelassen    
-  #  nodes["bat"] = [] # keine Batterien zugelassen
-  #  nodes["bat"] = nodes["supply"]   #Batterien an Verzweigungen zugelassen
-  #  nodes["bat"] = nodes["each"]     #Batterien an allen Knoten nach dem Trafo zugelassen
+    nodes["bat"] = net.load['bus'].to_numpy()   #batteries on Loads     
+  #  nodes["bat"] = [] # no batteries 
+  #  nodes["bat"] = nodes["supply"]   #batteries on all nodes without loads (branches)
+  #  nodes["bat"] = nodes["each"]     #batteries on all nodes (without trafo)
     
     gridnodes = list(nodes["grid"]) 
     
@@ -209,10 +209,10 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
 #%% extract line information from pandas-network
 
     
-    # set nominal Voltage for grid and Voltage bounds for nodes
+    # set nominal Voltage for grid and Voltage bounds for nodes (sq for assamption according to Liu)
     U_nominal = net.trafo.vn_lv_kv[0]*1000
-    #voltNode_max         = U_nominal*1.04
-    #voltNode_min         = U_nominal*0.96
+    
+    # maximum and minimum voltage in kV as difference from nominal voltage
     voltNode_sq_max         = (U_nominal*1.04)**2
     voltNode_sq_min         = (U_nominal*0.96)**2
     
@@ -223,13 +223,13 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
         nodeLines.append((net.line['from_bus'][i],net.line['to_bus'][i]))
     nodeLines = gp.tuplelist(nodeLines)
     
-    # extract maximal current for lines
-    # multiply with 400 V to get maximal power in kW      
+    # extract maximum current for lines
+    # multiply with 400 V to get maximum power in kW      
     powerLine_max = {}
     for [n,m] in nodeLines:
         powerLine_max[n,m] = (net.line['max_i_ka'][nodeLines.index((n,m))])*U_nominal
     
-    # maximal and minimal voltage in kV as difference from rated voltage
+    # loading line characteristics from Kerber-Net
     lineLength = {}
     specRes_r = {}
     specRes_x = {}
@@ -249,7 +249,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
         
         
 #%% insert EVs
-    # set maximal power for ev charge and discharge
+    # set maximum power for ev charge and discharge 
     ev_max = 3.6 
     
     # build realistic random daily demands in kWh
@@ -259,7 +259,6 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
         for n in gridnodes:
             for d in days:
                 demEV[n,d] = 0
-        #pass
     else:
         for n in gridnodes:
             for d in days:
@@ -324,9 +323,8 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
             chBat_min[n] = devs["bat"]["cap_min"]
     
     # attach plug-in loads and PV generatrion to building nodes
-    # TODO: do the same with EV loads!?
 
-     ## system distribution with efh/mfh
+    # system distribution with efh/mfh
     powerPlug = {}
     powerPV = {}
     heatload = {}
@@ -387,7 +385,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
     # add grid variables to model
     
     # set trafo bounds due to technichal limits
-    trafo_max = float(net.trafo.sn_mva*1000.)
+    trafo_max = float(net.trafo.sn_mva*1000)
     powerTrafoLoad = model.addVars(days,timesteps, vtype="C", lb=0, ub=trafo_max, name="powerTrafo_"+str(t))
     powerTrafoInj = model.addVars(days,timesteps, vtype="C", lb=0, ub=trafo_max, name="powerTrafo_"+str(t))
     
@@ -624,12 +622,13 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
                     model.addConstr(powerLine[n,m,d,t] <= powerLine_max[n,m], name="line power max_"+str(n)+str(m)+str(t))
                     model.addConstr(powerLine[n,m,d,t] >= (-1)*powerLine_max[n,m], name="line power min_"+str(n)+str(m)+str(t))
     
-    # Voltage Restriction according to (Liu, 2016)          
+    # Voltage bounds for square values
     for d in days:
         for t in timesteps:
             model.addConstr(voltNode_sq[0,d,t] == U_nominal**2)
             model.addConstr(voltNode_sq[1,d,t] == U_nominal**2)  
     
+    # Voltage Restriction according to (Liu, 2016)
     sin_phi = math.sin(options["phi"]) 
     cos_phi = math.cos(options["phi"])        
     for [n,m] in nodeLines:
@@ -639,6 +638,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
                     
     #%% EV Constraints 
     
+    # set constraint for fulfillment of demand on every node (set demand = 0 for nodes without ev)
     if options["EV_mode"] == "off":
         for n in gridnodes:
             for d in days:
@@ -656,7 +656,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
                         model.addConstr(ev_load[n,d,t] == 0)
                         model.addConstr(ev_inj[n,d,t] == 0)
         
-        # max Load.sum constraint on/off to check effect on battery size?
+        # set maximum charge and discharge to multiple of each ev-demand (to limit battery capacity)
         for n in gridnodes:
             for d in days:
                 for t in timesteps:
@@ -666,6 +666,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
                     if options["EV_mode"] == "on_demand":
                         model.addConstr(ev_load.sum(n,d,'*') * dt <= 2*demEV[n,d])
                         if loadNow[n,d,t] == 1:
+                            # set declining load to restrict grid-reactive behaviour
                             model.addConstr(ev_load[n,d,t+1] <= ev_load[n,d,t])
 
                     if options["EV_mode"] == "grid_reactive":
@@ -676,12 +677,7 @@ def compute(emi_max, net, eco, devs, clustered, params, options, district_option
                         if not n in loads_with["ev"]:
                             model.addConstr(ev_inj[n,d,t] == 0)
                     else:
-                        model.addConstr(ev_inj[n,d,t] == 0)  
-    
-                    
-                    #if options["EV_mode"] == "bi_directional":
-                    #    pass
-                    
+                        model.addConstr(ev_inj[n,d,t] == 0)                      
                 
    #%% battery constraints
     
