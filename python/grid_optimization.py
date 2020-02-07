@@ -16,7 +16,7 @@ import python.hpopt_energy as hpopt
 
 #%% Start:
 
-def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params, options, constraint_apc, constraint_InjMin, constraint_SubtrMin,constraint_InjMax,constraint_SubtrMax, critical_flag, emissions_max, costs_max):
+def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params, options, constraint_apc, constraint_InjMin, constraint_SubtrMin,constraint_InjMax,constraint_SubtrMax, emissions_max, costs_max):
     """
     Compute the optimal building energy system consisting of pre-defined 
     devices (devs) for a given building. Furthermore the program can choose
@@ -368,7 +368,15 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
         for n in gridnodes:
             Load_HP_total_node[n] = (sum(clustered["weights"][d] * sum(powerHPNet[n, d, t]
                                                                        for t in timesteps) for d in days) * dt)
-        if options["heatpump_seperated_costs"]:
+
+        if options["static_prices"]:
+            model.addConstrs((c_dem[n] == sum(sum(((powerHPNet[n, d, t] + powerSubtr[n,d,t]) * clustered["elcost_stat"][d,t] for t in timesteps)
+                              * clustered["weights"][d]) for d in days) * dt) for n in gridnodes)
+        else:
+            model.addConstrs(c_dem[n] == (sum((sum((powerHPNet[n,d,t] + powerSubtr[n,d,t]) * clustered["elcost_dyn"][d,t] for t in timesteps) * clustered["weights"][d]) for d in days)
+                             * dt ) for n in gridnodes)
+
+        """if options["heatpump_seperated_costs"]:
 
             model.addConstrs((c_dem[n] == eco["crf"] * eco["b"]["el"] * Load_total_node[n] * eco["el"]["el_sta"]["var"][0]
                                 + eco["crf"] * eco["b"]["el"] * Load_HP_total_node[n] * eco["el"]["el_hp"]["var"][0]
@@ -376,14 +384,17 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
         else:
 
             model.addConstrs((c_dem[n] == eco["crf"] * eco["b"]["el"] * (Load_total_node[n] + Load_HP_total_node[n]) * eco["el"]["el_sta"]["var"][0]
-                              for n in gridnodes), name="demand_costs" + str(n))
+                              for n in gridnodes), name="demand_costs" + str(n))"""
     else:
-        model.addConstrs((c_dem[n] == eco["crf"] * eco["b"]["el"] * Load_total_node[n] * eco["el"]["el_sta"]["var"][0]
-                          for n in gridnodes), name="demand_costs" + str(n))
+        if options["static_prices"]:
+            model.addConstrs((c_dem[n] == sum(sum((powerHPNet[n, d, t] + powerSubtr[n, d, t])* clustered["elcost_stat"][d,t] for t in timesteps) * clustered["weights"][d]
+                              for d in days) * dt) for n in gridnodes)
+        else:
+            model.addConstrs(c_dem[n] == ((sum(sum((powerHPNet[n, d, t] + powerSubtr[n, d, t]) * clustered["elcost_dyn"][d,t] for t in timesteps)
+                                ) * clustered["weights"][d] for d in days)  * dt) for n in gridnodes)
 
 
     #fpo: TODO: for future work you might want to implement the different heatpump power costs for the whole grid as well!
-
     # compute annual demand related costs per grid
     Load_total_grid = (sum(clustered["weights"][d] * sum(powerTrafoLoad[d,t]
                             for t in timesteps) for d in days) * dt)
@@ -410,8 +421,18 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                             for t in timesteps) for d in days) * dt)
 
     #fpo: TODO: this is missing the possibility of buying electricity and selling it at another time.
-    model.addConstrs((revenues[n] == eco["crf"] * eco["b"]["infl"] * (InjPV_total_node[n] + Curt_total_node[n]) * eco["price_sell_eeg"]
-                      for n in gridnodes), name="revenues"+str(n))
+    if options["rev_price_manner"] == "eeg":
+        model.addConstrs((revenues[n] == eco["crf"] * eco["b"]["infl"] * (InjPV_total_node[n] + Curt_total_node[n]) * eco["price_sell_eeg"]
+                        for n in gridnodes), name="revenues"+str(n))
+    elif options["rev_price_manner"] == "real":
+        if options["static_prices"]:
+            model.addConstrs((revenues[n] == (InjPV_total_node[n] + Curt_total_node[n]) *
+                              clustered["elcost_stat"][d,t] for n in gridnodes), name="revenues" + str(n))
+        else:
+            model.addConstrs(revenues[n] == (sum(sum((powerInjPV[n,d,t] + powerGenCurt[n,d,t]) * clustered["elcost_dyn"][d,t] for t in timesteps) * clustered["weights"][d] for d in days) * dt) for n in gridnodes)
+    else:
+        print("ERROR! CHECK OPTIONS FOR POWER PRICE!")
+
     
     # compute annual revenues for electricity feed-in per node
     # here: it's assumed that revenues are generated for all injections to the higher level grid
@@ -788,14 +809,15 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                     model.addConstr(powerSubtr[n, d, t] <= constraint_SubtrMax[n, d, t])
                     model.addConstr(powerSubtr[n,d,t] >= constraint_SubtrMin[n,d,t])
 
-    """# introduce constraints for pareto evaluation
-    model.addConstr(c_total_nodes <= costs_max)
-    model.addConstr(sum(emission_nodes[n] for n in gridnodes) <= emissions_max)"""
+    if options["run_which_opti"] == "pareto_oNB" or "pareto_mNB":
+        # introduce constraints for pareto evaluation
+        model.addConstr(c_total_nodes <= costs_max)
+        model.addConstr(sum(emission_nodes[n] for n in gridnodes) <= emissions_max)
 
     #%% start optimization
     
     # set objective function
-
+    #ATTENTION: PLEASE ONLY OPTIMIZE AFTER SUM OF NODES; NOT AFTER GRID
     if options["opt_costs"]:
         model.setObjective(c_total_nodes, gp.GRB.MINIMIZE)
         #model.setObjective(c_total_grid, gp.GRB.MINIMIZE)
@@ -808,8 +830,7 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
                     for t in timesteps) for d in days), gp.GRB.MINIMIZE)
 
     # adgust gurobi settings
-    #model.Params.TimeLimit = 60
-    
+
     model.Params.MIPGap = 0.05
     model.Params.NumericFocus = 3
     model.Params.MIPFocus = 3
@@ -1022,9 +1043,6 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
         pickle.dump(res_powerEHBat, fout, pickle.HIGHEST_PROTOCOL)
 
 
-
-    
-
     # introduce retrieving variables to give to timeloop
     # divide by 1000 to convert from kW to MW
     if options["hp_mode"] == "grid_opt":
@@ -1033,32 +1051,6 @@ def compute(net, nodes, gridnodes, days, timesteps, eco, devs, clustered, params
         powSubtrRet = np.array([[[((powerSubtr[n, d, t].X)/1000) for t in timesteps] for n in gridnodes] for d in days])
     powInjRet = np.array([[[((powerInj[n, d, t].X)/1000) for t in timesteps] for n in gridnodes] for d in days])
 
-
-    """BatCharge = np.array([[[(powerCh[n,d,t].X) for t in timesteps] for d in days] for n in gridnodes])
-    BatDischarge = np.array([[[(powerDis[n, d, t].X) for t in timesteps] for d in days] for n in gridnodes])
-
-    for n in gridnodes:
-        for d in days:
-            for t in timesteps:
-                if(BatCharge[n,d,t] > 0 and BatDischarge[n,d,t] > 0):
-                    print("Achtung, simultanes laden und entladen")
-                else:
-                    print("kein sychrones be und entladen")"""
-
-    #test read-out:
-
-    """apc_total_array = np.array([[apc_total[n,d].X for d in days] for n in gridnodes])
-    apc_var_array = np.array([[apc_var[n,d].X for d in days] for n in gridnodes])
-    powerGenReal_array = np.array([[[powerGenReal[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
-    powerGenRealMax_array = np.array([[[powerGenRealMax[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
-    powerUsePV_array = np.array([[[powerUsePV[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
-    powerNetLoad_array = np.array([[[powerNetLoad[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
-    powerPVChBat_array = np.array([[[powerPVChBat[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
-    powerInjPV_array = np.array([[[powerInjPV[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
-    powerInj_array = np.array([[[powerInj[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])
-    powerNetDisBat_array = np.array([[[powerNetDisBat[n,d,t].X for t in timesteps] for d in days] for n in gridnodes])"""
-
-    #powerGen_array = np.array([[[powerGen[n,d,t] for t in timesteps] for d in days] for n in gridnodes])
 
     emissions_added = sum(res_emission_nodes)
     costs_added = res_c_total_nodes
